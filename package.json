@@ -7,6 +7,8 @@
     "start": "npm run build && node ./build/server.js",
     "dev": "nodemon ./src/server.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
+    "test": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "test:v1": "jest ./src/api/v1/_tests/ --coverage --coverageReporters=text-lcov | coveralls",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
   },
@@ -25,8 +27,10 @@
     "nodemon": "^1.18.10"
   },
   "devDependencies": {
+    "coveralls": "^3.0.6",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "jest": "^24.9.0"
   }
 }
