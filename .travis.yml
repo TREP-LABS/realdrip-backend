@@ -4,7 +4,8 @@ node_js:
 install:
   - npm install
 script: 
-  - npm run test
+  - npm run test:v1
+  - npm run test:v1:coverage
 cache:
   directories:
     - "node_modules"
