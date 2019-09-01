@@ -7,7 +7,7 @@
     "start": "npm run build && node ./build/server.js",
     "dev": "nodemon ./src/server.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
-    "test:v1": "jest ./src/api/v1/tests/ --coverage",
+    "test": "jest ./src/api/v1/tests/ --coverage ",
     "test:v1:coverage": "jest ./src/api/v1/tests/ --coverage --coverageReporters=text-lcov | coveralls",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
@@ -17,20 +17,20 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.3.3",
-    "@babel/node": "^7.2.2",
-    "@babel/polyfill": "^7.2.5",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
     "dotenv": "^6.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.19.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
-    "eslint": "^5.14.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
     "jest": "^24.9.0"
   }
 }
