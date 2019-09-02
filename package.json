@@ -7,7 +7,12 @@
     "start": "forever ./build/http/start.js",
     "dev": "nodemon ./src/http/start.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
+<<<<<<< HEAD
     "test": "jest ./src/tests --coverage",
+=======
+    "test:v1": "jest ./src/api/v1/tests/ --coverage ",
+    "test:v1:coverage": "jest ./src/api/v1/tests/ --coverage --coverageReporters=text-lcov | coveralls",
+>>>>>>> FIX jest configuration
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
   },
