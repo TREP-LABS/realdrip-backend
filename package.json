@@ -7,7 +7,7 @@
     "start": "npm run build && node ./build/server.js",
     "dev": "nodemon ./src/server.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
-    "test": "jest ./src/api/v1/tests/ --coverage ",
+    "test:v1": "jest ./src/api/v1/tests/ --coverage ",
     "test:v1:coverage": "jest ./src/api/v1/tests/ --coverage --coverageReporters=text-lcov | coveralls",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
