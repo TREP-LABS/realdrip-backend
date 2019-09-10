@@ -8,7 +8,7 @@ jobs:
   include:
   - name: Unit Tests
     stage: Testing/Static Analysis
-    script: npm run test:v1:coverage
+    script: npm run test:coverage
   - name: Linting
     stage: Testing/Static Analysis
     script: npm run lint
