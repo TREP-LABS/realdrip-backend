@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npm run build && node ./build/server.js",
+    "start": "node ./build/server.js",
     "dev": "nodemon ./src/server.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
     "test:v1": "jest ./src/api/v1/tests/ --coverage ",
