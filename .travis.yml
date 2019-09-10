@@ -14,8 +14,8 @@ jobs:
     script: npm run lint
   - name: Deploy to staging
     stage: Deployment
-    if: branch = ch-deployment-pipeline-168190740
-    script: skip
+    if: branch = master
+    script: npm run build 
     deploy:
       on: master
       provider: heroku
