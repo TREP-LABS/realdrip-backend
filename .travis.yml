@@ -15,10 +15,9 @@ jobs:
   - name: Deploy to staging
     stage: Deployment
     if: branch = ch-deployment-pipeline-168190740
-    install: skip
     script: skip
     deploy:
-      on: ch-deployment-pipeline-168190740
+      on: master
       provider: heroku
       api_key:
         secure: "nTjfTRKV79h9t984gptqmCS15wWdjuqsYrhw1m7e65eWu2f/5kGZeEg+FlzrWuUdVy5da4HQeOM/3myZImERIKpp785pQB5W04/wSSllq7WPIGGjMhRfhx9G1VNueA/jiqr/qSWYt8/+gq2KnDYUq8dB1753WJsbaa7+Z6F/G5dEmi6zqhPcuX0H77v7fjPdJ+9880ej5O/Sf/sNXz0fQVg+CceVyqVz3em7PWfAb5zvprIuMfWCJW9QuZ5auZEapMHsKpwjuM78xlJs2YS6r+HM/4zQUJlR5XGCUCnaqV+Otsfo0QttckF5CWxsM5Bbi5yxAGJWIbgf7ptVqv3uFmVnA+Ul5ThU5MqZ4NQHkd2/ZH6SZeottg1nbFJgeRktMSOh9Ual1WyStoDnsxBVk6IJAi3NMwGZ/j1ZEPmj+gsG+VoztBjhA9guvOawG7hJhAH/QJibYrjYcumjtoWK7CNI4mwSZ3DBygd255Ot4R2AOtWKfm5BiA73U0mOyKMDCxsx6zzVU+ESkg4gE38fPlC9AViRwXaJQ1mvOky3HmSYU0NfdEorVMq36m2dKIcrXY39qRaBLWKTgljN6fKMlft1nyrG8QbCDzEay/xtvcljtLwJdd2WHb3KdH+8Tnguwbtp2LlxYt5nnCrSC3u8OXiML/zm7czsTIlTzTr/LLU="
