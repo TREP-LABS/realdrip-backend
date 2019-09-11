@@ -1,14 +1,14 @@
 {
-  "name": "basic-node-app",
+  "name": "realdrip-backend",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npm run build && node ./build/server.js",
-    "dev": "nodemon ./src/server.js --exec babel-node",
+    "start": "forever ./build/http/app.js",
+    "dev": "nodemon ./src/http/app.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
-    "test:v1": "jest ./src/api/v1/tests/ --coverage ",
-    "test:v1:coverage": "jest ./src/api/v1/tests/ --coverage --coverageReporters=text-lcov | coveralls",
+    "test": "jest --coverage",
+    "test:coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
   },
@@ -23,6 +23,7 @@
     "@babel/preset-env": "^7.5.5",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "forever": "^1.0.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   },
