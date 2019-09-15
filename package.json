@@ -7,12 +7,7 @@
     "start": "forever ./build/http/start.js",
     "dev": "nodemon ./src/http/start.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
-<<<<<<< HEAD
     "test": "jest ./src/tests --coverage",
-=======
-    "test:v1": "jest ./src/api/v1/tests/ --coverage ",
-    "test:v1:coverage": "jest ./src/api/v1/tests/ --coverage --coverageReporters=text-lcov | coveralls",
->>>>>>> FIX jest configuration
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
   },
@@ -28,6 +23,9 @@
     "bcrypt": "^3.0.6",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "firebase": "^6.6.0",
+    "firebase-admin": "^8.5.0",
     "forever": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
