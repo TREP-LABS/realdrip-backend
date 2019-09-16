@@ -19,43 +19,48 @@ import serviceAccount from "./fireboy-79d85-firebase-adminsdk-eq2r2-07f67da5cb.j
     let verifyDevice = async (deviceId)=> {
       let res = '';
       let device = await fb.database().ref("/fireboy/devices/").orderByValue().equalTo(deviceId).once("value", (snapshot)=> {
-        if (snapshot.exists()) {
-          res = "passed";
-        }else{
-          res = "failed";
-        }
-        console.log(res);
-        return res;            
+        return res = (snapshot.exists() ? "passed" : "failed");
       });
       return res;
     }
     //Client is an instance of mongodbClient connection
-    let create = function(client,data, callback) {
+    let create = (client, collectionName, data, callback)=> {
         const db = client.db(database);
         // Get the documents collection
-        const collection = db.collection('devices');
+        const collection = db.collection(collectionName);
         // Insert some documents
         collection.insertMany(data, (err, result)=> {
           assert.equal(err, null);
           // Pass the the result of the query to a callback function
-          callback(result,client);
+          callback(result, client);
         });
     }
-    let read = (client, collectionName, filter={}, callback)=>{
+    let read = (client, collectionName, filter={}, callback)=> {
       const db = client.db(database);
       // Get the documents collection
-      const coll = db.collection(collectionName);
-      coll.find(filter).toArray((err, result)=>{
+      const collection = db.collection(collectionName);
+      collection.find(filter).toArray((err, result)=>{
         assert.equal(err, null);
         callback(result, client);
       });
     }
+    let update = (client, collectionName, where, data, callback)=> {
+      const db = client.db(database);
+      // Get the documents collection
+      const collection = db.collection(collectionName);
+      // Update document where a is 2, set b equal to 1
+      collection.updateOne(where , { $set: data }, (err, result)=> {
+        assert.equal(err, null);
+        assert.equal(1, result.result.n);
+        callback(result, client);
+      });
+    }
     let connect = new Promise(
-        (resolve, reject)=>{
-            MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology:true}, function(err, client) {
-                assert.equal(null, err);
-                console.log("Mongo dripping like mango");
-                resolve(client);
-            });
+      (resolve, reject)=>{
+        MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology:true}, function(err, client) {
+          assert.equal(null, err);
+          console.log("Mongo dripping like mango");
+          resolve(client);
+        });
     });
-    module.exports = {connect, create, read, verifyDevice}
+    module.exports = {connect, create, read, update, verifyDevice}
