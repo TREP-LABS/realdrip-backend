@@ -1,7 +1,9 @@
-import deviceModel from '../db/deviceModel';
+import app from '../http/app'
+import supertest from 'supertest'
+const request = supertest(app)
 
-test('verifying device exits in Firebase', async () => {
-    let verification = await deviceModel.verifyDevice('rd-2002');
-    expect(verification).toBe("passed");
-  });
-  
+it('gets the version endpoint', async done => {
+  const response = await request.get('/api/version')
+  expect(response.status).toBe(200)
+  done()
+});

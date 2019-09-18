@@ -2,7 +2,7 @@
   "name": "realdrip-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "start.js",
   "scripts": {
     "start": "forever ./build/http/start.js",
     "dev": "nodemon ./src/http/start.js --exec babel-node",
