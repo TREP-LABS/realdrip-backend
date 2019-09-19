@@ -7,7 +7,7 @@
     "start": "forever ./build/http/app.js",
     "dev": "nodemon ./src/http/app.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
-    "test": "jest --coverage",
+    "test": "jest ./src/tests --coverage",
     "test:coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
@@ -21,17 +21,21 @@
     "@babel/node": "^7.5.5",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
+    "bcrypt": "^3.0.6",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "forever": "^1.0.0",
+    "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
   }
 }

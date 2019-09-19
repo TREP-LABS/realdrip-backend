@@ -9,8 +9,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', routes);
 
-app.listen(config.port, () => {
+export default app.listen(config.port, () => {
   console.log(`App listening on port ${config.port}`);
 });
-
-export default app;
