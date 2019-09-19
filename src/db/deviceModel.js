@@ -1,9 +1,13 @@
 import { MongoClient } from "mongodb";
 import firebase from "firebase-admin";
 import serviceAccount from "./fireboy-79d85-firebase-adminsdk-eq2r2-07f67da5cb.json";
+import dotenv from "dotenv";
+dotenv.config();
 
+let connectionInstance = null;
 let url = process.env.DB_TEST_URL; 
 let database = process.env.DB_TEST_NAME;
+
 let fb = firebase.initializeApp({
 	credential: firebase.credential.cert(serviceAccount),
 	apiKey: "AIzaSyAKVRIv-4e8JaGaDRcJDY1TJI4MbtHU0OI",
@@ -23,7 +27,6 @@ const getDevice = async (deviceId)=> {
 	return res;
 }
 
-//Client is an instance of mongodbClient connection
 let create = async (collectionName, data)=> {
 	let client = await connect();
 	const db = client.db(database);
@@ -31,9 +34,9 @@ let create = async (collectionName, data)=> {
 	try {
 		return collection.insertMany(data);
 	} catch (error) {
-		console.log("Unable to add item to collection: ", error);        
 	}
 }
+
 const read = async (collectionName, filter={})=> {
 	let client = await connect();
 	const db = client.db(database);
@@ -41,13 +44,21 @@ const read = async (collectionName, filter={})=> {
 	try {
 		return coll.find(filter).toArray();
 	} catch (error) {
-		console.log("unable to read item from mongo: ", error);        
 	}
 }
+
 const connect = async ()=>{
 	try {
-		console.log("mondodb on point");        
-		return MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology:true});
+		if (connectionInstance === null) {
+			connectionInstance =  MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology:true});
+			console.log("new connection instance");
+			
+			return connectionInstance;
+		} else {
+			console.log("existing connection");
+			
+			return connectionInstance
+		}
 	} catch (error) {
 		console.log("All forms of error: ", error);        
 	}
