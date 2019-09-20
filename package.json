@@ -8,7 +8,7 @@
     "dev": "nodemon ./src/http/app.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
     "test": "jest ./src/tests --coverage",
-    "test:coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "test:coverage": "jest --coverage --coverageReporters=text-lcov",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
     "lint": "eslint ./src"
   },
