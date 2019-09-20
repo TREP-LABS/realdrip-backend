@@ -1,10 +1,12 @@
 import supertest from 'supertest';
+import mongoose from 'mongoose';
 import app from '../http/app';
 
 const request = supertest(app);
 
 describe('/health', () => {
-  afterAll(() => {
+  afterAll(async () => {
+    await mongoose.connection.close(false);
     app.close();
   });
 

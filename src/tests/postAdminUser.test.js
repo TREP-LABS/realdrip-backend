@@ -20,6 +20,7 @@ const userDetails = {
 describe('/users/admin', () => {
   afterAll(async () => {
     await mongoose.connection.dropDatabase();
+    await mongoose.connection.close(false);
     app.close();
   });
 
