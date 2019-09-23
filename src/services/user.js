@@ -20,6 +20,9 @@ const createAdminUser = async (data) => {
     email: adminUser.email,
     // eslint-disable-next-line no-underscore-dangle
     hospitalId: adminUser._id,
+    location: adminUser.location,
+    confirmed: adminUser.confirmed,
+    deviceCount: adminUser.deviceCount,
   };
 };
 
