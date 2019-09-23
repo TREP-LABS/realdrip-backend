@@ -16,10 +16,10 @@ const createAdminUser = async (data) => {
     name, email, location, password: hashedPassword, confirmed: false, deviceCount: 0,
   });
   return {
+    // eslint-disable-next-line no-underscore-dangle
+    id: adminUser._id,
     name: adminUser.name,
     email: adminUser.email,
-    // eslint-disable-next-line no-underscore-dangle
-    hospitalId: adminUser._id,
     location: adminUser.location,
     confirmed: adminUser.confirmed,
     deviceCount: adminUser.deviceCount,
