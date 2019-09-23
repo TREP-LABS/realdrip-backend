@@ -18,10 +18,10 @@ const userDetails = {
 };
 
 describe('/users/admin', () => {
-  afterAll(async () => {
+  afterAll(async (done) => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close(false);
-    app.close();
+    app.close(() => done());
   });
 
   test('Opetation should succeed', (done) => {
