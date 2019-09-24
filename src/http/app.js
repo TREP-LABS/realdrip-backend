@@ -3,6 +3,7 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import routes from './routes';
+import config from './config';
 
 const app = express();
 app.use(logger('dev'));

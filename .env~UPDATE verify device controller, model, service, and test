@@ -1,0 +1,4 @@
+# Database connection information
+NODE_ENV = 'development'
+DB_TEST_URL = 'mongodb+srv://treplabs:ppuPoSjZclVKwqYXg5@cluster0-aitdw.mongodb.net/test?retryWrites=true&w=majority'
+DB_TEST_NAME = 'Realdrip'

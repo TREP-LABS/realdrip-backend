@@ -1,27 +1,33 @@
-import deviceService from '../../services/deviceServices/verify';
+import deviceService from '../../services/verify';
+import deviceValidation from '../validations/verifyDevice';
 
 const verifyDevice = async (req, res) => {
   const { deviceId } = req.body;
   const verification = await deviceService.verify(deviceId);
-  if (verification.status === 204) {
-    return res.status(422).json({
-      status: false,
-      message: 'DeviceId already verified',
-    });
-  } if (verification.status === 201) {
+  if (verification.status === 201) {
     return res.status(201).json({
-      status: false,
+      success: true,
       message: 'Device verified successfully',
+      data: {
+        deviceId: deviceId
+      }
     });
-  } if (verification.status === 404) {
+  }
+  if (verification.status === 404) {
     return res.status(422).json({
-      status: false,
+      success: false,
       message: 'Invalid device Id',
+      data: {
+        deviceId: deviceId
+      }
     });
   }
   return res.status(500).json({
-    status: false,
+    success: false,
     message: 'Internal server error',
+    data: {
+      deviceId: deviceId
+    }
   });
 };
-module.exports = { verifyDevice };
+module.exports = { verifyDevice: [deviceValidation.verifyDevice, verifyDevice] };
