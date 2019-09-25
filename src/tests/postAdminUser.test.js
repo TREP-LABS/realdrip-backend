@@ -18,10 +18,10 @@ const userDetails = {
 };
 
 describe('/users/admin', () => {
-  afterAll(async () => {
+  afterAll(async (done) => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close(false);
-    app.close();
+    app.close(() => done());
   });
 
   test('Opetation should succeed', (done) => {
@@ -29,13 +29,20 @@ describe('/users/admin', () => {
       .post('/api/users/admin')
       .send(userDetails)
       .end((err, res) => {
+        const expectedResponse = {
+          success: true,
+          message: 'Admin user created successfully',
+          data: {
+            id: expect.any(String),
+            name: userDetails.name,
+            email: userDetails.email,
+            location: userDetails.location,
+            confirmed: false,
+            deviceCount: 0,
+          },
+        };
         expect(res.status).toBe(201);
-        expect(res.body.message).toEqual('Admin user created successfully');
-        expect(res.body.success).toEqual(true);
-        expect(res.body.data.constructor.name).toEqual('Object');
-        expect(res.body.data.name).toEqual(userDetails.name);
-        expect(res.body.data.email).toEqual(userDetails.email);
-        expect(typeof res.body.data.hospitalId).toEqual('string');
+        expect(res.body).toMatchObject(expectedResponse);
         done();
       });
   });
