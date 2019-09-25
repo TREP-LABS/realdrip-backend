@@ -1,7 +1,7 @@
 import user from './user';
-import device from './device';
+import verifyDevice from './verifyDevice';
 
 export default {
   ...user, // The user module exports multiple models in an object
-  ...device,
+  ...verifyDevice,
 };

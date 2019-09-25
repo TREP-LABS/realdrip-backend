@@ -1,5 +1,4 @@
 language: node_js
-<<<<<<< HEAD
 node_js:
 - stable
 cache:
@@ -28,14 +27,3 @@ jobs:
 stages:
 - Testing/Static Analysis
 - Deployment
-=======
-node_js: 
-  - "stable"
-install:
-  - npm install
-script: 
-  - npm run test:v1:coverage
-cache:
-  directories:
-    - "node_modules"
->>>>>>> ADDED: Travis_ci, coveralls and Jest

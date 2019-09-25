@@ -6,7 +6,7 @@ import schemas from './schemas';
 setup();
 
 const adminUser = new models.AdminUser(mongoose.model('AdminUser', schemas.AdminUserSchema));
-const verifyDevice = new models.Device(mongoose.model('VerifyDevice', schemas.verifyDeviceSchema));
+const verifyDevice = new models.verifyDevice();
 
 export default {
   adminUser,

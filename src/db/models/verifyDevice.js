@@ -1,7 +1,7 @@
 import firebase from 'firebase-admin';
 import serviceAccount from './fireboy-79d85-firebase-adminsdk-eq2r2-07f67da5cb.json';
 
-class Device {
+class verifyDevice {
   constructor(model) {
     this.Model = model;
     this.fb = firebase.initializeApp({
@@ -20,11 +20,7 @@ class Device {
       .orderByValue().equalTo(deviceId)
       .once('value', snapshot => snapshot);
   }
-  
-  async createVerifyDevice(data) {
-    return new this.Model(data).save();
-  }
 }
 export default {
-  Device,
+  verifyDevice,
 };
