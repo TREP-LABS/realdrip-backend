@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "forever ./build/http/app.js",
-    "dev": "nodemon ./src/http/app.js --exec babel-node",
+    "start": "forever ./build/http/start.js",
+    "dev": "nodemon ./src/http/start.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
     "test": "jest ./src/tests --coverage",
     "build": "npm run clean && babel ./src -d ./build --copy-files",

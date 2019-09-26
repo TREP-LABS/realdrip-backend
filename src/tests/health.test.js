@@ -5,9 +5,8 @@ import app from '../http/app';
 const request = supertest(app);
 
 describe('/health', () => {
-  afterAll(async (done) => {
+  afterAll(async () => {
     await mongoose.connection.close(false);
-    app.close(() => done());
   });
 
   test('/api/health', (done) => {
