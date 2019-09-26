@@ -1,11 +1,11 @@
-import verifyDeviceService from '../../services/verifyDevice';
-import deviceValidation from '../validations/verifyDevice';
+import deviceService from '../../services/device';
+import deviceValidation from '../validations/device';
 
 const verifyDevice = async (req, res) => {
   const { deviceId } = req.body;
   try {
-    const deviceExists = await verifyDeviceService.verify(deviceId);
-    return res.status(201).json({ success: true, message: 'Device verified successfully', data: deviceExists });
+    await deviceService.verify(deviceId);
+    return res.status(204).json({ success: true });
   } catch (err) {
     if (err.httpStatusCode) {
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
@@ -13,4 +13,4 @@ const verifyDevice = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Error verifying device' });
   }
 };
-module.exports = { verifyDevice: [deviceValidation.verifyDevice, verifyDevice] };
+module.exports = { verifyDevice: [deviceValidation.verifyDeviceId, verifyDevice] };
