@@ -9,7 +9,7 @@ jobs:
   - name: Unit Tests
     stage: Testing/Static Analysis
     script: 
-      - npm run test -- --detectOpenHandles
+      - npm run test -- --detectOpenHandles --forceExit
       - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage # reporting coverage
   - name: Linting
     stage: Testing/Static Analysis
