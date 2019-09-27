@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "forever ./build/http/app.js",
-    "dev": "nodemon ./src/http/app.js --exec babel-node",
+    "start": "forever ./build/http/start.js",
+    "dev": "nodemon ./src/http/start.js --exec babel-node",
     "clean": "rm -rf ./build && mkdir build",
     "test": "jest ./src/tests --coverage",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
@@ -24,8 +24,11 @@
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "forever": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
+    "nodemailer": "^6.3.0",
+    "nodemailer-mailgun-transport": "^1.4.0",
     "nodemon": "^1.19.1",
     "validator": "^11.1.0"
   },
