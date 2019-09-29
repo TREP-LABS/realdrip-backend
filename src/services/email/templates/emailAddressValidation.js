@@ -58,7 +58,11 @@ export default ({ name, confirmationUrl }) => `
       </div>
       <div class="info">
         <p>Hi <span class="user-name">${name}</span>, thanks for signing up on the RealDrip platform. We need you to confirm your medical center email
-          to proceed with the registeration, thanks. <br /> Click on the button below to confirm your email address.
+          to proceed with the registration, thanks.
+        </p>
+        <br/>
+        <p>
+            Click on the button below to confirm your email address.
         </p>
         <div class="confirmation-btn">
           <a href=${confirmationUrl}>Confirm Email Address</a>
