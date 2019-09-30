@@ -1,4 +1,5 @@
 import validator from 'validator';
+import db from '../../db';
 import FieldErrors from './fieldErrors';
 
 /**
@@ -26,7 +27,7 @@ const createAdminUser = (req, res, next) => {
   else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Medical center email format is a not valid');
 
   // Validating password field
-  if (!password || typeof (name) !== 'string') fieldErrors.addError('password', 'Password field is a required string');
+  if (!password || typeof (password) !== 'string') fieldErrors.addError('password', 'Password field is a required string');
   else if (!(/\d/.test(password) && /[A-Z]/.test(password) && /[a-z]/.test(password) && password.length > 7)) {
     fieldErrors.addError('password', 'Password must be at least 7 character mix of capital, small letters with numbers');
   } else if (!confirmPassword || typeof (confirmPassword) !== 'string') {
@@ -65,7 +66,40 @@ const validateRegToken = (req, res, next) => {
   return next();
 };
 
+/**
+ * @description Validate user login request data.
+ * If the request data is valid, the request is sent to the next middleware otherwise,
+ * a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} Express helper function to pass request to the next middleware
+ */
+const login = (req, res, next) => {
+  const { email, password, userType } = req.body;
+  const fieldErrors = new FieldErrors();
+
+  // Validating email field
+  if (!email || typeof (email) !== 'string') fieldErrors.addError('email', 'Medical center email is a required string');
+  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Medical center email format is a not valid');
+
+  // Validating password field
+  if (!password || typeof (password) !== 'string') fieldErrors.addError('password', 'Password field is a required string');
+
+  // Validating user type field
+  const userTypes = Object.values(db.users.userTypes);
+  if (!userType || !userTypes.includes(userType)) {
+    fieldErrors.addError('userType', `userType field must be one of the following: ${userTypes.join(' ')}`);
+  }
+
+  if (fieldErrors.count > 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request body', errors: fieldErrors.errors });
+  }
+  return next();
+};
+
+
 export default {
   createAdminUser,
   validateRegToken,
+  login,
 };

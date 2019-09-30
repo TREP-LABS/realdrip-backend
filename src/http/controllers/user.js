@@ -42,7 +42,26 @@ const confirmUserAccount = async (req, res) => {
   }
 };
 
+/**
+ * @description User login controller
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const login = async (req, res) => {
+  const { email, password, userType } = req.body;
+  try {
+    const { token, user } = await userService.login({ email, password, userType });
+    return res.status(200).json({ success: true, message: 'Login successfully', data: { token, user } });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    return res.status(500).json({ success: false, message: 'Error logging user in' });
+  }
+};
+
 export default {
   createAdminUser: [userValidation.createAdminUser, createAdminUser],
   confirmUserAccount: [userValidation.validateRegToken, confirmUserAccount],
+  login: [userValidation.login, login],
 };

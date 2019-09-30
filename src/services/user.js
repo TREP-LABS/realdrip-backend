@@ -53,17 +53,55 @@ const createAdminUser = async (data) => {
  */
 const confirmUserAccount = async (regToken) => {
   try {
+    console.log('RegToken:  ', regToken);
     const decoded = jwt.verify(regToken, config.jwtSecrete);
     const { email } = decoded;
     return db.adminUser.updateUser(email, { confirmed: true });
   } catch (err) {
+    console.log('RegToken Err: ', err);
     const error = new Error('Registeration token not valid');
     error.httpStatusCode = 400;
     throw error;
   }
 };
 
+/**
+ * @description Grants authorization to a valid user
+ * @param {object} data The data required to perform the login operation
+ * @param {string} data.email The user email
+ * @param {string} data.password The user password
+ * @param {string} data.userType The user type
+ * @returns {object} The user details and authorization token
+ * @throws {Error} Throws an error is operations fails
+ */
+const login = async (data) => {
+  const { email, password, userType } = data;
+  const user = await db.users.getUserByEmail(email.toLowerCase(), userType);
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    const error = new Error('Email or password incorrect');
+    error.httpStatusCode = 400;
+    throw error;
+  }
+  // eslint-disable-next-line no-underscore-dangle
+  const userId = user._id;
+  return {
+    user: {
+      id: userId,
+      type: userType,
+      name: user.name,
+      email: user.email,
+      confirmed: user.confirmed,
+      defaultPass: user.defaultPass,
+      hospitalId: user.hospitalId,
+      deviceCount: user.deviceCount,
+    },
+    token: jwt.sign({ type: userType, id: userId }, config.jwtSecrete, { expiresIn: '3d' }),
+  };
+};
+
+
 export default {
   createAdminUser,
   confirmUserAccount,
+  login,
 };
