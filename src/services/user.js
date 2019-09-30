@@ -9,21 +9,22 @@ const createAdminUser = async (data) => {
     name, email, location, password,
   } = data;
   const lowerCaseEmail = email.toLowerCase();
-  const alreadyExistingUser = await db.adminUser.getAdminUserByEmail(lowerCaseEmail);
+  const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+  const alreadyExistingUser = await db.users.getUserByEmail(lowerCaseEmail, HOSPITAL_ADMIN_USER);
   if (alreadyExistingUser) {
     const error = new Error('User with this email already exist');
     error.httpStatusCode = 409;
     throw error;
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  const adminUser = await db.adminUser.createAdminUser({
+  const adminUser = await db.users.createUser({
     name,
     email: lowerCaseEmail,
     location,
     password: hashedPassword,
     confirmed: false,
     deviceCount: 0,
-  });
+  }, HOSPITAL_ADMIN_USER);
   const regToken = jwt.sign({ email, action: 'confirmation' }, config.jwtSecrete);
   const confirmationUrl = `${config.appUrl}/api/users/confirm?regToken=${regToken}`;
   // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
