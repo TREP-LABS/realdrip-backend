@@ -10,6 +10,10 @@ class AdminUser {
   async getAdminUserByEmail(email) {
     return this.Model.findOne({ email });
   }
+
+  async updateUser(email, update) {
+    return this.Model.updateOne({ email }, update);
+  }
 }
 
 

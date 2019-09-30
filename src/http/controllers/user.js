@@ -1,5 +1,6 @@
 import userService from '../../services/user';
 import userValidation from '../validations/user';
+import config from '../config';
 
 const createAdminUser = async (req, res) => {
   const {
@@ -18,6 +19,20 @@ const createAdminUser = async (req, res) => {
   }
 };
 
+const confirmUserAccount = async (req, res) => {
+  const { regToken } = req.query;
+  try {
+    await userService.confirmUserAccount(regToken);
+    return res.status(302).redirect(`${config.clientAppUrl}/login`);
+  } catch (err) {
+    if (err.httpStatusCode) {
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    return res.status(500).json({ success: false, message: 'Error confirming user account' });
+  }
+};
+
 export default {
   createAdminUser: [userValidation.createAdminUser, createAdminUser],
+  confirmUserAccount: [userValidation.validateRegToken, confirmUserAccount],
 };

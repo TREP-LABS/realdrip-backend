@@ -38,7 +38,19 @@ const createAdminUser = (req, res, next) => {
   return next();
 };
 
+const validateRegToken = (req, res, next) => {
+  const { regToken } = req.query;
+  const fieldErrors = new FieldErrors();
+  if (!regToken || typeof (regToken) !== 'string') {
+    fieldErrors.addError('regToken', 'regToken is a required query parameter');
+  }
+  if (fieldErrors.count > 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
+  }
+  return next();
+};
 
 export default {
   createAdminUser,
+  validateRegToken,
 };
