@@ -4,9 +4,10 @@ import bodyParser from 'body-parser';
 import routes from './routes';
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 // Enabling CORS for browser clients
 app.all('*', (req, res, next) => {

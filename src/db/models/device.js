@@ -10,8 +10,9 @@ class Device {
       databaseURL: config.fbUrl[config.environment],
     });
   }
-  async getDevice (deviceId) {
-    return await this.fb.database().ref('/fireboy/devices/')
+
+  async getDevice(deviceId) {
+    return this.fb.database().ref('/fireboy/devices/')
       .orderByValue().equalTo(deviceId)
       .once('value', snapshot => snapshot);
   }

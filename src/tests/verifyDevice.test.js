@@ -16,7 +16,7 @@ describe('/api/device/verify', () => {
   test('Device verification should succeed', async (done) => {
     request
       .post('/api/device/verify')
-      .send({deviceId: deviceId})
+      .send({ deviceId })
       .end((err, res) => {
         expect(res.status).toBe(204);
         done();
@@ -28,7 +28,7 @@ describe('/api/device/verify', () => {
       const InvalidDeviceId = 'rd_2005XPX';
       request
         .post('/api/device/verify')
-        .send({deviceId: InvalidDeviceId})
+        .send({ deviceId: InvalidDeviceId })
         .end((error, response) => {
           expect(response.status).toEqual(404);
           expect(response.body.success).toEqual(false);
@@ -39,7 +39,7 @@ describe('/api/device/verify', () => {
     test('deviceId is not provided', async (done) => {
       request
         .post('/api/device/verify')
-        .send({deviceId: undefined})
+        .send({ deviceId: undefined })
         .end((err, res) => {
           expect(res.status).toBe(400);
           expect(res.body.message).toEqual('Invalid request body');

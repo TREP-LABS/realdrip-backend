@@ -10,5 +10,5 @@ const device = new models.Device();
 
 export default {
   adminUser,
-  device
+  device,
 };

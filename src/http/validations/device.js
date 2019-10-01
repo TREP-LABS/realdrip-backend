@@ -1,4 +1,3 @@
-import validator from 'validator';
 import FieldErrors from './fieldErrors';
 
 const verifyDeviceId = (req, res, next) => {

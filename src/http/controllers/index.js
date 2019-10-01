@@ -3,5 +3,5 @@ import device from './device';
 
 export default {
   user,
-  device
+  device,
 };

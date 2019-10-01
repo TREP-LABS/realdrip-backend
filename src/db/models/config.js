@@ -7,5 +7,5 @@ export default {
   fbUrl: {
     test: process.env.FIREBASE_TEST_DATABASEURL,
     development: process.env.FIREBASE_DEV_DATABASEURL,
-  }
+  },
 };
