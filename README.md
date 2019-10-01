@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/TREP-LABS/realdrip-backend.svg?branch=develop)](https://travis-ci.org/TREP-LABS/realdrip-backend)
-[![Coverage Status](https://coveralls.io/repos/github/TREP-LABS/realdrip-backend/badge.svg)](https://coveralls.io/github/TREP-LABS/realdrip-backend)
+[![Build Status](https://travis-ci.org/TREP-LABS/realdrip-backend.svg?branch=master)](https://travis-ci.org/TREP-LABS/realdrip-backend)
+[![Coverage Status](https://coveralls.io/repos/github/TREP-LABS/realdrip-backend/badge.svg?branch=master)](https://coveralls.io/github/TREP-LABS/realdrip-backend?branch=master)
 ## RealDrip Backend
 `A node-js server using express-js
 `
