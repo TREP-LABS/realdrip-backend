@@ -2,6 +2,11 @@ import userService from '../../services/user';
 import userValidation from '../validations/user';
 import config from '../config';
 
+/**
+ * @description Controller for create admin user API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
 const createAdminUser = async (req, res) => {
   const {
     name, email, password, location,
@@ -19,6 +24,11 @@ const createAdminUser = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for confirm user account API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
 const confirmUserAccount = async (req, res) => {
   const { regToken } = req.query;
   try {

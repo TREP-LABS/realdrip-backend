@@ -44,6 +44,12 @@ const createAdminUser = async (data) => {
   };
 };
 
+/**
+ * @description The service function that confirms a user account
+ * @param {string} regToken The user registeration token
+ * @returns {Promise} A promise that resolves or reject to the db operation to update a user data.
+ * @throws {Error} Any error that prevents the service to execute successfully
+ */
 const confirmUserAccount = async (regToken) => {
   try {
     const decoded = jwt.verify(regToken, config.jwtSecrete);
