@@ -28,15 +28,20 @@ const hospitalAdminUserSchema = new Schema({
 const wardUserSchema = new Schema({
   ...baseUser,
   defaultPass: { type: Boolean },
-  hospitald: { type: Schema.Types.ObjectId, required: true },
+  hospitalId: { type: Schema.Types.ObjectId, required: true },
+  deviceCount: { type: Number, required: true },
 });
 
-// The ward user shcema is exactly the same as nurse user schema
-const nurseUserSchema = wardUserSchema.clone();
+const nurseUserSchema = new Schema({
+  ...baseUser,
+  defaultPass: { type: Boolean },
+  wardId: { type: Schema.Types.ObjectId, required: true },
+  hospitalId: { type: Schema.Types.ObjectId, required: true },
+});
 
 export default {
   // Ensure all model names are in lowercase
-  [userTypes.HOSPITAL_ADMIN_USER]: mongoose.model('user-hospitaladmin', hospitalAdminUserSchema),
-  [userTypes.WARD_USER]: mongoose.model('user-ward', wardUserSchema),
-  [userTypes.NURSE_USER]: mongoose.model('user-nurse', nurseUserSchema),
+  [userTypes.HOSPITAL_ADMIN_USER]: mongoose.model('user.hospitaladmin', hospitalAdminUserSchema),
+  [userTypes.WARD_USER]: mongoose.model('user.ward', wardUserSchema),
+  [userTypes.NURSE_USER]: mongoose.model('user.nurse', nurseUserSchema),
 };

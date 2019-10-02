@@ -88,7 +88,7 @@ const login = (req, res, next) => {
   // Validating user type field
   const userTypes = Object.values(db.users.userTypes);
   if (!userType || !userTypes.includes(userType)) {
-    fieldErrors.addError('userType', `userType field must be one of the following: ${userTypes.join(' ')}`);
+    fieldErrors.addError('userType', `userType field must be one of the following: ${userTypes.join(', ')}`);
   }
 
   if (fieldErrors.count > 0) {
