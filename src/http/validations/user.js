@@ -1,6 +1,14 @@
 import validator from 'validator';
 import FieldErrors from './fieldErrors';
 
+/**
+ * @description Validates the request data to create an admin user.
+ * If the request data is valid, the request is sent to the next middleware otherwise,
+ * a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
 const createAdminUser = (req, res, next) => {
   const {
     name, email, password, confirmPassword,
@@ -38,7 +46,26 @@ const createAdminUser = (req, res, next) => {
   return next();
 };
 
+/**
+ * @description Validates a user registeration token. If the token is valid,
+ * the request is sent to the next middleware otherwise, a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const validateRegToken = (req, res, next) => {
+  const { regToken } = req.query;
+  const fieldErrors = new FieldErrors();
+  if (!regToken || typeof (regToken) !== 'string') {
+    fieldErrors.addError('regToken', 'regToken is a required query parameter');
+  }
+  if (fieldErrors.count > 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
+  }
+  return next();
+};
 
 export default {
   createAdminUser,
+  validateRegToken,
 };

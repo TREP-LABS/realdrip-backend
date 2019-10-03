@@ -24,8 +24,8 @@ const createAdminUser = async (data) => {
     confirmed: false,
     deviceCount: 0,
   });
-  const confirmationToken = jwt.sign({ email, action: 'confirmation' }, config.jwtSecrete);
-  const confirmationUrl = `${config.appUrl}/api/users/confirm?token=${confirmationToken}`;
+  const regToken = jwt.sign({ email, action: 'confirmation' }, config.jwtSecrete);
+  const confirmationUrl = `${config.appUrl}/api/users/confirm?regToken=${regToken}`;
   // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
   // before sending response to the user.
   emailService.sendEmailAddresValidation({ name, email }, confirmationUrl)
@@ -44,6 +44,25 @@ const createAdminUser = async (data) => {
   };
 };
 
+/**
+ * @description The service function that confirms a user account
+ * @param {string} regToken The user registeration token
+ * @returns {Promise} A promise that resolves or reject to the db operation to update a user data.
+ * @throws {Error} Any error that prevents the service to execute successfully
+ */
+const confirmUserAccount = async (regToken) => {
+  try {
+    const decoded = jwt.verify(regToken, config.jwtSecrete);
+    const { email } = decoded;
+    return db.adminUser.updateUser(email, { confirmed: true });
+  } catch (err) {
+    const error = new Error('Registeration token not valid');
+    error.httpStatusCode = 400;
+    throw error;
+  }
+};
+
 export default {
   createAdminUser,
+  confirmUserAccount,
 };

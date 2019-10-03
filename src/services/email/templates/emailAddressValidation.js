@@ -68,7 +68,7 @@ export default ({ name, confirmationUrl }) => `
           <a href=${confirmationUrl}>Confirm Email Address</a>
         </div>
         <p>Just incase the button above does not work, copy and past the url below to a browser tab:</p>
-        <a href=${confirmationUrl}class="url">${confirmationUrl}</a>
+        <a href=${confirmationUrl} class="url">${confirmationUrl}</a>
         <p class="mistake-note">If you received this email by mistake, simply delete it. Thanks.</p>
       </div>
     </div>
