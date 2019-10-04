@@ -40,7 +40,6 @@ const nurseUserSchema = new Schema({
 });
 
 export default {
-  // Ensure all model names are in lowercase
   [userTypes.HOSPITAL_ADMIN_USER]: mongoose.model('user.hospitaladmin', hospitalAdminUserSchema),
   [userTypes.WARD_USER]: mongoose.model('user.ward', wardUserSchema),
   [userTypes.NURSE_USER]: mongoose.model('user.nurse', nurseUserSchema),

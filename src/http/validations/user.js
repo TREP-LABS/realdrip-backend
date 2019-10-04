@@ -72,7 +72,7 @@ const validateRegToken = (req, res, next) => {
  * a faliure response is sent to the user.
  * @param {object} req Express request object
  * @param {object} res Express response object
- * @param {function} Express helper function to pass request to the next middleware
+ * @param {function} next Express helper function to pass request to the next middleware
  */
 const login = (req, res, next) => {
   const { email, password, userType } = req.body;
