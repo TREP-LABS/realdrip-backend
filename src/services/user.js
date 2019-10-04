@@ -25,7 +25,7 @@ const createAdminUser = async (data) => {
     confirmed: false,
     deviceCount: 0,
   }, HOSPITAL_ADMIN_USER);
-  const regToken = jwt.sign({ email, action: 'confirmation' }, config.jwtSecrete);
+  const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
   const confirmationUrl = `${config.appUrl}/api/users/confirm?regToken=${regToken}`;
   // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
   // before sending response to the user.
@@ -53,12 +53,10 @@ const createAdminUser = async (data) => {
  */
 const confirmUserAccount = async (regToken) => {
   try {
-    console.log('RegToken:  ', regToken);
     const decoded = jwt.verify(regToken, config.jwtSecrete);
-    const { email } = decoded;
-    return db.adminUser.updateUser(email, { confirmed: true });
+    const { email, userType } = decoded;
+    return db.users.updateUser(email, { confirmed: true }, userType);
   } catch (err) {
-    console.log('RegToken Err: ', err);
     const error = new Error('Registeration token not valid');
     error.httpStatusCode = 400;
     throw error;
