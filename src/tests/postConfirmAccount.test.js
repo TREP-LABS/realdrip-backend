@@ -11,7 +11,7 @@ describe('/users/confirm', () => {
   });
 
   test('Operation should succeed if token is valid', (done) => {
-    const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9ndW5uaXlpdHVubWlzZUBnbWFpbC5jb20iLCJhY3Rpb24iOiJjb25maXJtYXRpb24iLCJpYXQiOjE1Njk4MzU0NDh9.WFhIPCwEaBjnIaxPMFwthYezl7X3MqhQYcPfcYD8Lhw';
+    const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VyVHlwZSI6Imhvc3BpdGFsX2FkbWluIiwiaWF0IjoxNTcwMTgyNjk4fQ.Df7sc7J_1vJozqO5UEFU6O_P6BdJ1xzhv-NbuoP-pWk';
     request
       .get(`/api/users/confirm?regToken=${validToken}`)
       .end((err, res) => {
