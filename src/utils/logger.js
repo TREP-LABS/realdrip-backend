@@ -1,5 +1,8 @@
 import bunyan from 'bunyan';
 import expressRequestsLogger from 'express-requests-logger';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const log = bunyan.createLogger({
   name: process.env.APP_NAME || 'app',
