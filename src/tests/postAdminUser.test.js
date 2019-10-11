@@ -17,7 +17,9 @@ const userDetails = {
   },
 };
 
-describe('/users/admin', () => {
+const hospitalUserEndpoint = '/api/hospital';
+
+describe(hospitalUserEndpoint, () => {
   afterAll(async () => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close(false);
@@ -25,7 +27,7 @@ describe('/users/admin', () => {
 
   test('Opetation should succeed', (done) => {
     request
-      .post('/api/users/admin')
+      .post(hospitalUserEndpoint)
       .send(userDetails)
       .end((err, res) => {
         const expectedResponse = {
@@ -36,8 +38,8 @@ describe('/users/admin', () => {
             name: userDetails.name,
             email: userDetails.email,
             location: userDetails.location,
-            confirmed: false,
-            deviceCount: 0,
+            confirmedEmail: false,
+            verifiedPurchase: false,
           },
         };
         expect(res.status).toBe(201);
@@ -51,13 +53,13 @@ describe('/users/admin', () => {
       const anotherUser = { ...userDetails, email: 'anotherUser@test.com' };
       // create a user first
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send(anotherUser)
         .end((error, response) => {
           expect(response.body.success).toEqual(true);
           // Try creating that same user again
           request
-            .post('/api/users/admin')
+            .post(hospitalUserEndpoint)
             .send(anotherUser)
             .end((err, res) => {
               expect(res.status).toBe(409);
@@ -70,7 +72,7 @@ describe('/users/admin', () => {
 
     test('name is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, name: '' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -84,7 +86,7 @@ describe('/users/admin', () => {
 
     test('name value is less than 3 characters', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, name: 'me' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -98,7 +100,7 @@ describe('/users/admin', () => {
 
     test('email is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, email: '' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -112,7 +114,7 @@ describe('/users/admin', () => {
 
     test('email value is not a valid email address', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, email: 'testtt.com' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -126,7 +128,7 @@ describe('/users/admin', () => {
 
     test('password is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, password: '' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -142,7 +144,7 @@ describe('/users/admin', () => {
       // A weak password is a password that is less than 7 characters
       // and is not a mix of capital, small letters and numbers.
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, password: 'password' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -156,7 +158,7 @@ describe('/users/admin', () => {
 
     test('confirm password is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, confirmPassword: '' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -170,7 +172,7 @@ describe('/users/admin', () => {
 
     test('confirm password value does not match password value', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, confirmPassword: 'anotherPassword' })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -184,7 +186,7 @@ describe('/users/admin', () => {
 
     test('country is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, location: { ...userDetails.location, country: '' } })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -198,7 +200,7 @@ describe('/users/admin', () => {
 
     test('state is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, location: { ...userDetails.location, state: '' } })
         .end((err, res) => {
           expect(res.status).toBe(400);
@@ -212,7 +214,7 @@ describe('/users/admin', () => {
 
     test('address is not provided', (done) => {
       request
-        .post('/api/users/admin')
+        .post(hospitalUserEndpoint)
         .send({ ...userDetails, location: { ...userDetails.location, address: '' } })
         .end((err, res) => {
           expect(res.status).toBe(400);

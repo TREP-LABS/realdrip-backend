@@ -27,11 +27,11 @@ describe('/users/login', () => {
   beforeAll((done) => {
     // Create a user before running any test
     request
-      .post('/api/users/admin')
+      .post('/api/hospital')
       .send(userDetails)
       .end((err, res) => {
         if (err || res.status !== 201) {
-          throw Error('Creating user failed, all tests in this suite is expected to also fail');
+          throw Error('Creating hospital user failed, all tests in this suite is expected to also fail');
           // TODO: Find a better way to exit/skip this test suite once user creation fails
         }
         done();
@@ -54,11 +54,10 @@ describe('/users/login', () => {
           data: {
             user: {
               id: expect.any(String),
-              type: loginDetails.userType,
               name: expect.any(String),
               email: loginDetails.email,
-              confirmed: false,
-              deviceCount: expect.any(Number),
+              confirmedEmail: false,
+              verifiedPurchase: false,
             },
             token: expect.any(String),
           },
