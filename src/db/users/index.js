@@ -20,17 +20,6 @@ const getUser = async (userMatch, userType) => {
 };
 
 /**
- * @description gets user based on details supplied
- * @param {object} userDetails The user details is an object that contains user params
- * @returns {Promise} A promise that resolves or reject to the result of the database operation
- */
-
-const getUser = async (userDetails, userType) => {
-  const Model = userModels[userType];
-  return Model.findOne(userDetails);
-};
-
-/**
  * @description Updates user data in the database
  * @param {object} userMatch An object describing how to select the user to be udpated
  * @param {string} [userMatch._id] The unique id of the user
