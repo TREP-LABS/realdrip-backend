@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
     const { id, type } = decoded;
     const user = await db.users.getUser({ _id: id }, type);
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Unable to fetch user details' });
+      return res.status(404).json({ success: false, message: 'Invalid user' });
     }
     res.locals.user = user;
     res.locals.userType = type;
