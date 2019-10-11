@@ -1,11 +1,17 @@
 import express from 'express';
-import logger from 'morgan';
+import uuid from 'uuid/v4';
+import { log, logMiddleware } from '../utils/logger';
 import routes from './routes';
 
 const app = express();
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  const reqId = uuid();
+  res.locals.log = log.child({ reqId });
+  next();
+}, (req, res, next) => logMiddleware(res.locals.log)(req, res, next));
 
 // Enabling CORS for browser clients
 app.all('*', (req, res, next) => {

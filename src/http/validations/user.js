@@ -11,6 +11,9 @@ import FieldErrors from './fieldErrors';
  * @param {function} next Express helper function to pass request to the next middleware
  */
 const createAdminUser = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating request data to create admin user');
+
   const {
     name, email, password, confirmPassword,
     location: { country, state, address },
@@ -42,8 +45,10 @@ const createAdminUser = (req, res, next) => {
   if (!address || typeof (address) !== 'string') fieldErrors.addError('location.address', 'Address field is a required string');
 
   if (fieldErrors.count > 0) {
+    log.debug('Create admin request data is invalid, sending back failure response');
     return res.status(400).json({ success: false, message: 'Invalid request body', errors: fieldErrors.errors });
   }
+  log.debug('Create admin request data is valid, moving on to the next middleware');
   return next();
 };
 
@@ -55,14 +60,19 @@ const createAdminUser = (req, res, next) => {
  * @param {function} next Express helper function to pass request to the next middleware
  */
 const validateRegToken = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating user registeration token');
+
   const { regToken } = req.query;
   const fieldErrors = new FieldErrors();
   if (!regToken || typeof (regToken) !== 'string') {
     fieldErrors.addError('regToken', 'regToken is a required query parameter');
   }
   if (fieldErrors.count > 0) {
+    log.debug('Registeration token is invalid, sending back a failure response');
     return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
   }
+  log.debug('Registeration token is valid, moving on to the next middleware');
   return next();
 };
 
@@ -75,6 +85,9 @@ const validateRegToken = (req, res, next) => {
  * @param {function} next Express helper function to pass request to the next middleware
  */
 const login = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating user login request data');
+
   const { email, password, userType } = req.body;
   const fieldErrors = new FieldErrors();
 
@@ -92,8 +105,10 @@ const login = (req, res, next) => {
   }
 
   if (fieldErrors.count > 0) {
+    log.debug('User login request data is invalid, sending back a failure response');
     return res.status(400).json({ success: false, message: 'Invalid request body', errors: fieldErrors.errors });
   }
+  log.debug('User login request data is valid, moving on to the next middleware');
   return next();
 };
 
