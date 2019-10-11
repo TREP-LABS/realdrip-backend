@@ -57,9 +57,9 @@ describe('/api/device/devieid', () => {
   test('Geting device should fail due to invalid token', async (done) => {
     request
       .get('/api/device/deviceId')
-      .set('Authorization', 'abc123')
+      .set('req-token', 'abc123')
       .end((err, res) => {
-        expect(res.status).toBe(403);
+        expect(res.status).toBe(401);
         expect(res.body.success).toEqual(false);
         done();
       });
@@ -68,10 +68,10 @@ describe('/api/device/devieid', () => {
   test('Geting device should fail because the device id is invalid', async (done) => {
     const user = await db.users.createUser(userDetails, 'hospital_admin');
     // eslint-disable-next-line no-underscore-dangle
-    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
+    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     request
       .get('/api/device/deviceId')
-      .set('Authorization', validToken)
+      .set('req-token', validToken)
       .end((err, res) => {
         expect(res.status).toBe(404);
         expect(res.body.success).toEqual(false);
@@ -87,11 +87,11 @@ describe('/api/device/devieid', () => {
       label: 'something nice',
     });
     // eslint-disable-next-line no-underscore-dangle
-    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
+    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     request
     // eslint-disable-next-line no-underscore-dangle
       .get(`/api/device/${device._id}`)
-      .set('Authorization', validToken)
+      .set('req-token', validToken)
       .end((err, res) => {
         expect(res.status).toBe(200);
         done();

@@ -12,7 +12,8 @@ const createAdminUser = async (data, log) => {
   const lowerCaseEmail = email.toLowerCase();
   const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
   log.debug('Checking if a user with the given email already exist');
-  const alreadyExistingUser = await db.users.getUserByEmail(lowerCaseEmail, HOSPITAL_ADMIN_USER);
+  const alreadyExistingUser = await db.users.getUser({ email: lowerCaseEmail },
+    HOSPITAL_ADMIN_USER);
   if (alreadyExistingUser) {
     log.debug('User with the given email already exist, throwing error');
     const error = new Error('User with this email already exist');
@@ -83,8 +84,12 @@ const confirmUserAccount = async (regToken, log) => {
 const login = async (data, log) => {
   log.debug('Executing login service');
   const { email, password, userType } = data;
+<<<<<<< HEAD
   log.debug('Check if a user with the given email exist');
   const user = await db.users.getUserByEmail(email.toLowerCase(), userType);
+=======
+  const user = await db.users.getUser({ email: email.toLowerCase() }, userType);
+>>>>>>> FIX PR reviews
   if (!user || !bcrypt.compareSync(password, user.password)) {
     log.debug('The given email or password is not correct, throwing error');
     const error = new Error('Email or password incorrect');
