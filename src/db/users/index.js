@@ -12,6 +12,17 @@ const getUserByEmail = async (email, userType) => {
 };
 
 /**
+ * @description gets user based on details supplied
+ * @param {object} userDetails The user details is an object that contains user params
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+
+const getUser = async (userDetails, userType) => {
+  const Model = userModels[userType];
+  return Model.findOne(userDetails);
+};
+
+/**
  * @description Updates user data in the database
  * @param {string} email The email of the user to update
  * @param {object} update The data to patch with the existing user data
@@ -27,4 +38,5 @@ export default {
   getUserByEmail,
   updateUser,
   userTypes,
+  getUser,
 };
