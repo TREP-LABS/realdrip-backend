@@ -36,7 +36,7 @@ const getAllDevice = async (user, userType, log) => {
     return { device };
   } catch (err) {
     log.debug('Unable to get devices. Returning an error with a status code');
-    const error = new Error(`Unable to get devices`);
+    const error = new Error('Unable to get devices');
     error.httpStatusCode = 404;
     throw error;
   }

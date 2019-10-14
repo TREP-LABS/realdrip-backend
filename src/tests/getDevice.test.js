@@ -120,6 +120,5 @@ describe('/api/device/devieid', () => {
         expect(res.status).toBe(200);
         done();
       });
-
   }, timeout);
 });

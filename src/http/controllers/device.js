@@ -25,7 +25,7 @@ const getAllDevice = async (req, res) => {
   try {
     const device = await deviceService.getAllDevice(user, userType, log);
     log.debug('getAllDevice service executed without error, sending back a success response');
-    return res.status(200).json({ success: true, message: 'Device found', data: device });
+    return res.status(200).json({ success: true, message: 'Devices found', data: device });
   } catch (err) {
     if (err.httpStatusCode) {
       log.debug('getAllDevice service failed with an http status code, sending back a failure response');
