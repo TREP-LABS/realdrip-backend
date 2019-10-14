@@ -27,8 +27,8 @@ const createAdminUser = async (data, log) => {
     email: lowerCaseEmail,
     location,
     password: hashedPassword,
-    confirmed: false,
-    deviceCount: 0,
+    confirmedEmail: false,
+    verifiedPurchase: false,
   }, HOSPITAL_ADMIN_USER);
   log.debug('Create a registeration token');
   const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
@@ -44,8 +44,8 @@ const createAdminUser = async (data, log) => {
     name: adminUser.name,
     email: adminUser.email,
     location: adminUser.location,
-    confirmed: adminUser.confirmed,
-    deviceCount: adminUser.deviceCount,
+    confirmedEmail: adminUser.confirmedEmail,
+    verifiedPurchase: adminUser.verifiedPurchase,
   };
 };
 
@@ -98,13 +98,14 @@ const login = async (data, log) => {
   return {
     user: {
       id: userId,
-      type: userType,
       name: user.name,
       email: user.email,
-      confirmed: user.confirmed,
+      phoneNo: user.phoneNo,
+      confirmedEmail: user.confirmedEmail,
+      verifiedPurchase: user.verifiedPurchase,
       defaultPass: user.defaultPass,
+      wardId: user.wardId,
       hospitalId: user.hospitalId,
-      deviceCount: user.deviceCount,
     },
     token,
   };

@@ -4,7 +4,9 @@ import app from '../http/app';
 
 const request = supertest(app);
 
-describe('/users/confirm', () => {
+const confirmEmailEndpoint = '/api/hospital/confirmEmail';
+
+describe(confirmEmailEndpoint, () => {
   afterAll(async () => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close(false);
@@ -13,7 +15,7 @@ describe('/users/confirm', () => {
   test('Operation should succeed if token is valid', (done) => {
     const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VyVHlwZSI6Imhvc3BpdGFsX2FkbWluIiwiaWF0IjoxNTcwMTgyNjk4fQ.Df7sc7J_1vJozqO5UEFU6O_P6BdJ1xzhv-NbuoP-pWk';
     request
-      .get(`/api/users/confirm?regToken=${validToken}`)
+      .get(`${confirmEmailEndpoint}?regToken=${validToken}`)
       .end((err, res) => {
         expect(res.status).toBe(302);
         expect(res.header.location).toMatch(/\/login/);
@@ -23,7 +25,7 @@ describe('/users/confirm', () => {
 
   test('Operation should fail if regToken is not provied', (done) => {
     request
-      .get('/api/users/confirm?regToken=')
+      .get(`${confirmEmailEndpoint}?regToken=`)
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body.message).toEqual('Invalid request');
@@ -35,7 +37,7 @@ describe('/users/confirm', () => {
 
   test('Operation should fail if regToken is not valid', (done) => {
     request
-      .get('/api/users/confirm?regToken=someRandomToken')
+      .get(`${confirmEmailEndpoint}?regToken=someRandomToken`)
       .end((err, res) => {
         expect(res.status).toBe(400);
         expect(res.body.message).toEqual('Registeration token not valid');

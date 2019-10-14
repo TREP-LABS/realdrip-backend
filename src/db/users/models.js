@@ -21,15 +21,14 @@ const hospitalAdminUserSchema = new Schema({
     state: { type: String, required: true },
     address: { type: String, required: true },
   },
-  confirmed: { type: Boolean, required: true },
-  deviceCount: { type: Number, required: true },
+  confirmedEmail: { type: Boolean, required: true },
+  verifiedPurchase: { type: Boolean, required: true },
 });
 
 const wardUserSchema = new Schema({
   ...baseUser,
   defaultPass: { type: Boolean },
   hospitalId: { type: Schema.Types.ObjectId, required: true },
-  deviceCount: { type: Number, required: true },
 });
 
 const nurseUserSchema = new Schema({
