@@ -22,6 +22,8 @@ const userDetails = {
     state: 'TestState',
     address: 'TestAddress',
   },
+  confirmedEmail: true,
+  verifiedPurchase: true,
 };
 const userDetails2 = {
   name: 'Test Admin User',
@@ -35,6 +37,8 @@ const userDetails2 = {
     state: 'TestState',
     address: 'TestAddress',
   },
+  confirmedEmail: true,
+  verifiedPurchase: true,
 };
 
 describe('/api/device/devieid', () => {
