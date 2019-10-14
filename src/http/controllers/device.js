@@ -19,6 +19,24 @@ const getSingleDevice = async (req, res) => {
   }
 };
 
+const getAllDevice = async (req, res) => {
+  const { user, userType, log } = res.locals;
+  log.debug('Executing the getAllDevice controller');
+  try {
+    const device = await deviceService.getAllDevice(user, userType, log);
+    log.debug('getAllDevice service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Device found', data: device });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('getAllDevice service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'getAllDevice service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error getting device' });
+  }
+};
+
 export default {
   getSingleDevice: [deviceValidation.getSingleDevice, getSingleDevice],
+  getAllDevice,
 };

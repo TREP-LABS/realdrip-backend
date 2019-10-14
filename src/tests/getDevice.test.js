@@ -56,11 +56,27 @@ describe('/api/device/devieid', () => {
         expect(res.body.success).toEqual(false);
         done();
       });
+    request
+      .get('/api/device/deviceId')
+      .end((err, res) => {
+        expect(res.status).toBe(401);
+        expect(res.body.success).toEqual(false);
+        done();
+      });
   }, timeout);
 
   test('Geting device should fail due to invalid token', async (done) => {
     request
       .get('/api/device/deviceId')
+      .set('req-token', 'abc123')
+      .end((err, res) => {
+        expect(res.status).toBe(401);
+        expect(res.body.success).toEqual(false);
+        done();
+      });
+
+    request
+      .get('/api/device')
       .set('req-token', 'abc123')
       .end((err, res) => {
         expect(res.status).toBe(401);
@@ -96,5 +112,14 @@ describe('/api/device/devieid', () => {
         expect(res.status).toBe(200);
         done();
       });
+
+    request
+      .get('/api/device')
+      .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+
   }, timeout);
 });

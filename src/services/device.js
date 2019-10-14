@@ -20,4 +20,25 @@ const getSingleDevice = async (deviceId, user, userType, log) => {
     throw error;
   }
 };
-export default { getSingleDevice };
+
+const getAllDevice = async (user, userType, log) => {
+  try {
+    log.debug('Gathering user details');
+    const deviceMatch = {
+      // eslint-disable-next-line no-underscore-dangle
+      hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
+      // eslint-disable-next-line no-underscore-dangle
+      wardId: userType === 'ward_user' ? user._id : user.wardId,
+    };
+    log.debug('Getting devices from the database using user details');
+    const device = await db.device.getAllDevice(deviceMatch);
+    log.debug('Sending devices to the user');
+    return { device };
+  } catch (err) {
+    log.debug('Unable to get devices. Returning an error with a status code');
+    const error = new Error(`Unable to get devices`);
+    error.httpStatusCode = 404;
+    throw error;
+  }
+};
+export default { getSingleDevice, getAllDevice };

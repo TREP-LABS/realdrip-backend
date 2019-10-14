@@ -15,6 +15,17 @@ const getSingleDevice = async (deviceDetails) => {
 };
 
 /**
+ * @description Gets all devices matching the query parameter
+ * @param {object} deviceDetails  The data to be used as filter for getting all devices
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const getAllDevice = async (deviceDetails) => {
+  const params = JSON.parse(JSON.stringify(deviceDetails));
+  const Model = deviceModel;
+  return Model.find(params);
+};
+
+/**
  * @description Creates a device in the database
  * @param {object} data  The device info to be added to the database
  * @param {string} data.hospitalId
@@ -29,5 +40,6 @@ const createDevice = async (data) => {
 
 export default {
   getSingleDevice,
+  getAllDevice,
   createDevice,
 };
