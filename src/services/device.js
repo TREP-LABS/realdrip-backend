@@ -12,7 +12,7 @@ const getSingleDevice = async (deviceId, user, userType, log) => {
       // eslint-disable-next-line no-underscore-dangle
       wardId: userType === 'ward_user' ? user._id : user.wardId,
     };
-    log.debug('Fetching device from database');
+    log.debug('Fetching device from database using filter parameters');
     const device = await db.device.getSingleDevice(deviceMatch);
     log.debug('Returning device to user');
     return { device };
