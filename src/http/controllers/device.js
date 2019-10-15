@@ -4,7 +4,7 @@ import deviceValidation from '../validations/device';
 const getSingleDevice = async (req, res) => {
   const { deviceId } = req.params;
   const { user, userType, log } = res.locals;
-  log.debug('Executing the getAllDevice controller');
+  log.debug('Executing the getSingleDevice controller');
   try {
     const device = await deviceService.getSingleDevice(deviceId, user, userType, log);
     log.debug('getSingleDevice service executed without error, sending back a success response');

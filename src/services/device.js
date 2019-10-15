@@ -15,7 +15,7 @@ const getSingleDevice = async (deviceId, user, userType, log) => {
     log.debug('Fetching device from database using filter parameters');
     const device = await db.device.getSingleDevice(deviceMatch);
     log.debug('Returning device to user');
-    return { device };
+    return device;
   } catch (err) {
     log.debug('Unable to get device. throwing error');
     const error = new Error(`Unable to get device with id: ${deviceId}`);
