@@ -33,7 +33,7 @@ const getAllDevice = async (user, userType, log) => {
     log.debug('Getting devices from the database using user details');
     const device = await db.device.getAllDevice(deviceMatch);
     log.debug('Sending devices to the user');
-    return { device };
+    return device;
   } catch (err) {
     log.debug('Unable to get devices. Returning an error with a status code');
     const error = new Error('Unable to get devices');
