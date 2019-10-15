@@ -6,9 +6,14 @@ const createUser = async (userData, userType) => {
   return new Model(userData).save();
 };
 
-const getUserByEmail = async (email, userType) => {
+/**
+ * @description Gets a user based on details supplied
+ * @param {object} userDetails The user details is an object that contains user params
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const getUser = async (userDetails, userType) => {
   const Model = userModels[userType];
-  return Model.findOne({ email });
+  return Model.findOne(userDetails);
 };
 
 /**
@@ -24,7 +29,7 @@ const updateUser = async (email, update, userType) => {
 
 export default {
   createUser,
-  getUserByEmail,
   updateUser,
   userTypes,
+  getUser,
 };
