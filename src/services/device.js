@@ -5,11 +5,8 @@ const getSingleDevice = async (deviceId, user, userType, log) => {
   try {
     log.debug('Gathering filter parameters for getting device');
     const deviceMatch = {
-      // eslint-disable-next-line no-underscore-dangle
       _id: deviceId,
-      // eslint-disable-next-line no-underscore-dangle
       hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-      // eslint-disable-next-line no-underscore-dangle
       wardId: userType === 'ward_user' ? user._id : user.wardId,
     };
     log.debug('Fetching device from database using filter parameters');
