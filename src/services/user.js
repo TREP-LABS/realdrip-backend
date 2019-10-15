@@ -4,6 +4,20 @@ import db from '../db';
 import emailService from './email';
 import config from './config';
 
+const formatUserData = user => JSON.parse(JSON.stringify({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  phoneNo: user.phoneNo,
+  location: user.location,
+  confirmedEmail: user.confirmedEmail,
+  verifiedPurchase: user.verifiedPurchase,
+  defaultPass: user.defaultPass,
+  hospitalId: user.hospitalId,
+  deviceCount: user.deviceCount,
+}));
+
+
 const createAdminUser = async (data, log) => {
   log.debug('Executing createAdminUser service');
   const {
@@ -12,8 +26,9 @@ const createAdminUser = async (data, log) => {
   const lowerCaseEmail = email.toLowerCase();
   const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
   log.debug('Checking if a user with the given email already exist');
-  const alreadyExistingUser = await db.users.getUser({ email: lowerCaseEmail },
-    HOSPITAL_ADMIN_USER);
+  const alreadyExistingUser = await db.users.getUser(
+    { email: lowerCaseEmail }, HOSPITAL_ADMIN_USER,
+  );
   if (alreadyExistingUser) {
     log.debug('User with the given email already exist, throwing error');
     const error = new Error('User with this email already exist');
@@ -39,15 +54,25 @@ const createAdminUser = async (data, log) => {
   log.debug('Sending email address validation mail notification');
   emailService.sendEmailAddresValidation({ name, email }, confirmationUrl)
     .catch(err => log.error(err, `Error sending email to  ${email}`));
-  return {
-    // eslint-disable-next-line no-underscore-dangle
-    id: adminUser._id,
-    name: adminUser.name,
-    email: adminUser.email,
-    location: adminUser.location,
-    confirmedEmail: adminUser.confirmedEmail,
-    verifiedPurchase: adminUser.verifiedPurchase,
-  };
+  return formatUserData(adminUser);
+};
+
+/**
+ * @description The service function that updates an admin user account details
+ * @param {object} data The editable user data and the userId
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The updated user data
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const updateAdminUser = async (data, log) => {
+  log.debug('Executing updateAdminUser service');
+  const { name, location, userId } = data;
+  const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+  const fieldsToUpdate = JSON.parse(JSON.stringify({ name, location }));
+  const { _doc: updatedUser } = await db.users.updateUser(
+    { _id: userId }, fieldsToUpdate, HOSPITAL_ADMIN_USER,
+  );
+  return formatUserData(updatedUser);
 };
 
 /**
@@ -63,7 +88,7 @@ const confirmUserAccount = async (regToken, log) => {
     const decoded = jwt.verify(regToken, config.jwtSecrete);
     const { email, userType } = decoded;
     log.debug('Registeration token is valid, update user information in the DB');
-    return db.users.updateUser(email, { confirmed: true }, userType);
+    return db.users.updateUser({ email }, { confirmedEmail: true }, userType);
   } catch (err) {
     log.debug('Unable to verify the registeration token, throwing error');
     const error = new Error('Registeration token not valid');
@@ -92,29 +117,16 @@ const login = async (data, log) => {
     error.httpStatusCode = 400;
     throw error;
   }
-  // eslint-disable-next-line no-underscore-dangle
   const userId = user._id;
   log.debug('Create an auth token for this user');
   const token = jwt.sign({ type: userType, id: userId }, config.jwtSecrete, { expiresIn: '3d' });
-  return {
-    user: {
-      id: userId,
-      name: user.name,
-      email: user.email,
-      phoneNo: user.phoneNo,
-      confirmedEmail: user.confirmedEmail,
-      verifiedPurchase: user.verifiedPurchase,
-      defaultPass: user.defaultPass,
-      wardId: user.wardId,
-      hospitalId: user.hospitalId,
-    },
-    token,
-  };
+  return { user: formatUserData(user), token };
 };
 
 
 export default {
   createAdminUser,
+  updateAdminUser,
   confirmUserAccount,
   login,
 };
