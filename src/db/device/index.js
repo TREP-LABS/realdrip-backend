@@ -28,6 +28,10 @@ const getAllDevice = async (deviceMatch) => {
 /**
  * @description Gets all devices matching the query parameter
  * @param {object} deviceDetails  The data to be used as filter for getting all devices
+ * @param {string} deviceDetails.hospitalId The hospitalId will used as the filter
+ * if the hospital_admin request for a device
+ * @param {string} deviceDetails.wardId if the ward or nurse requests for a device
+ *  then both the hospitalId and the wardId will be used as filters
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
 const getAllDevice = async (deviceDetails) => {
