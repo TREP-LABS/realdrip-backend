@@ -2,6 +2,7 @@ import deviceModel from './model';
 
 /**
  * @description Gets a single device from the database
+<<<<<<< HEAD
  * @param {object} deviceMatch  The data to be used as filter for getting device
  * @param {string} deviceMatch._id The unique id of the device
  * @param {string} deviceMatch.hospitalId The hospital id associated with the device
@@ -23,21 +24,31 @@ const getSingleDevice = async (deviceMatch) => {
 const getAllDevice = async (deviceMatch) => {
   const Model = deviceModel;
   return Model.find(deviceMatch);
+=======
+ * @param {object} deviceMatch  The data to be used as filter
+ * @param {string} deviceMatch._id
+ * @param {string} deviceMatch.hospitalId
+ * @param {string} deviceMatch.wardId
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const getSingleDevice = async (deviceMatch) => {
+  const Model = deviceModel;
+  return Model.findOne(deviceMatch);
+>>>>>>> UPDATE did a rebase and fix review issues and merge conflict
 };
 
 /**
  * @description Gets all devices matching the query parameter
- * @param {object} deviceDetails  The data to be used as filter for getting all devices
- * @param {string} deviceDetails.hospitalId The hospitalId will used as the filter
+ * @param {object} deviceMatch  The data to be used as filter for getting all devices
+ * @param {string} deviceMatch.hospitalId The hospitalId will used as the filter
  * if the hospital_admin request for a device
- * @param {string} deviceDetails.wardId if the ward or nurse requests for a device
+ * @param {string} deviceMatch.wardId if the ward or nurse requests for a device
  *  then both the hospitalId and the wardId will be used as filters
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getAllDevice = async (deviceDetails) => {
-  const params = JSON.parse(JSON.stringify(deviceDetails));
+const getAllDevice = async (deviceMatch) => {
   const Model = deviceModel;
-  return Model.find(params);
+  return Model.find(deviceMatch);
 };
 
 /**

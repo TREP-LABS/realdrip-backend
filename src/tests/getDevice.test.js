@@ -51,7 +51,7 @@ describe('/api/device/', () => {
         done();
       });
     request
-      .get('/api/device/deviceId')
+      .get('/api/device')
       .end((err, res) => {
         expect(res.status).toBe(401);
         expect(res.body.success).toEqual(false);
