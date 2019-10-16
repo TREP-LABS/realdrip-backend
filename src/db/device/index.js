@@ -64,8 +64,23 @@ const createDevice = async (data) => {
   return new Model(data).save();
 };
 
+/**
+ * @description Updates device data in the database
+ * @param {object} deviceMatch An object describing how to select the device to be udpated
+ * @param {string} [deviceMatch._id] The unique id of the device
+ * @param {string} [deviceMatch.hospitalId] The hospitalId of the device
+ * @param {string} [deviceMatch.wardId] The wardId of the device
+ * @param {object} update The data to patch with the existing device data
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const updateDevice = async (deviceMatch, update) => {
+  const Model = deviceModel;
+  return Model.findOneAndUpdate(deviceMatch, { $set: update }, { new: true });
+};
+
 export default {
   getSingleDevice,
   getAllDevice,
   createDevice,
+  updateDevice,
 };

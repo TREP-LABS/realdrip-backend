@@ -25,5 +25,6 @@ router.post('/users/login', controllers.allUser.login);
 
 router.get('/device', authMiddleware, controllers.device.getAllDevice);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
+router.put('/device/:deviceId', authMiddleware, controllers.device.updateDevice);
 
 export default router;
