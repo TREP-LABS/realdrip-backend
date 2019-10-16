@@ -78,7 +78,9 @@ describe('/api/device/', () => {
         expect(res.body.success).toEqual(false);
         done();
       });
+  }, timeout);
 
+  test('Geting all devices should fail if the request token is invalid', async (done) => {
     request
       .get('/api/device')
       .set('req-token', 'abc123')
@@ -119,7 +121,16 @@ describe('/api/device/', () => {
         expect(res.status).toBe(200);
         done();
       });
+  }, timeout);
 
+  test('Getting all devices should succed if both the user and the device id is valid', async (done) => {
+    const user = await db.users.createUser({ ...userDetails, email: 'abiola@test.com' },
+      'hospital_admin');
+    await db.device.createDevice({
+      hospitalId: user._id,
+      label: 'something nice',
+    });
+    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     request
       .get('/api/device')
       .set('req-token', validToken)
@@ -134,6 +145,24 @@ describe('/api/device/', () => {
     request
       .get('/api/device')
       .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+  }, timeout);
+
+  test('Updating of the device label should succeed if the device details and the user are both valid', async (done) => {
+    const user = await db.users.createUser({ ...userDetails, email: 'Tumise@test.com' },
+      'hospital_admin');
+    const device = await db.device.createDevice({
+      hospitalId: user._id,
+      label: 'something nice',
+    });
+    const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
+    request
+      .put(`/api/device/${device._id}`)
+      .set('req-token', validToken)
+      .send({ label: 'kesiena' })
       .end((err, res) => {
         expect(res.status).toBe(200);
         done();
