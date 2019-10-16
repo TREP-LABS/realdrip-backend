@@ -9,8 +9,9 @@ const getSingleDevice = async (deviceId, user, userType, log) => {
       hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
       wardId: userType === 'ward_user' ? user._id : user.wardId,
     };
+    const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
     log.debug('Fetching device from database using filter parameters');
-    const device = await db.device.getSingleDevice(deviceMatch);
+    const device = await db.device.getSingleDevice(purifyDeviceMatch);
     log.debug('Returning device to user');
     return device;
   } catch (err) {
@@ -25,13 +26,12 @@ const getAllDevice = async (user, userType, log) => {
   try {
     log.debug('Gathering user details');
     const deviceMatch = {
-      // eslint-disable-next-line no-underscore-dangle
       hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-      // eslint-disable-next-line no-underscore-dangle
       wardId: userType === 'ward_user' ? user._id : user.wardId,
     };
+    const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
     log.debug('Getting devices from the database using user details');
-    const device = await db.device.getAllDevice(deviceMatch);
+    const device = await db.device.getAllDevice(purifyDeviceMatch);
     log.debug('Sending devices to the user');
     return device;
   } catch (err) {

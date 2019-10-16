@@ -57,7 +57,7 @@ describe('/api/device/devieid', () => {
         done();
       });
     request
-      .get('/api/device/deviceId')
+      .get('/api/device')
       .end((err, res) => {
         expect(res.status).toBe(401);
         expect(res.body.success).toEqual(false);
@@ -98,7 +98,7 @@ describe('/api/device/devieid', () => {
       });
   }, timeout);
 
-  test('Geting device should succeed', async (done) => {
+  test('Geting device should succeed for both getting single device and all devices', async (done) => {
     const user = await db.users.createUser(userDetails2, 'hospital_admin');
     const device = await db.device.createDevice({
       hospitalId: user._id,
