@@ -71,7 +71,6 @@ describe('/api/device/devieid', () => {
 
   test('Geting device should fail because the device id is invalid', async (done) => {
     const user = await db.users.createUser(userDetails, 'hospital_admin');
-    // eslint-disable-next-line no-underscore-dangle
     const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     request
       .get('/api/device/deviceId')
@@ -86,14 +85,11 @@ describe('/api/device/devieid', () => {
   test('Geting device should succeed', async (done) => {
     const user = await db.users.createUser(userDetails2, 'hospital_admin');
     const device = await db.device.createDevice({
-      // eslint-disable-next-line no-underscore-dangle
       hospitalId: user._id,
       label: 'something nice',
     });
-    // eslint-disable-next-line no-underscore-dangle
     const validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     request
-    // eslint-disable-next-line no-underscore-dangle
       .get(`/api/device/${device._id}`)
       .set('req-token', validToken)
       .end((err, res) => {
