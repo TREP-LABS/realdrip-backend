@@ -13,5 +13,6 @@ export default {
     testEmail: process.env.TEST_EMAIL,
   },
   jwtSecrete: process.env.JWT_SECRETE,
-  appUrl: process.env.SERVER_APP_URL,
+  serverAppUrl: process.env.SERVER_APP_URL,
+  clientAppUrl: process.env.CLIENT_APP_URL,
 };

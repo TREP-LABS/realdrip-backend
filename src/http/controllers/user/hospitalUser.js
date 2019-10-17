@@ -1,6 +1,6 @@
-import userService from '../../services/user';
-import userValidation from '../validations/user';
-import config from '../config';
+import hospitalUserService from '../../../services/user/hospitalUser';
+import userValidation from '../../validations/user';
+import config from '../../config';
 
 /**
  * @description Controller for create admin user API operation
@@ -14,7 +14,7 @@ const createAdminUser = async (req, res) => {
     name, email, password, location,
   } = req.body;
   try {
-    const user = await userService.createAdminUser({
+    const user = await hospitalUserService.createAdminUser({
       name, email, password, location,
     }, log);
     log.debug('CreateAdminUser service executed without error, sending back a success response');
@@ -40,7 +40,7 @@ const updateAdminUser = async (req, res) => {
   const { name, location } = req.body;
   const { _id: userId } = res.locals.user;
   try {
-    const user = await userService.updateAdminUser({ name, location, userId }, log);
+    const user = await hospitalUserService.updateAdminUser({ name, location, userId }, log);
     log.debug('UpdateAdminUser service executed without error, sending back a success response');
     return res.status(200).json({ success: true, message: 'User updated successfully', data: user });
   } catch (err) {
@@ -63,7 +63,7 @@ const confirmUserAccount = async (req, res) => {
   log.debug('Executing confirmUserAccount controller');
   const { regToken } = req.query;
   try {
-    await userService.confirmUserAccount(regToken, log);
+    await hospitalUserService.confirmUserAccount(regToken, log);
     log.debug('ConfirmUserAccount service executed without error, sending back a success response');
     return res.status(302).redirect(`${config.clientAppUrl}/login`);
   } catch (err) {
@@ -76,32 +76,8 @@ const confirmUserAccount = async (req, res) => {
   }
 };
 
-/**
- * @description User login controller
- * @param {object} req Express request object
- * @param {object} res Express response object
- */
-const login = async (req, res) => {
-  const { log } = res.locals;
-  log.debug('Executing the login controller');
-  const { email, password, userType } = req.body;
-  try {
-    const { token, user } = await userService.login({ email, password, userType }, log);
-    log.debug('Login service executed without error, sending back a success response');
-    return res.status(200).json({ success: true, message: 'Login successfully', data: { token, user } });
-  } catch (err) {
-    if (err.httpStatusCode) {
-      log.debug('Login service failed with an http status code, sending back a failure response');
-      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
-    }
-    log.error(err, 'Login service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error logging user in' });
-  }
-};
-
 export default {
   createAdminUser: [userValidation.createAdminUser, createAdminUser],
   confirmUserAccount: [userValidation.validateRegToken, confirmUserAccount],
   updateAdminUser: [userValidation.updateHospitalUser, updateAdminUser],
-  login: [userValidation.login, login],
 };

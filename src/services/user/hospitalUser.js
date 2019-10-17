@@ -1,23 +1,30 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import db from '../db';
-import emailService from './email';
-import config from './config';
+import db from '../../db';
+import emailService from '../email';
+import config from '../config';
 
-const formatUserData = user => JSON.parse(JSON.stringify({
+/**
+ * @description Format the user data to be returned to the client
+ * @param {object} user The raw user data gotten from the database
+ * @returns {object} The formatted user data
+ */
+const formatUserData = user => ({
   id: user._id,
   name: user.name,
   email: user.email,
-  phoneNo: user.phoneNo,
   location: user.location,
   confirmedEmail: user.confirmedEmail,
   verifiedPurchase: user.verifiedPurchase,
-  defaultPass: user.defaultPass,
-  hospitalId: user.hospitalId,
-  deviceCount: user.deviceCount,
-}));
+});
 
-
+/**
+ * @description The service function that creates an hospital user
+ * @param {object} data The hospital user data
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The new user
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
 const createAdminUser = async (data, log) => {
   log.debug('Executing createAdminUser service');
   const {
@@ -48,7 +55,7 @@ const createAdminUser = async (data, log) => {
   }, HOSPITAL_ADMIN_USER);
   log.debug('Create a registeration token');
   const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
-  const confirmationUrl = `${config.appUrl}/api/users/confirm?regToken=${regToken}`;
+  const confirmationUrl = `${config.serverAppUrl}/api/users/confirm?regToken=${regToken}`;
   // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
   // before sending response to the user.
   log.debug('Sending email address validation mail notification');
@@ -78,6 +85,7 @@ const updateAdminUser = async (data, log) => {
 /**
  * @description The service function that confirms a user account
  * @param {string} regToken The user registeration token
+ * @param {function} log Logger utility for logging messages
  * @returns {Promise} A promise that resolves or reject to the db operation to update a user data.
  * @throws {Error} Any error that prevents the service to execute successfully
  */
@@ -97,36 +105,8 @@ const confirmUserAccount = async (regToken, log) => {
   }
 };
 
-/**
- * @description Grants authorization to a valid user
- * @param {object} data The data required to perform the login operation
- * @param {string} data.email The user email
- * @param {string} data.password The user password
- * @param {string} data.userType The user type
- * @returns {object} The user details and authorization token
- * @throws {Error} Throws an error is operations fails
- */
-const login = async (data, log) => {
-  log.debug('Executing login service');
-  const { email, password, userType } = data;
-  log.debug('Check if a user with the given email exist');
-  const user = await db.users.getUser({ email: email.toLowerCase() }, userType);
-  if (!user || !bcrypt.compareSync(password, user.password)) {
-    log.debug('The given email or password is not correct, throwing error');
-    const error = new Error('Email or password incorrect');
-    error.httpStatusCode = 400;
-    throw error;
-  }
-  const userId = user._id;
-  log.debug('Create an auth token for this user');
-  const token = jwt.sign({ type: userType, id: userId }, config.jwtSecrete, { expiresIn: '3d' });
-  return { user: formatUserData(user), token };
-};
-
-
 export default {
   createAdminUser,
   updateAdminUser,
   confirmUserAccount,
-  login,
 };

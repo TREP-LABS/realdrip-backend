@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import mailgunTransport from 'nodemailer-mailgun-transport';
 import emailAddressValidation from './templates/emailAddressValidation';
+import newWardUser from './templates/newWardUser';
 import config from '../config';
 
 const mailgunOptions = {
@@ -19,6 +20,20 @@ const sendEmailAddresValidation = (user, confirmationUrl) => emailClient.sendMai
   html: emailAddressValidation({ name: user.name, confirmationUrl }),
 });
 
+const sendNewWardUserNotification = (user, loginUrl) => {
+  const { name, email, password } = user;
+  return emailClient.sendMail({
+    from: config.email.noReply,
+    to: config.environment === 'test' ? config.email.testEmail : user.email,
+    subject: 'Please verify your email address',
+    html: newWardUser({
+      name, email, password, loginUrl,
+    }),
+  });
+};
+
 export default {
+  emailClient,
+  sendNewWardUserNotification,
   sendEmailAddresValidation,
 };
