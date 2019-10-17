@@ -15,13 +15,11 @@ const auth = async (req, res, next) => {
     const { id, type } = decoded;
     const user = await db.users.getUser({ _id: id }, type);
     if (!user) {
-      console.log('----->No user for this token')
       return res.status(401).json({ success: false, message: 'Unable to fetch user details' });
     }
     res.locals.user = user;
     res.locals.userType = type;
   } catch (err) {
-    console.log('----->', err)
     return res.status(401).json({ success: false, message: 'Unable to authenticate token' });
   }
   return next();
