@@ -2,7 +2,7 @@ import deviceModel from './model';
 
 /**
  * @description Gets a single device from the database
- * @param {object} deviceMatch  The data to be used as filter
+ * @param {object} deviceMatch  The data to be used as filter for getting device
  * @param {string} deviceMatch._id The unique id of the device
  * @param {string} deviceMatch.hospitalId The hospital id associated with the device
  * @param {string} deviceMatch.wardId The ward id associated with the device
