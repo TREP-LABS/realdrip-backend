@@ -2,7 +2,7 @@ import deviceService from '../../services/device';
 import deviceValidation from '../validations/device';
 
 /**
- * @description Controller for "update admin user" API operation
+ * @description Controller to get single device
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
@@ -28,7 +28,7 @@ const getSingleDevice = async (req, res) => {
 };
 
 /**
- * @description Controller for "update admin user" API operation
+ * @description Controller to get all devices
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
@@ -36,9 +36,9 @@ const getAllDevice = async (req, res) => {
   const { user, userType, log } = res.locals;
   log.debug('Executing the getAllDevice controller');
   try {
-    const device = await deviceService.getAllDevice(user, userType, log);
+    const devices = await deviceService.getAllDevice(user, userType, log);
     log.debug('getAllDevice service executed without error, sending back a success response');
-    return res.status(200).json({ success: true, message: 'Devices found', data: device });
+    return res.status(200).json({ success: true, message: 'Devices found', data: devices });
   } catch (err) {
     if (err.httpStatusCode) {
       log.debug('getAllDevice service failed with an http status code, sending back a failure response');
