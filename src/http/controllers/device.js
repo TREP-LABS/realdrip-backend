@@ -50,7 +50,7 @@ const getAllDevice = async (req, res) => {
 };
 
 /**
- * @description Controller for "update admin user" API operation
+ * @description Controller for Update device API operation
  * @param {object} req Express request object
  * @param {object} res Express response object
  */

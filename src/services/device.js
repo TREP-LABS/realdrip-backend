@@ -1,13 +1,13 @@
 import db from '../db';
 
 /**
- * @description The service function that gets all devices belonging to a user
+ * @description The service function that gets a single device
  * @param {Object} data data required
  * @param {String} data.deviceId The id of the device been requested for
  * @param {Object} data.user The user details
  * @param {String} data.userType The type of user making the request
  * @param {function} log Logger utility for logging messages
- * @returns {Object} The updated user data
+ * @returns {Object} The device data
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getSingleDevice = async (data, log) => {
@@ -34,12 +34,12 @@ const getSingleDevice = async (data, log) => {
 };
 
 /**
- * @description The service function that gets all devices belonging to a user
+ * @description The service function that gets all devices
  * @param {Object} data The data required
  * @param {Object} data.user The user making the request
  * @param {String} data.userType The type of user making the request
  * @param {function} log Logger utility for logging messages
- * @returns {Object} The updated user data
+ * @returns {Object} The devices
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getAllDevice = async (data, log) => {
