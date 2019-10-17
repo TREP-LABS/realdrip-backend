@@ -26,20 +26,6 @@ const getAllDevice = async (deviceMatch) => {
 };
 
 /**
- * @description Gets all devices matching the query parameter
- * @param {object} deviceMatch  The data to be used as filter for getting all devices
- * @param {string} deviceMatch.hospitalId The hospitalId will used as the filter
- * if the hospital_admin request for a device
- * @param {string} deviceMatch.wardId if the ward or nurse requests for a device
- *  then both the hospitalId and the wardId will be used as filters
- * @returns {Promise} A promise that resolves or reject to the result of the database operation
- */
-const getAllDevice = async (deviceMatch) => {
-  const Model = deviceModel;
-  return Model.find(deviceMatch);
-};
-
-/**
  * @description Creates a device in the database
  * @param {object} data  The device info to be added to the database
  * @param {string} data.hospitalId The hospital Id to be associated with the device
