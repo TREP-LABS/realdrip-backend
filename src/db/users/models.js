@@ -27,6 +27,7 @@ const hospitalAdminUserSchema = new Schema({
 
 const wardUserSchema = new Schema({
   ...baseUser,
+  label: { type: String },
   defaultPass: { type: Boolean },
   hospitalId: { type: Schema.Types.ObjectId, required: true },
 });
