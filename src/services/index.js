@@ -1,12 +1,9 @@
-import setup from './setup';
-import users from './users';
+import user from './user';
 import device from './device';
 import infusion from './infusion';
 
-setup();
-
 export default {
-  users,
+  user,
   device,
   infusion,
 };

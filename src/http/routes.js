@@ -27,4 +27,9 @@ router.get('/device', authMiddleware, controllers.device.getAllDevice);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
 router.put('/device/:deviceId', authMiddleware, controllers.device.updateDevice);
 
+router.post('/infusion', authMiddleware, controllers.infusion.createInfusion);
+router.get('/infusion', authMiddleware, controllers.infusion.getAllInfusion);
+router.get('/infusion/:infusionId', authMiddleware, controllers.infusion.getSingleInfusion);
+router.put('/infusion/:infusionId', authMiddleware, controllers.infusion.updateInfusion);
+
 export default router;
