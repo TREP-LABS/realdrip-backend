@@ -36,7 +36,7 @@ const getAllDevice = async (req, res) => {
   const { user, userType, log } = res.locals;
   log.debug('Executing the getAllDevice controller');
   try {
-    const devices = await deviceService.getAllDevice(user, userType, log);
+    const devices = await deviceService.getAllDevice({ user, userType }, log);
     log.debug('getAllDevice service executed without error, sending back a success response');
     return res.status(200).json({ success: true, message: 'Devices found', data: devices });
   } catch (err) {
