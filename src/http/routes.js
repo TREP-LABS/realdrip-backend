@@ -38,6 +38,14 @@ router.put(
   hasVerifiedAccount,
   controllers.wardUser.updateWardUser,
 );
+router.get(
+  '/ward',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.wardUser.getAllWardUser,
+);
 
 router.post('/users/login', controllers.allUser.login);
 

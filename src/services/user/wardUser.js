@@ -105,8 +105,29 @@ const updateWardUser = async (data, log) => {
   return formatUserData(updatedUser);
 };
 
+/**
+ * @description The service function that gets all ward users
+ * @param {object} data The data required to execute this service
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The ward users
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const getAllWardUser = async (data, log) => {
+  log.debug('Executing getAllWardUser service');
+  const { hospitalId } = data;
+  const { WARD_USER } = db.users.userTypes;
+  const userFields = [
+    '_id', 'name', 'email', 'label', 'defaultPass', 'hospitalId',
+  ];
+  log.debug('Querying db for all ward users that matches the given hospitalId');
+  let users = await db.users.getAllUsers({ hospitalId }, WARD_USER, userFields);
+  users = users.map(user => formatUserData(user));
+  return users;
+};
+
 export default {
   createWardUser,
   getSingleWardUser,
   updateWardUser,
+  getAllWardUser,
 };
