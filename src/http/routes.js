@@ -1,10 +1,12 @@
 import express from 'express';
 import controllers from './controllers';
+import db from '../db';
 import authMiddleware from './middlewares/authMiddleware';
 import userStatus from './middlewares/userStatus';
 
 const router = express.Router();
-const { isHospitalUser, hasConfirmedEmail, hasVerifiedAccount } = userStatus;
+const { hasConfirmedEmail, hasVerifiedAccount, hasUserPrivledge } = userStatus;
+const { HOSPITAL_ADMIN_USER, WARD_USER } = db.users.userTypes;
 
 router.get('/health', (req, res) => res.json({ status: 'I am alive' }));
 
@@ -15,10 +17,18 @@ router.get('/hospital/confirmEmail', controllers.hospitalUser.confirmUserAccount
 router.post(
   '/ward',
   authMiddleware,
-  isHospitalUser,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
   hasConfirmedEmail,
   hasVerifiedAccount,
   controllers.wardUser.createWardUser,
+);
+router.get(
+  '/ward/:wardId',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.wardUser.getSingleWardUser,
 );
 
 router.post('/users/login', controllers.allUser.login);

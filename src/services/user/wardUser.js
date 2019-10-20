@@ -64,6 +64,23 @@ const createWardUser = async (data, log) => {
   return formatUserData(wardUser);
 };
 
+/**
+ * @description The service function that gets a single ward user
+ * @param {object} data The data required for this service to execute
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The new user
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const getSingleWardUser = async (data, log) => {
+  log.debug('Executing getSingleWardUser service');
+  const { wardId } = data;
+  const { WARD_USER } = db.users.userTypes;
+  log.debug('Querying DB for a single ward');
+  const wardUser = await db.users.getUser({ _id: wardId }, WARD_USER);
+  return formatUserData(wardUser);
+};
+
 export default {
   createWardUser,
+  getSingleWardUser,
 };
