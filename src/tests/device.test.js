@@ -131,7 +131,6 @@ describe('/api/device/', () => {
         expect(res.status).toBe(200);
         done();
       });
-
   }, timeout);
 
   test('Getting all devices should succed if both the user and the device id is valid', (done) => {
