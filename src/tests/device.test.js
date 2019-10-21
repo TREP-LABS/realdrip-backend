@@ -50,13 +50,6 @@ describe('/api/device/', () => {
         expect(res.body.success).toEqual(false);
         done();
       });
-    request
-      .get('/api/device/deviceId')
-      .end((err, res) => {
-        expect(res.status).toBe(401);
-        expect(res.body.success).toEqual(false);
-        done();
-      });
   }, timeout);
 
   test('Geting all devices should fail when a request token is not sent', (done) => {
@@ -72,17 +65,6 @@ describe('/api/device/', () => {
   test('Geting a single device should fail if the request token is invalid', (done) => {
     request
       .get('/api/device/deviceId')
-      .set('req-token', 'abc123')
-      .end((err, res) => {
-        expect(res.status).toBe(401);
-        expect(res.body.success).toEqual(false);
-        done();
-      });
-  }, timeout);
-
-  test('Geting all devices should fail if the request token is invalid', async (done) => {
-    request
-      .get('/api/device')
       .set('req-token', 'abc123')
       .end((err, res) => {
         expect(res.status).toBe(401);
@@ -123,16 +105,6 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Getting all devices should succed if both the user and the device id is valid', async (done) => {
-    request
-      .get('/api/device')
-      .set('req-token', validToken)
-      .end((err, res) => {
-        expect(res.status).toBe(200);
-        done();
-      });
-  }, timeout);
-
   test('Getting all devices should succed if both the user and the device id is valid', (done) => {
     request
       .get('/api/device')
@@ -143,7 +115,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Updating of the device label should succeed if the device details and the user are both valid', async (done) => {
+  test('Updating of the device label should succeed if the device details and the user are both valid', (done) => {
     request
       .put(`/api/device/${device._id}`)
       .set('req-token', validToken)
