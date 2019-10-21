@@ -2,24 +2,35 @@ import deviceModel from './model';
 
 /**
  * @description Gets a single device from the database
- * @param {object} deviceDetails  The data to be used as filter
- * @param {string} deviceDetails._id
- * @param {string} deviceDetails.hospitalId
- * @param {string} deviceDetails.wardId
+ * @param {object} deviceMatch  The data to be used as filter for getting device
+ * @param {string} deviceMatch._id The unique id of the device
+ * @param {string} deviceMatch.hospitalId The hospital id associated with the device
+ * @param {string} deviceMatch.wardId The ward id associated with the device
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getSingleDevice = async (deviceDetails) => {
-  const params = JSON.parse(JSON.stringify(deviceDetails));
+const getSingleDevice = async (deviceMatch) => {
   const Model = deviceModel;
-  return Model.findOne(params);
+  return Model.findOne(deviceMatch);
+};
+
+/**
+ * @description Gets all devices matching the query parameter
+ * @param {object} deviceMatch  The data to be used as filter for getting all devices
+ * @param {string} deviceMatch.hospitalId The hospitalId id associated with the device
+ * @param {string} deviceMatch.wardId The ward id associated with the device
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const getAllDevice = async (deviceMatch) => {
+  const Model = deviceModel;
+  return Model.find(deviceMatch);
 };
 
 /**
  * @description Creates a device in the database
  * @param {object} data  The device info to be added to the database
- * @param {string} data.hospitalId
- * @param {string} data.wardId
- * @param {string} data.label
+ * @param {string} data.hospitalId The hospital Id to be associated with the device
+ * @param {string} data.wardId The ward Id to be associated with the device
+ * @param {string} data.label The label of the device
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
 const createDevice = async (data) => {
@@ -29,5 +40,6 @@ const createDevice = async (data) => {
 
 export default {
   getSingleDevice,
+  getAllDevice,
   createDevice,
 };
