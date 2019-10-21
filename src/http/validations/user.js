@@ -199,9 +199,40 @@ const validateWardId = (req, res, next) => {
   return next();
 };
 
+/**
+ * @description Validates the request data to update a ward user.
+ * If the request data is valid, the request is sent to the next middleware otherwise,
+ * a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const updateWardUser = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating request data to update a ward user');
+  const { name, label } = req.body;
+  const fieldErrors = new FieldErrors();
+
+  if (name) {
+    if (typeof (name) !== 'string') fieldErrors.addError('name', 'Ward name is a required string');
+    if (name.trim().length < 3) fieldErrors.addError('name', 'Ward name must be at least 3 characters');
+  }
+  if (label && typeof label !== 'string') {
+    fieldErrors.addError('label', 'Ward label is a required string');
+  }
+  if (fieldErrors.count > 0) {
+    log.debug('Update ward request data is invalid, sending back failure response');
+    return res.status(400).json({ success: false, message: 'Invalid request body', errors: fieldErrors.errors });
+  }
+
+  log.debug('Update ward request data is valid, moving on to the next middleware');
+  return next();
+};
+
 export default {
   createAdminUser,
   createWardUser,
+  updateWardUser,
   updateHospitalUser,
   validateRegToken,
   validateWardId,

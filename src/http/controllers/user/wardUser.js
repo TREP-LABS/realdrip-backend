@@ -22,10 +22,33 @@ const createWardUser = async (req, res) => {
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
     log.error(err, 'CreateWardUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error creating admin user' });
+    return res.status(500).json({ success: false, message: 'Error creating ward user' });
   }
 };
 
+/**
+ * @description Controller for "update ward user" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const updateWardUser = async (req, res) => {
+  const { log } = res.locals;
+  log.debug('Executing the updateWardUser controller');
+  const { name, label } = req.body;
+  const { wardId } = req.params;
+  try {
+    const user = await wardUserService.updateWardUser({ name, label, wardId }, log);
+    log.debug('UpdateWardUser service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Ward user updated successfully', data: user });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('UpdateWardUser service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'UpdateWardUser service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error updating ward user' });
+  }
+};
 
 /**
  * @description Controller for "get single ward user" API operation
@@ -58,4 +81,5 @@ const getSingleWardUser = async (req, res) => {
 export default {
   createWardUser: [userValidation.createWardUser, createWardUser],
   getSingleWardUser: [userValidation.validateWardId, getSingleWardUser],
+  updateWardUser: [userValidation.validateWardId, userValidation.updateWardUser, updateWardUser],
 };
