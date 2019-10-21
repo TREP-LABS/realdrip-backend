@@ -50,6 +50,9 @@ describe('/api/device/', () => {
         expect(res.body.success).toEqual(false);
         done();
       });
+  }, timeout);
+
+  test('Geting all devices should fail when a request token is not sent', (done) => {
     request
       .get('/api/device')
       .end((err, res) => {
@@ -78,7 +81,9 @@ describe('/api/device/', () => {
         expect(res.body.success).toEqual(false);
         done();
       });
+  }, timeout);
 
+  test('Geting all devices should fail if the request token is invalid', (done) => {
     request
       .get('/api/device')
       .set('req-token', 'abc123')
@@ -119,7 +124,9 @@ describe('/api/device/', () => {
         expect(res.status).toBe(200);
         done();
       });
+  }, timeout);
 
+  test('Getting all devices should succed if both the user and the device id is valid', (done) => {
     request
       .get('/api/device')
       .set('req-token', validToken)
