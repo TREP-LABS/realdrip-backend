@@ -84,7 +84,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Geting a single device should fail when the device id is invalid', (done) => {
+  test('Geting a single device should fail when the deviceId is invalid', (done) => {
     request
       .get('/api/device/devihhdjjfdjceId')
       .set('req-token', validToken)
@@ -95,7 +95,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Geting a single device should succeed if the request token and the device id is valid', (done) => {
+  test('Geting a single device should succeed if the request token and the deviceId is valid', (done) => {
     request
       .get(`/api/device/${device._id}`)
       .set('req-token', validToken)
