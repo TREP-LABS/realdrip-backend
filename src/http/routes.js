@@ -52,4 +52,6 @@ router.post('/users/login', controllers.allUser.login);
 router.get('/device', authMiddleware, controllers.device.getAllDevice);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
 
+router.post('/infusion', authMiddleware, controllers.infusion.createInfusion);
+
 export default router;
