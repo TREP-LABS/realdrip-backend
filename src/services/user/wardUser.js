@@ -80,7 +80,33 @@ const getSingleWardUser = async (data, log) => {
   return formatUserData(wardUser);
 };
 
+/**
+ * @description The service function that updates a ward user data
+ * @param {object} data The editable user data and wardId
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The updated user data
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const updateWardUser = async (data, log) => {
+  log.debug('Executing updateWardUser service');
+  const { name, label, wardId } = data;
+  const { WARD_USER } = db.users.userTypes;
+  const user = await db.users.getUser({ _id: wardId }, WARD_USER);
+  if (!user) {
+    log.debug('The ward user to update does not exist');
+    const error = new Error('User does not exist');
+    error.httpStatusCode = 404;
+    throw error;
+  }
+  const fieldsToUpdate = JSON.parse(JSON.stringify({ name, label }));
+  const { _doc: updatedUser } = await db.users.updateUser(
+    { _id: wardId }, fieldsToUpdate, WARD_USER,
+  );
+  return formatUserData(updatedUser);
+};
+
 export default {
   createWardUser,
   getSingleWardUser,
+  updateWardUser,
 };

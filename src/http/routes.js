@@ -30,6 +30,14 @@ router.get(
   hasVerifiedAccount,
   controllers.wardUser.getSingleWardUser,
 );
+router.put(
+  '/ward/:wardId',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.wardUser.updateWardUser,
+);
 
 router.post('/users/login', controllers.allUser.login);
 
