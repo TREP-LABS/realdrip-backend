@@ -47,7 +47,34 @@ const login = async (data, log) => {
   return { user: formatUserData(user), token };
 };
 
+/**
+ * @description Updates a user password in the database
+ * @param {object} data The data required to execute this service
+ * @param {string} data.formerPassword The user former password
+ * @param {string} data.formerHashedPassword The user former hashed password
+ * @param {string} data.newPassword The new password to set for the user
+ * @param {string} data.userId The user id
+ * @param {string} data.userType The user type
+ * @throws {Error} Throws an error is operations fails
+ */
+const updatePassword = async (data, log) => {
+  log.debug('Executing updatePassword service');
+  const {
+    formerHashedPassword, formerPassword, newPassword, userType, userId,
+  } = data;
+  if (!bcrypt.compareSync(formerPassword, formerHashedPassword)) {
+    log.debug('The formerPassword is not correct, throwing error');
+    const error = new Error('Former password is not correct');
+    error.httpStatusCode = 400;
+    throw error;
+  }
+  log.debug('Hashing new user password');
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+  log.debug('Updating user password in db');
+  await db.users.updateUser({ _id: userId }, { password: newHashedPassword }, userType);
+};
 
 export default {
   login,
+  updatePassword,
 };
