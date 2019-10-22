@@ -49,7 +49,7 @@ const createDevice = async (data) => {
  */
 const updateDevice = async (deviceMatch, update) => {
   const Model = deviceModel;
-  return Model.findOneAndUpdate(deviceMatch, { $set: update }, { new: true });
+  return Model.findOneAndUpdate(deviceMatch, update, { new: true });
 };
 
 export default {

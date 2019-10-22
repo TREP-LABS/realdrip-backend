@@ -82,8 +82,8 @@ const updateDevice = async (data, log) => {
     log.debug('Gathering filter to match device');
     const deviceMatch = {
       _id: deviceId,
-      hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-      wardId: userType === 'ward_user' ? user._id : user.wardId,
+      hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
+      wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
     };
     const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
     log.debug('Updating device info');
@@ -94,8 +94,8 @@ const updateDevice = async (data, log) => {
     return device;
   } catch (err) {
     log.debug('Unable to update device. Returning an error with a status code');
-    const error = new Error('Unable to get devices');
-    error.httpStatusCode = 404;
+    const error = new Error('Unable to update device');
+    error.httpStatusCode = 500;
     throw error;
   }
 };
