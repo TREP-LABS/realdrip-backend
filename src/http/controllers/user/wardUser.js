@@ -51,6 +51,29 @@ const updateWardUser = async (req, res) => {
 };
 
 /**
+ * @description Controller for "get all ward user" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const getAllWardUser = async (req, res) => {
+  const { log, user: { _id: hospitalId } } = res.locals;
+  log.debug('Executing the getAllWardUser controller');
+  try {
+    const wardUsers = await wardUserService.getAllWardUser({ hospitalId }, log);
+    log.debug('GetAllWardUser service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Operation successful', data: wardUsers });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('GetAllWardUser service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'GetAllWardUser service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error getting all ward users' });
+  }
+};
+
+
+/**
  * @description Controller for "get single ward user" API operation
  * @param {object} req Express request object
  * @param {object} res Express response object
@@ -82,4 +105,5 @@ export default {
   createWardUser: [userValidation.createWardUser, createWardUser],
   getSingleWardUser: [userValidation.validateWardId, getSingleWardUser],
   updateWardUser: [userValidation.validateWardId, userValidation.updateWardUser, updateWardUser],
+  getAllWardUser,
 };
