@@ -33,11 +33,11 @@ const updatePassword = async (req, res) => {
   const { log } = res.locals;
   log.debug('Executing the updatePassword controller');
   const { formerPassword, newPassword } = req.body;
-  const { user, userType } = res.locals;
+  const { userType } = res.locals;
   const { userId } = req.params;
   try {
     await userService.updatePassword({
-      formerHashedPassword: user.password, formerPassword, newPassword, userId, userType,
+      formerPassword, newPassword, userId, userType,
     }, log);
     log.debug('UpdatePassword service executed without error, sending back a success response');
     return res.status(204).json({});

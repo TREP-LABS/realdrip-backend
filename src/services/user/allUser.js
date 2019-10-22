@@ -60,9 +60,16 @@ const login = async (data, log) => {
 const updatePassword = async (data, log) => {
   log.debug('Executing updatePassword service');
   const {
-    formerHashedPassword, formerPassword, newPassword, userType, userId,
+    formerPassword, newPassword, userType, userId,
   } = data;
-  if (!bcrypt.compareSync(formerPassword, formerHashedPassword)) {
+  const user = await db.users.getUser({ _id: userId }, userType);
+  if (!user) {
+    log.debug('The user to update does not exist');
+    const error = new Error('User does not exist');
+    error.httpStatusCode = 404;
+    throw error;
+  }
+  if (!bcrypt.compareSync(formerPassword, user.password)) {
     log.debug('The formerPassword is not correct, throwing error');
     const error = new Error('Former password is not correct');
     error.httpStatusCode = 400;
