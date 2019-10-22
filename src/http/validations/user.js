@@ -181,11 +181,29 @@ const createWardUser = (req, res, next) => {
   return next();
 };
 
+/**
+ * @description Validates a wardId
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const validateWardId = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Checking if the given wardId is valid');
+  const { wardId } = req.params;
+  if (!db.validResourceId(wardId)) {
+    log.debug('WardId is not valid, sending back failure response');
+    return res.status(400).json({ success: false, message: 'Ward id is not valid' });
+  }
+  log.debug('WardId is valid, moving on to the next middleware');
+  return next();
+};
 
 export default {
   createAdminUser,
   createWardUser,
   updateHospitalUser,
   validateRegToken,
+  validateWardId,
   login,
 };
