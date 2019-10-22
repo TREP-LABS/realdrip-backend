@@ -11,7 +11,7 @@ const createUser = async (userData, userType) => {
  * @param {object} userMatch An object describing how to select the user to be fetched
  * @param {string} [userMatch._id] The unique id of the user
  * @param {string} [userMatch.email] The email of the user
- * @param {string} userType The type of user. One of hospital_admin, ward_user or nurse_user.
+ * @param {string} userType The type of user. One of hospital_admin, ward_user or nurse_user
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
 const getUser = async (userMatch, userType) => {

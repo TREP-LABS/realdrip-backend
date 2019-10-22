@@ -22,7 +22,7 @@ const formatUserData = user => JSON.parse(JSON.stringify({
 }));
 
 /**
- * @description Grants authorization to a valid user
+ * @description Grants authorization to a valid user.
  * @param {object} data The data required to perform the login operation
  * @param {string} data.email The user email
  * @param {string} data.password The user password
