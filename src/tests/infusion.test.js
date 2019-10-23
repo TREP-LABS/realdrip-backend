@@ -34,6 +34,14 @@ describe('/api/infusion/', () => {
       hospitalId: user._id,
       label: 'something nice',
     });
+    await db.infusion.createInfusion({
+      startVolume: 700,
+      stopVolume: 50,
+      patientName: 'Tumtum',
+      doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
+      deviceId: device._id,
+      hospitalId: user._id,
+    });
   }, timeout);
 
   afterAll(async () => {
@@ -75,6 +83,16 @@ describe('/api/infusion/', () => {
       .send(infusionDetails)
       .end((err, res) => {
         expect(res.status).toBe(201);
+        done();
+      });
+  }, timeout);
+
+  test('Geting all Infusions should succeed if the request token is valid', (done) => {
+    request
+      .get('/api/infusion')
+      .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
         done();
       });
   }, timeout);

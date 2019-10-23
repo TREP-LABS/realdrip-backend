@@ -59,5 +59,6 @@ router.post(
   hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
   controllers.infusion.createInfusion,
 );
+router.get('/infusion', authMiddleware, controllers.infusion.getAllInfusion);
 
 export default router;

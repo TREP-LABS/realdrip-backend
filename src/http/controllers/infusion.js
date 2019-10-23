@@ -34,6 +34,29 @@ const createInfusion = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "get All Infusion" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const getAllInfusion = async (req, res) => {
+  const { user, userType, log } = res.locals;
+  log.debug('Executing the getAllInfusion controller');
+  try {
+    const infusions = await infusionService.getAllInfusion({ user, userType }, log);
+    log.debug('getAllInfusion service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Infusions found', data: infusions });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('getAllInfusion service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'getAllInfusion service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error getting Infusions' });
+  }
+};
+
 export default {
   createInfusion: [infusionValidation.createInfusion, createInfusion],
+  getAllInfusion,
 };
