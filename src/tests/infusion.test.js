@@ -28,7 +28,7 @@ describe('/api/infusion/', () => {
   let validToken;
 
   beforeAll(async () => {
-    user = await db.users.createUser({ ...userDetails, email: 'amenedil@trep.com' }, 'hospital_admin');
+    user = await db.users.createUser({ ...userDetails, email: 'infusion@infusion.com' }, 'hospital_admin');
     validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     device = await db.device.createDevice({
       hospitalId: user._id,
@@ -67,6 +67,7 @@ describe('/api/infusion/', () => {
       doctorsInstruction: 'Give 150ml twice daily',
       deviceId: device._id,
       hospitalId: user._id,
+      wardId: user._id,
     };
     request
       .post('/api/infusion')

@@ -52,6 +52,11 @@ router.post('/users/login', controllers.allUser.login);
 router.get('/device', authMiddleware, controllers.device.getAllDevice);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
 
-router.post('/infusion', authMiddleware, controllers.infusion.createInfusion);
+router.post(
+  '/infusion',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  controllers.infusion.createInfusion,
+);
 
 export default router;
