@@ -19,4 +19,16 @@ const createInfusion = (req, res, next) => {
   return next();
 };
 
-export default { createInfusion };
+const deleteInfusion = (req, res, next) => {
+  const { infusionId } = req.params;
+  const fieldErrors = new FieldErrors();
+
+  if (!infusionId) fieldErrors.addError('infusionId', 'infusionId is required');
+  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'Invalid infusionId.');
+  if (fieldErrors.count > 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
+  }
+  return next();
+};
+
+export default { createInfusion, deleteInfusion };

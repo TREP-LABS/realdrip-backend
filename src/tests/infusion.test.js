@@ -26,13 +26,21 @@ describe('/api/infusion/', () => {
   let user;
   let device;
   let validToken;
-
+  let defaultInfusion;
   beforeAll(async () => {
     user = await db.users.createUser({ ...userDetails, email: 'infusion@infusion.com' }, 'hospital_admin');
     validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     device = await db.device.createDevice({
       hospitalId: user._id,
       label: 'something nice',
+    });
+    defaultInfusion = await db.infusion.createInfusion({
+      startVolume: 700,
+      stopVolume: 50,
+      patientName: 'Tumtum',
+      doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
+      deviceId: device._id,
+      hospitalId: user._id,
     });
   }, timeout);
 
@@ -75,6 +83,16 @@ describe('/api/infusion/', () => {
       .send(infusionDetails)
       .end((err, res) => {
         expect(res.status).toBe(201);
+        done();
+      });
+  }, timeout);
+
+  test('deleting a single Infusion should succeed if the request token and the infusionId is valid', (done) => {
+    request
+      .delete(`/api/infusion/${defaultInfusion._id}`)
+      .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(204);
         done();
       });
   }, timeout);
