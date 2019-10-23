@@ -3,7 +3,7 @@ import db from '../../db';
 import FieldErrors from './fieldErrors';
 
 /**
- * @description Validates the request data to create an admin user.
+ * @description Validates the request data to create an admin user
  * If the request data is valid, the request is sent to the next middleware otherwise,
  * a faliure response is sent to the user.
  * @param {object} req Express request object
