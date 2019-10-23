@@ -113,9 +113,33 @@ const updateInfusion = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller to delete infusion
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const deleteInfusion = async (req, res) => {
+  const { infusionId } = req.params;
+  const { user, userType, log } = res.locals;
+  log.debug('Executing the deleteInfusion controller');
+  try {
+    await infusionService.deleteInfusion({ infusionId, user, userType }, log);
+    log.debug('deleteInfusion service executed without error, sending back a success response');
+    return res.status(204);
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('deleteInfusion service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'deleteInfusion service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error deleting Infusion' });
+  }
+};
+
 export default {
   createInfusion: [infusionValidation.createInfusion, createInfusion],
-  getSingleInfusion: [infusionValidation.validateInfusionIid, getSingleInfusion],
+  getSingleInfusion: [infusionValidation.validateInfusionId, getSingleInfusion],
   getAllInfusion,
   updateInfusion: [infusionValidation.updateInfusion, updateInfusion],
+  deleteInfusion: [infusionValidation.validateInfusionId, deleteInfusion],
 };
