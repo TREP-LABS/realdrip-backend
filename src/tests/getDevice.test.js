@@ -10,7 +10,7 @@ dotenv.config();
 const request = supertest(app);
 const userDetails = {
   name: 'Test User',
-  email: 'temmietayo@test.com',
+  email: 'temmietayo@devicetest.com',
   password: 'Password1',
   location: {
     country: 'TestCountry',
@@ -28,7 +28,7 @@ describe('/api/device/', () => {
   let validToken;
 
   beforeAll(async () => {
-    user = await db.users.createUser({ ...userDetails, email: 'mazikin@test.com' }, 'hospital_admin');
+    user = await db.users.createUser({ ...userDetails, email: 'devicetest@device.com' }, 'hospital_admin');
     validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     device = await db.device.createDevice({
       hospitalId: user._id,
