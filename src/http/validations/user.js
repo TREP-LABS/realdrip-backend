@@ -3,7 +3,7 @@ import db from '../../db';
 import FieldErrors from './fieldErrors';
 
 /**
- * @description Validates the request data to create an admin user.
+ * @description Validates the request data to create an admin user
  * If the request data is valid, the request is sent to the next middleware otherwise,
  * a faliure response is sent to the user.
  * @param {object} req Express request object
@@ -229,11 +229,44 @@ const updateWardUser = (req, res, next) => {
   return next();
 };
 
+/**
+ * @description Validates the request data to update a user password.
+ * If the request data is valid, the request is sent to the next middleware otherwise,
+ * a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const udpateUserPassword = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating request data to update user password');
+
+  const { formerPassword, newPassword } = req.body;
+  const { userId } = req.params;
+  const fieldErrors = new FieldErrors();
+
+  if (!db.validResourceId(userId)) fieldErrors.addError('userId', 'userId is not valid');
+
+  if (!formerPassword || typeof formerPassword !== 'string') fieldErrors.addError('formerPassword', 'Former password is a required string');
+  if (!newPassword || typeof newPassword !== 'string') fieldErrors.addError('newPassword', 'New password is a requried string');
+  else if (!(/\d/.test(newPassword) && /[A-Z]/.test(newPassword) && /[a-z]/.test(newPassword) && newPassword.length > 7)) {
+    fieldErrors.addError('newPassword', 'New password must be at least 7 character mix of capital, small letters with numbers');
+  }
+
+  if (fieldErrors.count > 0) {
+    log.debug('Update password request data is invalid, sending back failure response');
+    return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
+  }
+  log.debug('Update password request data is valid, moving on to the next middleware');
+  return next();
+};
+
 export default {
   createAdminUser,
   createWardUser,
   updateWardUser,
   updateHospitalUser,
+  udpateUserPassword,
   validateRegToken,
   validateWardId,
   login,

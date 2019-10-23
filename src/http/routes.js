@@ -48,6 +48,7 @@ router.get(
 );
 
 router.post('/users/login', controllers.allUser.login);
+router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);
 
 router.get('/device', authMiddleware, controllers.device.getAllDevice);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
