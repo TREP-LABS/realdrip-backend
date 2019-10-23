@@ -101,7 +101,7 @@ const updateInfusion = async (req, res) => {
     if (!infusion) {
       return res.status(404).json({ success: false, message: 'Unable to update Infusion' });
     }
-    log.debug('updateInfusion service executed without error, sending back a success response');
+    log.debug('updateInfusion service executed without error, sending back a success response.');
     return res.status(200).json({ success: true, message: 'Device updated', data: infusion });
   } catch (err) {
     if (err.httpStatusCode) {
