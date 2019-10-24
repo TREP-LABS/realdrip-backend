@@ -84,7 +84,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Geting a single device should fail when the deviceId is invalid', (done) => {
+  test('Geting a Single device should fail when the deviceId is invalid', (done) => {
     request
       .get('/api/device/devihhdjjfdjceId')
       .set('req-token', validToken)
@@ -105,10 +105,21 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Getting all devices should succed if both the user and the device id is valid', (done) => {
+  test('Getting all devices should succed if both the user and the device id is valid.', (done) => {
     request
       .get('/api/device')
       .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+  }, timeout);
+
+  test('Updating of the device label should succeed if the device details and the user are both valid.', (done) => {
+    request
+      .put(`/api/device/${device._id}`)
+      .set('req-token', validToken)
+      .send({ label: 'kesiena' })
       .end((err, res) => {
         expect(res.status).toBe(200);
         done();
