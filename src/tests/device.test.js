@@ -105,7 +105,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Getting all devices should succed if both the user and the device id is valid', (done) => {
+  test('Getting all devices should succed if both the user and the device id is valid.', (done) => {
     request
       .get('/api/device')
       .set('req-token', validToken)
@@ -115,7 +115,7 @@ describe('/api/device/', () => {
       });
   }, timeout);
 
-  test('Updating of the device label should succeed if the device details and the user are both valid', (done) => {
+  test('Updating of the device label should succeed if the device details and the user are both valid.', (done) => {
     request
       .put(`/api/device/${device._id}`)
       .set('req-token', validToken)
