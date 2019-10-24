@@ -82,8 +82,40 @@ const getSingleInfusion = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "update Infusion" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const updateInfusion = async (req, res) => {
+  const {
+    patientName, doctorsInstruction, startVolume, stopVolume,
+  } = req.body;
+  const { infusionId } = req.params;
+  const { user, userType, log } = res.locals;
+  log.debug('Executing the updateInfusion controller');
+  try {
+    const infusion = await infusionService.updateInfusion({
+      infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
+    }, log);
+    if (!infusion) {
+      return res.status(404).json({ success: false, message: 'Unable to update Infusion' });
+    }
+    log.debug('updateInfusion service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Device updated', data: infusion });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('updateInfusion service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'updateInfusion service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error updating infusion' });
+  }
+};
+
 export default {
   createInfusion: [infusionValidation.createInfusion, createInfusion],
   getSingleInfusion: [infusionValidation.validateInfusionIid, getSingleInfusion],
   getAllInfusion,
+  updateInfusion: [infusionValidation.updateInfusion, updateInfusion],
 };

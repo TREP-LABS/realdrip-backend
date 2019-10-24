@@ -86,9 +86,44 @@ const getSingleInfusion = async (data, log) => {
   log.debug('Returning infusion to user');
   return infusion;
 };
+ 
+  /**
+ * @description The service function that updates an Infusion
+ * @param {Object} data The data required
+ * @param {Object} data.user The user data
+ * @param {String} data.infusionId the id of the infusion to be updated
+ * @param {String} data.userType The type of user making the request
+ * @param {String} data.label the new label of the device
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The updated device data
+ * @throws {error} Any error that prevents the service from executing successfully
+ */
+const updateInfusion = async (data, log) => {
+  const {
+    infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
+  } = data;
+  log.debug('Gathering filter to match infusion');
+  const infusionMatch = {
+    _id: infusionId,
+    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
+    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
+    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+  };
+  const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
+  const update = JSON.parse(JSON.stringify({
+    patientName, doctorsInstruction, startVolume, stopVolume,
+  }));
+  log.debug('Updating infusion details');
+  const infusion = await db.infusion.updateInfusion(
+    purifyInfusionMatch, update,
+  );
+  log.debug('Sending updated infusion to the user');
+  return infusion;
+};
 
 export default {
   createInfusion,
   getAllInfusion,
   getSingleInfusion,
+  updateInfusion,
 };
