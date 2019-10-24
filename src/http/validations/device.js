@@ -16,19 +16,12 @@ const getSingleDevice = (req, res, next) => {
 
 const updateDevice = (req, res, next) => {
   const { deviceId } = req.params;
-  const { label, wardId, hospitalId } = req.body;
+  const { label } = req.body;
 
   const fieldErrors = new FieldErrors();
   if (label) {
-    if (typeof (label) !== 'string') fieldErrors.addError('label', 'label is a string');
+    if (typeof (label) !== 'string') fieldErrors.addError('label', 'label is a required string');
   }
-  if (wardId) {
-    if (!db.validResourceId(wardId)) fieldErrors.addError('wardId', 'wardId is not valid');
-  }
-  if (hospitalId) {
-    if (!db.validResourceId(hospitalId)) fieldErrors.addError('hospitalId', 'hospitalId is not valid');
-  }
-  if (!deviceId) fieldErrors.addError('deviceId', 'deviceId is required');
   if (!db.validResourceId(deviceId)) fieldErrors.addError('deviceId', 'deviceId is not valid');
 
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
