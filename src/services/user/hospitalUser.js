@@ -55,7 +55,7 @@ const createAdminUser = async (data, log) => {
   }, HOSPITAL_ADMIN_USER);
   log.debug('Create a registeration token');
   const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
-  const confirmationUrl = `${config.serverAppUrl}/api/users/confirm?regToken=${regToken}`;
+  const confirmationUrl = `${config.serverAppUrl}/api/hospital/confirmEmail?regToken=${regToken}`;
   // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
   // before sending response to the user.
   log.debug('Sending email address validation mail notification');
