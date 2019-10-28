@@ -110,7 +110,7 @@ describe('/api/infusion/', () => {
       });
   }, timeout);
   
-  test('Updating of infusion should succeed if the infusion details is valid.', (done) => {
+  test('Updating of infusion should succeed if the infusion details is valid', (done) => {
     request
       .put(`/api/infusion/${defaultInfusion._id}`)
       .set('req-token', validToken)
