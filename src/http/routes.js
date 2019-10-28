@@ -59,7 +59,12 @@ router.post(
 router.post('/users/login', controllers.allUser.login);
 router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);
 
-router.get('/device', authMiddleware, controllers.device.getAllDevice);
+router.get(
+  '/device',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  controllers.device.getAllDevice,
+);
 router.get('/device/:deviceId', authMiddleware, controllers.device.getSingleDevice);
 
 router.post(
