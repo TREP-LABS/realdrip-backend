@@ -53,7 +53,30 @@ const getSingleNurseUser = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "get all nurse user" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const getAllNurseUser = async (req, res) => {
+  const { log, user: { _id: wardId, hospitalId } } = res.locals;
+  log.debug('Executing getAllNurseUser controller');
+  try {
+    const nurses = await nurseUserService.getAllNurseUser({ hospitalId, wardId }, log);
+    log.debug('getAllNurseUser service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Nurse users fetched successfully', data: nurses });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('getAllNurseUser service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'getAllNurseUser service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error fetching nurses' });
+  }
+};
+
 export default {
   createNurseUser: [createNurseUser],
   getSingleNurseUser: [userValidation.validateNurseId, getSingleNurseUser],
+  getAllNurseUser,
 };
