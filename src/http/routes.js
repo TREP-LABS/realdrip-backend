@@ -47,6 +47,15 @@ router.get(
   controllers.wardUser.getAllWardUser,
 );
 
+router.post(
+  '/nurse',
+  authMiddleware,
+  hasUserPrivledge([WARD_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.nurseUser.createNurseUser,
+);
+
 router.post('/users/login', controllers.allUser.login);
 router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);
 
