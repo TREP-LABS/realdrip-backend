@@ -71,7 +71,7 @@ const getAllNurseUser = async (req, res) => {
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
     log.error(err, 'getAllNurseUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error fetching nurses' });
+    return res.status(500).json({ success: false, message: 'Error fetching all nurses' });
   }
 };
 
