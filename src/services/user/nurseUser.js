@@ -68,7 +68,7 @@ const createNurseUser = async (data, log) => {
 };
 
 /**
- * @description The service function that gets a single nurse
+ * @description The service function that gets a single nurse user
  * @param {object} data The data required for this service to execute
  * @param {function} log Logger utility for logging messages
  * @returns {object} The nurse user
