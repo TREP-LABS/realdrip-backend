@@ -31,7 +31,7 @@ const createInfusion = async (data) => {
  */
 const updateInfusion = async (infusionMatch, update) => {
   const Model = infusionModel;
-  return Model.findOneAndUpdate(infusionMatch, { $set: update }, { new: true });
+  return Model.findOneAndUpdate(infusionMatch, update, { new: true });
 };
 
 /**

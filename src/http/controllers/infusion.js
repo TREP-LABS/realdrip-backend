@@ -56,7 +56,34 @@ const getAllInfusion = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "get Single Infusion" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const getSingleInfusion = async (req, res) => {
+  const { infusionId } = req.params;
+  const { user, userType, log } = res.locals;
+  log.debug('Executing the getSingleInfusion controller');
+  try {
+    const infusion = await infusionService.getSingleInfusion({ infusionId, user, userType }, log);
+    if (!infusion) {
+      return res.status(404).json({ success: false, message: 'Infusion not found' });
+    }
+    log.debug('getSingleInfusion service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Infusion found', data: infusion });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('getSingleInfusion service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'getSingleInfusion service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error getting Infusion' });
+  }
+};
+
 export default {
   createInfusion: [infusionValidation.createInfusion, createInfusion],
+  getSingleInfusion: [infusionValidation.validateInfusionIid, getSingleInfusion],
   getAllInfusion,
 };
