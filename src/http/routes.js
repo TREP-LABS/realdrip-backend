@@ -78,5 +78,8 @@ router.post(
   controllers.infusion.createInfusion,
 );
 router.get('/infusion', authMiddleware, controllers.infusion.getAllInfusion);
+router.get('/infusion/:infusionId',
+  authMiddleware,
+  controllers.infusion.getSingleInfusion);
 
 export default router;

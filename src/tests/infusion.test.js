@@ -8,6 +8,7 @@ import db from '../db';
 dotenv.config();
 
 const request = supertest(app);
+
 const userDetails = {
   name: 'another Test User',
   email: 'temmietayo@test.com',
@@ -20,12 +21,14 @@ const userDetails = {
   confirmedEmail: true,
   verifiedPurchase: true,
 };
+
 const timeout = 90000;
 
 describe('/api/infusion/', () => {
   let user;
   let device;
   let validToken;
+  let defaultInfusion;
 
   beforeAll(async () => {
     user = await db.users.createUser({ ...userDetails, email: 'infusion@infusion.com' }, 'hospital_admin');
@@ -34,7 +37,7 @@ describe('/api/infusion/', () => {
       hospitalId: user._id,
       label: 'something nice',
     });
-    await db.infusion.createInfusion({
+    defaultInfusion = await db.infusion.createInfusion({
       startVolume: 700,
       stopVolume: 50,
       patientName: 'Tumtum',
@@ -90,6 +93,16 @@ describe('/api/infusion/', () => {
   test('Geting all Infusions should succeed if the request token is valid', (done) => {
     request
       .get('/api/infusion')
+      .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+  }, timeout);
+
+  test('Geting a single Infusion should succeed if the infusionId is valid', (done) => {
+    request
+      .get(`/api/infusion/${defaultInfusion._id}`)
       .set('req-token', validToken)
       .end((err, res) => {
         expect(res.status).toBe(200);
