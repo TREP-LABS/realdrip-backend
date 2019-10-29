@@ -100,7 +100,7 @@ describe('/api/infusion/', () => {
       });
   }, timeout);
 
-  test('Geting a single Infusion should succeed if the request token and the infusionId is valid', (done) => {
+  test('Geting a single Infusion should succeed if the infusionId is valid', (done) => {
     request
       .get(`/api/infusion/${defaultInfusion._id}`)
       .set('req-token', validToken)
