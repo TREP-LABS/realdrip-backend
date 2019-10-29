@@ -35,7 +35,7 @@ const validateInfusionIid = (req, res, next) => {
 const updateInfusion = (req, res, next) => {
   const { infusionId } = req.params;
   const {
-    patientName, doctorsInstruction, startVolume, stopVolume, deviceId,
+    patientName, doctorsInstruction, startVolume, stopVolume,
   } = req.body;
   const fieldErrors = new FieldErrors();
 
@@ -52,10 +52,6 @@ const updateInfusion = (req, res, next) => {
   }
   if (stopVolume) {
     if (typeof (stopVolume) !== 'number') fieldErrors.addError('stopVolume', 'stopVolume is a required number');
-  }
-  if (deviceId) {
-    if (typeof (deviceId) !== 'string') fieldErrors.addError('deviceId', 'deviceId is a required string');
-    if (!db.validResourceId(deviceId)) fieldErrors.addError('deviceId', 'Invalid deviceId.');
   }
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     return res.status(400).json({ success: false, message: 'Invalid request: All fields can\'t be empty' });
