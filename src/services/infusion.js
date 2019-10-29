@@ -86,8 +86,8 @@ const getSingleInfusion = async (data, log) => {
   log.debug('Returning infusion to user');
   return infusion;
 };
- 
-  /**
+
+/**
  * @description The service function that updates an Infusion
  * @param {Object} data The data required
  * @param {Object} data.user The user data
