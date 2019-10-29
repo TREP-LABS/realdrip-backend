@@ -55,6 +55,14 @@ router.post(
   hasVerifiedAccount,
   controllers.nurseUser.createNurseUser,
 );
+router.get(
+  '/nurse/:nurseId',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.nurseUser.getSingleNurseUser,
+);
 
 router.post('/users/login', controllers.allUser.login);
 router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);

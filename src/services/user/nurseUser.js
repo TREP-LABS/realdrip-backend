@@ -64,10 +64,26 @@ const createNurseUser = async (data, log) => {
 
   emailService.sendNewNurseUserNotification({ name, email, password: defaultPassword }, loginUrl)
     .catch(err => log.error(err, `Error sending email to  ${email}`));
+  return formatUserData(nurseUser);
+};
 
+/**
+ * @description The service function that gets a single nurse
+ * @param {object} data The data required for this service to execute
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The nurse user
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const getSingleNurseUser = async (data, log) => {
+  log.debug('Executing getSingleNurseUser service');
+  const { nurseId } = data;
+  const { NURSE_USER } = db.users.userTypes;
+  log.debug('Querying DB for a single nurse');
+  const nurseUser = await db.users.getUser({ _id: nurseId }, NURSE_USER);
   return formatUserData(nurseUser);
 };
 
 export default {
   createNurseUser,
+  getSingleNurseUser,
 };
