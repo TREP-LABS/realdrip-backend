@@ -39,8 +39,7 @@ const updateInfusion = (req, res, next) => {
   } = req.body;
   const fieldErrors = new FieldErrors();
 
-  if (!infusionId) fieldErrors.addError('infusionId', 'infusionId is a required');
-  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'Invalid infusionId.');
+  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'Infusion id is invalid.');
 
   if (patientName) {
     if (typeof (patientName) !== 'string') fieldErrors.addError('patientName', 'patientName is a required string');

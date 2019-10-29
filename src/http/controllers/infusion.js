@@ -99,7 +99,7 @@ const updateInfusion = async (req, res) => {
       infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
     }, log);
     if (!infusion) {
-      return res.status(404).json({ success: false, message: 'Unable to update Infusion' });
+      return res.status(404).json({ success: false, message: 'Infusion not found' });
     }
     log.debug('updateInfusion service executed without error, sending back a success response.');
     return res.status(200).json({ success: true, message: 'Device updated', data: infusion });
