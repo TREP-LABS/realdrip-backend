@@ -35,6 +35,7 @@ const wardUserSchema = new Schema({
 const nurseUserSchema = new Schema({
   ...baseUser,
   defaultPass: { type: Boolean },
+  phoneNo: { type: String },
   wardId: { type: Schema.Types.ObjectId, required: true },
   hospitalId: { type: Schema.Types.ObjectId, required: true },
 });
