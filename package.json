@@ -28,7 +28,7 @@
     "forever": "^1.0.0",
     "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.7.1",
+    "mongoose": "^5.7.5",
     "nodemailer": "^6.3.0",
     "nodemailer-mailgun-transport": "^1.4.0",
     "nodemon": "^1.19.1",
