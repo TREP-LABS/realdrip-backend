@@ -12,6 +12,7 @@ export default {
     noReply: 'no-reply@realdrip.com',
     testEmail: process.env.TEST_EMAIL,
   },
+  bcryptHashSaltRounds: Number.parseInt(process.env.BCRYPT_HASH_SALT_ROUNDS, 10),
   jwtSecrete: process.env.JWT_SECRETE,
   serverAppUrl: process.env.SERVER_APP_URL,
   clientAppUrl: process.env.CLIENT_APP_URL,

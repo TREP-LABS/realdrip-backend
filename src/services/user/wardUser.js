@@ -45,7 +45,7 @@ const createWardUser = async (data, log) => {
   log.debug('Creating a default password for this user');
   const defaultPassword = passwordGenerator.generate({ length: 10, numbers: true });
   log.debug('Hashing user password');
-  const hashedPassword = bcrypt.hashSync(defaultPassword, 10);
+  const hashedPassword = bcrypt.hashSync(defaultPassword, config.bcryptHashSaltRounds);
   log.debug('Saving user data in database');
   const wardUser = await db.users.createUser({
     hospitalId,

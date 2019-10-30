@@ -43,7 +43,7 @@ const createAdminUser = async (data, log) => {
     throw error;
   }
   log.debug('Hashing user password');
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, config.bcryptHashSaltRounds);
   log.debug('Saving user data in database');
   const adminUser = await db.users.createUser({
     name,
