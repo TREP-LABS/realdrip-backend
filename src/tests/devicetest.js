@@ -1,3 +1,4 @@
+/*
 import supertest from 'supertest';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
@@ -24,14 +25,16 @@ const timeout = 90000;
 
 // I am skipping this test suite because I don't want to delte it
 // It should be refactored to make use of auth tokens in the test globals
-describe.skip('/api/device/', () => {
+describe('/api/device/', () => {
   let user;
   let device;
   let validToken;
 
   beforeAll(async () => {
-    user = await db.users.createUser({ ...userDetails, email: 'devicetest@device.com' }, 'hospital_admin');
-    validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
+    user = await db.users.createUser(
+      { ...userDetails, email: 'devicetest@device.com' }, 'hospital_admin');
+    validToken = jwt.sign(
+      { type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
     device = await db.device.createDevice({
       hospitalId: user._id,
       label: 'something nice',
@@ -97,7 +100,8 @@ describe.skip('/api/device/', () => {
       });
   }, timeout);
 
-  test('Geting a single device should succeed if the request token and the deviceId is valid', (done) => {
+  test('Geting a single device should succeed if the request token and the deviceId is valid',
+    (done) => {
     request
       .get(`/api/device/${device._id}`)
       .set('req-token', validToken)
@@ -117,7 +121,8 @@ describe.skip('/api/device/', () => {
       });
   }, timeout);
 
-  test('Updating of the device label should succeed if the device details and the user are both valid.', (done) => {
+  test('Updating of the device label should succeed if the device details' +
+  'and the user are both valid.',(done) => {
     request
       .put(`/api/device/${device._id}`)
       .set('req-token', validToken)
@@ -128,3 +133,4 @@ describe.skip('/api/device/', () => {
       });
   }, timeout);
 });
+*/

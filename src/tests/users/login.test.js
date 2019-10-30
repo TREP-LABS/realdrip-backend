@@ -46,7 +46,7 @@ const testCases = [
         success: false,
         message: 'Invalid request body',
         errors: {
-          email: ['Userr email is a required string'],
+          email: ['User email is a required string'],
         },
       },
     },
