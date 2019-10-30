@@ -32,4 +32,34 @@ const validateInfusionIid = (req, res, next) => {
   return next();
 };
 
-export default { createInfusion, validateInfusionIid };
+const updateInfusion = (req, res, next) => {
+  const { infusionId } = req.params;
+  const {
+    patientName, doctorsInstruction, startVolume, stopVolume,
+  } = req.body;
+  const fieldErrors = new FieldErrors();
+
+  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'Infusion id is invalid.');
+
+  if (patientName) {
+    if (typeof (patientName) !== 'string') fieldErrors.addError('patientName', 'patientName is a required string');
+  }
+  if (doctorsInstruction) {
+    if (typeof (doctorsInstruction) !== 'string') fieldErrors.addError('doctorsInstruction', 'doctorsInstruction is a required string');
+  }
+  if (startVolume) {
+    if (typeof (startVolume) !== 'number') fieldErrors.addError('startVolume', 'startVolume is a required number');
+  }
+  if (stopVolume) {
+    if (typeof (stopVolume) !== 'number') fieldErrors.addError('stopVolume', 'stopVolume is a required number');
+  }
+  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request: All fields can\'t be empty' });
+  }
+  if (fieldErrors.count > 0) {
+    return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
+  }
+  return next();
+};
+
+export default { createInfusion, validateInfusionIid, updateInfusion };

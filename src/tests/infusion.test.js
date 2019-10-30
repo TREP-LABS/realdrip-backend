@@ -109,4 +109,15 @@ describe('/api/infusion/', () => {
         done();
       });
   }, timeout);
+
+  test('Updating of infusion should succeed if the infusion details is valid', (done) => {
+    request
+      .put(`/api/infusion/${defaultInfusion._id}`)
+      .set('req-token', validToken)
+      .send({ patientName: 'Abeeb' })
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+  }, timeout);
 });

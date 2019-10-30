@@ -81,5 +81,12 @@ router.get('/infusion', authMiddleware, controllers.infusion.getAllInfusion);
 router.get('/infusion/:infusionId',
   authMiddleware,
   controllers.infusion.getSingleInfusion);
+router.put(
+  '/infusion/:infusionId',
+  authMiddleware,
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.infusion.updateInfusion,
+);
 
 export default router;
