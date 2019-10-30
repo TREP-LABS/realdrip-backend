@@ -10,7 +10,6 @@ const loginDetails = hospitalUser => ({
 });
 
 
-// @todo: I am not sure the way I'm mutating the test globals in the db here is right
 const testCases = [
   {
     title: 'should log user in succcessfully',
@@ -36,7 +35,6 @@ const testCases = [
       },
     },
   },
-  // @todo: This error message of this case is to specific to hospital user, I shoudl fix this
   {
     title: 'should fail if user email is not provided',
     request: context => ({
@@ -48,12 +46,11 @@ const testCases = [
         success: false,
         message: 'Invalid request body',
         errors: {
-          email: ['Medical center email is a required string'],
+          email: ['Userr email is a required string'],
         },
       },
     },
   },
-  // @todo: This error message of this case is to specific to hospital user, I shoudl fix this
   {
     title: 'should fail if user email is not a valid email address',
     request: context => ({
@@ -65,7 +62,7 @@ const testCases = [
         success: false,
         message: 'Invalid request body',
         errors: {
-          email: ['Medical center email format is a not valid'],
+          email: ['User email format is a not valid'],
         },
       },
     },

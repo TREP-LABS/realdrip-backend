@@ -92,8 +92,8 @@ const login = (req, res, next) => {
   const fieldErrors = new FieldErrors();
 
   // Validating email field
-  if (!email || typeof (email) !== 'string') fieldErrors.addError('email', 'Medical center email is a required string');
-  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Medical center email format is a not valid');
+  if (!email || typeof (email) !== 'string') fieldErrors.addError('email', 'User email is a required string');
+  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'User email format is a not valid');
 
   // Validating password field
   if (!password || typeof (password) !== 'string') fieldErrors.addError('password', 'Password field is a required string');

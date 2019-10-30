@@ -12,8 +12,6 @@ const updateUserFields = {
   },
 };
 
-
-// @todo: I am not sure the way I'm mutating the test globals in the db here is right
 const testCases = [
   {
     title: 'should update hospital user',
