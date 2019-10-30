@@ -125,7 +125,7 @@ const deleteInfusion = async (req, res) => {
   try {
     await infusionService.deleteInfusion({ infusionId, user, userType }, log);
     log.debug('deleteInfusion service executed without error, sending back a success response');
-    return res.status(204);
+    return res.status(204).json({});
   } catch (err) {
     if (err.httpStatusCode) {
       log.debug('deleteInfusion service failed with an http status code, sending back a failure response');

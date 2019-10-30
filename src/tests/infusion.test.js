@@ -29,10 +29,7 @@ describe('/api/infusion/', () => {
   let device;
   let validToken;
   let defaultInfusion;
-<<<<<<< HEAD
 
-=======
->>>>>>> ADD delete infusion resources
   beforeAll(async () => {
     user = await db.users.createUser({ ...userDetails, email: 'infusion@infusion.com' }, 'hospital_admin');
     validToken = jwt.sign({ type: 'hospital_admin', id: user._id }, process.env.JWT_SECRETE, { expiresIn: '3d' });
@@ -123,7 +120,7 @@ describe('/api/infusion/', () => {
         done();
       });
   }, timeout);
-  
+
   test('deleting a single Infusion should succeed if the request token and the infusionId is valid', (done) => {
     request
       .delete(`/api/infusion/${defaultInfusion._id}`)
