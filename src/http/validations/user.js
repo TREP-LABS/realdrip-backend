@@ -283,6 +283,7 @@ export default {
   createAdminUser,
   createWardUser,
   updateWardUser,
+  updateNurseUser,
   updateHospitalUser,
   udpateUserPassword,
   validateRegToken,

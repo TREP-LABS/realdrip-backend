@@ -63,6 +63,14 @@ router.get(
   hasVerifiedAccount,
   controllers.nurseUser.getSingleNurseUser,
 );
+router.put(
+  '/nurse/:nurseId',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.nurseUser.updateNurseUser,
+);
 router.get(
   '/nurse',
   authMiddleware,
