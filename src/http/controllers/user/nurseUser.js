@@ -59,7 +59,10 @@ const getSingleNurseUser = async (req, res) => {
  * @param {object} res Express response object
  */
 const getAllNurseUser = async (req, res) => {
-  const { log, user: { _id: wardId, hospitalId } } = res.locals;
+  const { log, user, userType } = res.locals;
+  const hospitalId = userType === 'hospital_admin' ? user._id : user.hospitalId;
+  const wardId = userType === 'ward_user' ? user._id : user.wardId;
+
   log.debug('Executing getAllNurseUser controller');
   try {
     const nurses = await nurseUserService.getAllNurseUser({ hospitalId, wardId }, log);
