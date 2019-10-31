@@ -120,4 +120,14 @@ describe('/api/infusion/', () => {
         done();
       });
   }, timeout);
+
+  test('deleting a single Infusion should succeed if the request token and the infusionId is valid', (done) => {
+    request
+      .delete(`/api/infusion/${defaultInfusion._id}`)
+      .set('req-token', validToken)
+      .end((err, res) => {
+        expect(res.status).toBe(204);
+        done();
+      });
+  }, timeout);
 });

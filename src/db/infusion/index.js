@@ -62,9 +62,25 @@ const getAllInfusion = async (infusionMatch) => {
   return Model.find(infusionMatch);
 };
 
+/**
+ * @description delete a single infusion from the database
+ * @param {object} infusionMatch  The data to be used as filter
+ * @param {string} infusionMatch._id The unique id of the infusion
+ * @param {string} infusionMatch.hospitalId the hospital id
+ * @param {string} infusionMatch.deviceId the device id
+ * @param {string} infusionMatch.wardId the ward id
+ * @param {string} infusionMatch.nurseId the nurse id
+ * @returns {Promise} A promise that resolves or reject to the result of the database operation
+ */
+const deleteInfusion = async (infusionMatch) => {
+  const Model = infusionModel;
+  return Model.deleteOne(infusionMatch);
+};
+
 export default {
   createInfusion,
   updateInfusion,
   getSingleInfusion,
   getAllInfusion,
+  deleteInfusion,
 };

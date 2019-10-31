@@ -19,7 +19,7 @@ const createInfusion = (req, res, next) => {
   return next();
 };
 
-const validateInfusionIid = (req, res, next) => {
+const validateInfusionId = (req, res, next) => {
   const { infusionId } = req.params;
 
   const fieldErrors = new FieldErrors();
@@ -62,4 +62,4 @@ const updateInfusion = (req, res, next) => {
   return next();
 };
 
-export default { createInfusion, validateInfusionIid, updateInfusion };
+export default { createInfusion, validateInfusionId, updateInfusion };

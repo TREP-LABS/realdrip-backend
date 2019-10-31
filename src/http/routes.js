@@ -88,5 +88,13 @@ router.put(
   hasVerifiedAccount,
   controllers.infusion.updateInfusion,
 );
+router.delete(
+  '/infusion/:infusionId',
+  authMiddleware,
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  controllers.infusion.deleteInfusion,
+);
 
 export default router;
