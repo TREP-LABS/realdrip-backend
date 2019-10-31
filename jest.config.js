@@ -5,13 +5,12 @@ module.exports = {
   // should be collected
   collectCoverageFrom: [
     '**/src/**/*.{js,jsx}',
+    '!**/http/start.js',
+    '!**.test.js',
+    '!**/node_modules/**',
   ],
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
-  // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    '\\\\node_modules\\\\',
-  ],
   // The test environment that will be used for testing
   testEnvironment: 'node',
   globalSetup: './src/tests/setup.js',
