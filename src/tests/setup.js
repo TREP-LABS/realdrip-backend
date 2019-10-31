@@ -18,8 +18,8 @@ let hospitalUser = {
     state: 'TestState',
     address: 'TestAddress',
   },
-  confirmedEmail: false,
-  verifiedPurchase: false,
+  confirmedEmail: true,
+  verifiedPurchase: true,
 };
 
 let wardUser = {
