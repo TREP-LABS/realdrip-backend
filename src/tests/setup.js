@@ -8,7 +8,8 @@ const jwtSecrete = process.env.JWT_SECRETE;
 
 const createToken = ({ type, id }) => jwt.sign({ type, id }, jwtSecrete, { expiresIn: '3d' });
 
-const hospitalUser = {
+let hospitalUser = {
+  id: '',
   name: 'Test Hospital User',
   email: 'hospitaluser@test.com',
   password: '',
@@ -21,7 +22,8 @@ const hospitalUser = {
   verifiedPurchase: false,
 };
 
-const wardUser = {
+let wardUser = {
+  id: '',
   name: 'Test Ward User',
   email: 'warduser@test.com',
   password: '',
@@ -30,7 +32,8 @@ const wardUser = {
   hospitalId: '',
 };
 
-const nurseUser = {
+let nurseUser = {
+  id: '',
   name: 'Test nurse user',
   email: 'nurseuser@test.com',
   phoneNo: '09088888',
@@ -55,13 +58,32 @@ export default async () => {
     ...nurseUser, wardId, hospitalId, password: hashedpass,
   }, NURSE_USER);
 
-  hospitalUser.authToken = createToken({ type: HOSPITAL_ADMIN_USER, id: hospitalId });
-  wardUser.authToken = createToken({ type: WARD_USER, id: wardId });
-  nurseUser.authToken = createToken({ type: NURSE_USER, id: nurseId });
+  hospitalUser = {
+    ...hospitalUser,
+    id: hospitalId,
+    password: hashedpass,
+    stringPass,
+    authToken: createToken({ type: HOSPITAL_ADMIN_USER, id: hospitalId }),
+  };
 
-  hospitalUser.stringPass = stringPass;
-  wardUser.stringPass = stringPass;
-  nurseUser.stringPass = stringPass;
+  wardUser = {
+    ...wardUser,
+    id: wardId,
+    hospitalId,
+    password: hashedpass,
+    stringPass,
+    authToken: createToken({ type: WARD_USER, id: wardId }),
+  };
+
+  nurseUser = {
+    ...nurseUser,
+    id: nurseId,
+    wardId,
+    hospitalId,
+    password: hashedpass,
+    stringPass,
+    authToken: createToken({ type: NURSE_USER, id: nurseId }),
+  };
 
   process.env.TEST_GLOBALS = JSON.stringify({
     hospitalUser,
