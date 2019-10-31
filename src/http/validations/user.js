@@ -230,6 +230,24 @@ const updateWardUser = (req, res, next) => {
 };
 
 /**
+ * @description Validates a NurseId
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const validateNurseId = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Checking if the given wardId is valid');
+  const { nurseId } = req.params;
+  if (!db.validResourceId(nurseId)) {
+    log.debug('nurseId is not valid, sending back failure response');
+    return res.status(400).json({ success: false, message: 'Nurse id is not valid' });
+  }
+  log.debug('NurseId is valid, moving on to the next middleware');
+  return next();
+};
+
+/**
  * @description Validates the request data to update a user password.
  * If the request data is valid, the request is sent to the next middleware otherwise,
  * a faliure response is sent to the user.
@@ -269,5 +287,6 @@ export default {
   udpateUserPassword,
   validateRegToken,
   validateWardId,
+  validateNurseId,
   login,
 };

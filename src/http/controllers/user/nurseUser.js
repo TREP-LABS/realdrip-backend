@@ -1,4 +1,5 @@
 import nurseUserService from '../../../services/user/nurseUser';
+import userValidation from '../../validations/user';
 
 /**
  * @description Controller for "create nurse user" API operation
@@ -25,6 +26,34 @@ const createNurseUser = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "get single Nurse user" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const getSingleNurseUser = async (req, res) => {
+  const { log } = res.locals;
+  log.debug('Executing the getSingleNurseUser controller');
+  const { nurseId } = req.params;
+  try {
+    const nurseUser = await nurseUserService.getSingleNurseUser({ nurseId }, log);
+    if (!nurseUser) {
+      log.debug('getSingleNurseUser service did not return a user, sending back a 404 response');
+      return res.status(404).json({ success: true, message: 'Nurse not found' });
+    }
+    log.debug('getSingleNurseUser service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Operation successful', data: nurseUser });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('getSingleNurseUser service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'getSingleNurseUser service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error getting nurse' });
+  }
+};
+
 export default {
   createNurseUser: [createNurseUser],
+  getSingleNurseUser: [userValidation.validateNurseId, getSingleNurseUser],
 };
