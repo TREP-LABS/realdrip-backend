@@ -23,8 +23,6 @@ const userDetails = {
 };
 const timeout = 90000;
 
-// I am skipping this test suite because I don't want to delte it
-// It should be refactored to make use of auth tokens in the test globals
 describe('/api/device/', () => {
   let user;
   let device;

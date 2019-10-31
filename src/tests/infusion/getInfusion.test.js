@@ -42,8 +42,6 @@ const testCases = [
       },
     },
   },
-  // This test case is added here even when the get single infusion endpoint is not implemented
-  // just to demonstrate how to go about creating a test case for getting single infusion
   {
     title: 'should get a single infusion',
     request: context => ({
