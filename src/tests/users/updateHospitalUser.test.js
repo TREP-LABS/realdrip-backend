@@ -56,6 +56,63 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'should fail if new country value is not a string',
+    request: context => ({
+      body: { ...updateUserFields, location: { ...updateUserFields, country: 45 } },
+      headers: {
+        'req-token': context.testGlobals.hospitalUser.authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request body',
+        errors: {
+          'location.country': ['Country field is a required string'],
+        },
+      },
+    },
+  },
+  {
+    title: 'should fail if new state value is not a string',
+    request: context => ({
+      body: { ...updateUserFields, location: { ...updateUserFields, state: 45 } },
+      headers: {
+        'req-token': context.testGlobals.hospitalUser.authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request body',
+        errors: {
+          'location.state': ['State field is a required string'],
+        },
+      },
+    },
+  },
+  {
+    title: 'should fail if new address value is not a string',
+    request: context => ({
+      body: { ...updateUserFields, location: { ...updateUserFields, address: 45 } },
+      headers: {
+        'req-token': context.testGlobals.hospitalUser.authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request body',
+        errors: {
+          'location.address': ['Address field is a required string'],
+        },
+      },
+    },
+  },
 ];
 
 const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);

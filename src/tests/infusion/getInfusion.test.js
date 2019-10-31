@@ -70,6 +70,26 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'should fail to get single infusion if infusionId is not valid',
+    request: context => ({
+      body: {},
+      endpoint: '/api/infusion/555aa',
+      headers: {
+        'req-token': context.testGlobals.wardUser.authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          infusionId: ['infusionId is not valid.'],
+        },
+      },
+    },
+  },
 ];
 
 const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
