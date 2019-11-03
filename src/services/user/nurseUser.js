@@ -83,7 +83,29 @@ const getSingleNurseUser = async (data, log) => {
   return formatUserData(nurseUser);
 };
 
+/**
+ * @description The service function that gets all nurse users
+ * @param {object} data The nurse user data
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} all nurses
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const getAllNurseUser = async (data, log) => {
+  log.debug('Executing getAllNurseUser service');
+  const { hospitalId, wardId } = data;
+  const userMatch = JSON.parse(JSON.stringify({ hospitalId, wardId }));
+  const { NURSE_USER } = db.users.userTypes;
+  const userFields = [
+    '_id', 'name', 'phoneNo', 'email', 'hospitalId', 'wardId',
+  ];
+  log.debug('Querying db for all nurses that matches the given hospitalId and wardId');
+  let nurses = await db.users.getAllUsers(userMatch, NURSE_USER, userFields);
+  nurses = nurses.map(user => formatUserData(user));
+  return nurses;
+};
+
 export default {
   createNurseUser,
   getSingleNurseUser,
+  getAllNurseUser,
 };
