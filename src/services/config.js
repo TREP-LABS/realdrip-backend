@@ -10,7 +10,6 @@ export default {
   },
   email: {
     noReply: 'no-reply@realdrip.com',
-    testEmail: process.env.TEST_EMAIL,
   },
   jwtSecrete: process.env.JWT_SECRETE,
   serverAppUrl: process.env.SERVER_APP_URL,

@@ -14,9 +14,18 @@ const mailgunOptions = {
 
 const emailClient = nodemailer.createTransport(mailgunTransport(mailgunOptions));
 
+const { NODE_ENV, ENFORCE_TEST_EMAILS } = process.env;
+const enforceTestEmails = ENFORCE_TEST_EMAILS ? ENFORCE_TEST_EMAILS.toLocaleLowerCase() === 'true' : false;
+if (NODE_ENV === 'test' && !enforceTestEmails) {
+  emailClient.sendMail = ({ subject }) => {
+    console.log(`"${subject}" email not sent because runtime is in test environment`);
+    return Promise.resolve('');
+  };
+}
+
 const sendEmailAddresValidation = (user, confirmationUrl) => emailClient.sendMail({
   from: config.email.noReply,
-  to: config.environment === 'test' ? config.email.testEmail : user.email,
+  to: user.email,
   subject: 'Please verify your email address',
   html: emailAddressValidation({ name: user.name, confirmationUrl }),
 });
@@ -25,7 +34,7 @@ const sendNewWardUserNotification = (user, loginUrl) => {
   const { name, email, password } = user;
   return emailClient.sendMail({
     from: config.email.noReply,
-    to: config.environment === 'test' ? config.email.testEmail : user.email,
+    to: user.email,
     subject: 'Ward login credentials',
     html: newWardUser({
       name, email, password, loginUrl,
@@ -37,7 +46,7 @@ const sendNewNurseUserNotification = (user, loginUrl) => {
   const { name, email, password } = user;
   return emailClient.sendMail({
     from: config.email.noReply,
-    to: config.environment === 'test' ? config.email.testEmail : user.email,
+    to: user.email,
     subject: 'Nurse login credentials',
     html: newNurseUser({
       name, email, password, loginUrl,
