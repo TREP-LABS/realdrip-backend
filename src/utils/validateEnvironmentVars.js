@@ -39,7 +39,7 @@ const environmetnVars = {
   APP_NAME: {
     severityLevel: 2,
     env: [TEST, DEVELOPMENT, STAGING, PRODUCTION],
-    default: 'rd-backend',
+    defaultValue: 'rd-backend',
   },
   PORT: {
     severityLevel: 2,
