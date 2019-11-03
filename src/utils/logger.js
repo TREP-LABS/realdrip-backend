@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const log = bunyan.createLogger({
-  name: process.env.APP_NAME || 'app',
-  level: process.env.LOG_LEVEL || 'info',
+  name: process.env.APP_NAME,
+  level: process.env.LOG_LEVEL,
 });
 
 export const logMiddleware = logger => expressRequestsLogger({
