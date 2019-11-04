@@ -2,7 +2,6 @@ import nurseUserService from '../../../services/user/nurseUser';
 import userValidation from '../../validations/user';
 import db from '../../../db';
 
-
 /**
  * @description Controller for "create nurse user" API operation
  * @param {object} req Express request object
@@ -81,8 +80,35 @@ const getAllNurseUser = async (req, res) => {
   }
 };
 
+/**
+ * @description Controller for "update nurse user" API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const updateNurseUser = async (req, res) => {
+  const { log } = res.locals;
+  log.debug('Executing the updateNurseUser controller');
+  const { name, phoneNo } = req.body;
+  const { nurseId } = req.params;
+  try {
+    const user = await nurseUserService.updateNurseUser({ name, phoneNo, nurseId }, log);
+    log.debug('UpdateNurseUser service executed without error, sending back a success response');
+    return res.status(200).json({ success: true, message: 'Nurse user updated successfully', data: user });
+  } catch (err) {
+    if (err.httpStatusCode) {
+      log.debug('UpdateNurseUser service failed with an http status code, sending back a failure response');
+      return res.status(err.httpStatusCode).json({ success: false, message: err.message });
+    }
+    log.error(err, 'UpdateNurseUser service failed without an http status code');
+    return res.status(500).json({ success: false, message: 'Error updating Nurse user' });
+  }
+};
 export default {
   createNurseUser: [createNurseUser],
   getSingleNurseUser: [userValidation.validateNurseId, getSingleNurseUser],
   getAllNurseUser,
+  updateNurseUser: [
+    userValidation.validateNurseId,
+    userValidation.updateNurseUser,
+    updateNurseUser],
 };

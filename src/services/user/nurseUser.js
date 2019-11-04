@@ -104,8 +104,28 @@ const getAllNurseUser = async (data, log) => {
   return nurses;
 };
 
+/**
+ * @description The service function that updates a nurse user data
+ * @param {object} data The editable user data and nurseId
+ * @param {function} log Logger utility for logging messages
+ * @returns {object} The updated user data
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
+const updateNurseUser = async (data, log) => {
+  log.debug('Executing updateNurseUser service');
+  const { name, phoneNo, nurseId } = data;
+  const { NURSE_USER } = db.users.userTypes;
+  log.debug('Attempting to update nurse user details');
+  const fieldsToUpdate = JSON.parse(JSON.stringify({ name, phoneNo }));
+  const { _doc: updatedUser } = await db.users.updateUser(
+    { _id: nurseId }, fieldsToUpdate, NURSE_USER,
+  );
+  return formatUserData(updatedUser);
+};
+
 export default {
   createNurseUser,
   getSingleNurseUser,
   getAllNurseUser,
+  updateNurseUser,
 };
