@@ -10,7 +10,6 @@ export default {
   },
   email: {
     noReply: 'no-reply@realdrip.com',
-    testEmail: process.env.TEST_EMAIL,
   },
   bcryptHashSaltRounds: Number.parseInt(process.env.BCRYPT_HASH_SALT_ROUNDS, 10),
   jwtSecrete: process.env.JWT_SECRETE,
