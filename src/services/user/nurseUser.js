@@ -104,7 +104,7 @@ const getAllNurseUser = async (data, log) => {
   return nurses;
 };
 
-  /**
+/**
  * @description The service function that updates a nurse user data
  * @param {object} data The editable user data and nurseId
  * @param {function} log Logger utility for logging messages
