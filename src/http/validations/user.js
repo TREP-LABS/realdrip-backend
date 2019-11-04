@@ -230,6 +230,36 @@ const updateWardUser = (req, res, next) => {
 };
 
 /**
+ * @description Validates the request data to create a nurse user.
+ * If the request data is valid, the request is sent to the next middleware otherwise,
+ * a faliure response is sent to the user.
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @param {function} next Express helper function to pass request to the next middleware
+ */
+const createNurseUser = (req, res, next) => {
+  const { log } = res.locals;
+  log.debug('Validating request data to create a nurse user');
+  const { name, email, phoneNo } = req.body;
+  const fieldErrors = new FieldErrors();
+
+  if (!name || typeof (name) !== 'string') fieldErrors.addError('name', 'Nurse name is a required string');
+  if (name.trim().length < 3) fieldErrors.addError('name', 'Nurse name must be at least 3 characters');
+
+  if (!email || typeof (email) !== 'string') fieldErrors.addError('email', 'Nurse email is a required string');
+  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Nurse email format is a not valid');
+
+  if (!phoneNo || typeof (phoneNo) !== 'string') fieldErrors.addError('phoneNo', 'phoneNo is a required string');
+
+  if (fieldErrors.count > 0) {
+    log.debug('Create nurse request data is invalid, sending back failure response');
+    return res.status(400).json({ success: false, message: 'Invalid request body', errors: fieldErrors.errors });
+  }
+
+  log.debug('Create nurse request data is valid, moving on to the next middleware');
+  return next();
+};
+/**
  * @description Validates a NurseId
  * @param {object} req Express request object
  * @param {object} res Express response object
@@ -312,6 +342,7 @@ const udpateUserPassword = (req, res, next) => {
 export default {
   createAdminUser,
   createWardUser,
+  createNurseUser,
   updateWardUser,
   updateNurseUser,
   updateHospitalUser,

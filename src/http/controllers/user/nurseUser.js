@@ -104,7 +104,7 @@ const updateNurseUser = async (req, res) => {
   }
 };
 export default {
-  createNurseUser: [createNurseUser],
+  createNurseUser: [userValidation.createNurseUser, createNurseUser],
   getSingleNurseUser: [userValidation.validateNurseId, getSingleNurseUser],
   getAllNurseUser,
   updateNurseUser: [
