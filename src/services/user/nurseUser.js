@@ -115,7 +115,7 @@ const updateNurseUser = async (data, log) => {
   log.debug('Executing updateNurseUser service');
   const { name, phoneNo, nurseId } = data;
   const { NURSE_USER } = db.users.userTypes;
-  log.debug('Attempting to update nurse user');
+  log.debug('Attempting to update nurse user details');
   const fieldsToUpdate = JSON.parse(JSON.stringify({ name, phoneNo }));
   const { _doc: updatedUser } = await db.users.updateUser(
     { _id: nurseId }, fieldsToUpdate, NURSE_USER,
