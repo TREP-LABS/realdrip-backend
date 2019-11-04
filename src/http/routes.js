@@ -6,7 +6,7 @@ import userStatus from './middlewares/userStatus';
 
 const router = express.Router();
 const { hasConfirmedEmail, hasVerifiedAccount, hasUserPrivledge } = userStatus;
-const { HOSPITAL_ADMIN_USER, WARD_USER } = db.users.userTypes;
+const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 
 router.get('/health', (req, res) => res.json({ status: 'I am alive' }));
 
@@ -66,9 +66,7 @@ router.get(
 router.put(
   '/nurse/:nurseId',
   authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  hasUserPrivledge([NURSE_USER.toLowerCase()]),
   controllers.nurseUser.updateNurseUser,
 );
 router.get(
