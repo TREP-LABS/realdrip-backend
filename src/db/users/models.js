@@ -9,7 +9,6 @@ const baseUser = {
     type: String,
     required: true,
     unique: true,
-    index: true,
   },
   password: { type: String, required: true },
 };
@@ -25,12 +24,16 @@ const hospitalAdminUserSchema = new Schema({
   verifiedPurchase: { type: Boolean, required: true },
 });
 
+hospitalAdminUserSchema.index({ email: true }, { background: false });
+
 const wardUserSchema = new Schema({
   ...baseUser,
   label: { type: String },
   defaultPass: { type: Boolean },
   hospitalId: { type: Schema.Types.ObjectId, required: true },
 });
+
+wardUserSchema.index({ email: true }, { background: false });
 
 const nurseUserSchema = new Schema({
   ...baseUser,
@@ -39,6 +42,8 @@ const nurseUserSchema = new Schema({
   wardId: { type: Schema.Types.ObjectId, required: true },
   hospitalId: { type: Schema.Types.ObjectId, required: true },
 });
+
+nurseUserSchema.index({ email: true }, { background: false });
 
 export default {
   [userTypes.HOSPITAL_ADMIN_USER]: mongoose.model('user.hospitaladmin', hospitalAdminUserSchema),
