@@ -65,7 +65,7 @@ const createAdminUser = async (data, log) => {
 };
 
 /**
- * @description The service function that updates an admin user account details
+ * @description The service function that updates an admin user account details.
  * @param {object} data The editable user data and the userId
  * @param {function} log Logger utility for logging messages
  * @returns {object} The updated user data
