@@ -4,9 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npm run validateEnvironmentVars && forever ./build/http/start.js",
-    "dev": "npm run validateEnvironmentVars && nodemon ./src/http/start.js --watch ./src --exec babel-node",
-    "validateEnvironmentVars": "babel-node ./src/utils/validateEnvironmentVars.js",
+    "start": "forever -c \"node -r ./build/utils/validateEnvironmentVars.js\" ./build/http/start.js",
+    "dev": "nodemon -r ./src/utils/validateEnvironmentVars.js  --exec babel-node ./src/http/start.js --watch ./src",
     "clean": "rm -rf ./build && mkdir build",
     "test": "jest ./src/tests --coverage",
     "build": "npm run clean && babel ./src -d ./build --copy-files",
