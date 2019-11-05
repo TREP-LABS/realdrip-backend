@@ -117,17 +117,19 @@ const testCases = [
 
 const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
 
-const hospitalUserEndpoint = '/api/hospital/';
-
 test.each(testTable)('Update Hospital User endpoint: %s', (title, reqData, resData) => {
   const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
+  const hospitalUserEndpoint = `/api/hospital/${testGlobals.hospitalUser.id}`;
+  // eslint-disable-next-line no-console
+  console.log(hospitalUserEndpoint);
+  
   const reqContext = { testGlobals };
   let processedReqData;
   if (typeof reqData === 'function') {
     processedReqData = reqData(reqContext);
   } else processedReqData = reqData;
   return request
-    .put(`${hospitalUserEndpoint}/${testGlobals.hospitalUser.id}`)
+    .put(hospitalUserEndpoint)
     .send(processedReqData.body || {})
     .set(processedReqData.headers || {})
     .then((res) => {
