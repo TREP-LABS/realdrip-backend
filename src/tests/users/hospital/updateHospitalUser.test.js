@@ -117,7 +117,7 @@ const testCases = [
 
 const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
 
-const hospitalUserEndpoint = '/api/hospital';
+const hospitalUserEndpoint = '/api/hospital/';
 
 test.each(testTable)('Update Hospital User endpoint: %s', (title, reqData, resData) => {
   const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
@@ -127,7 +127,7 @@ test.each(testTable)('Update Hospital User endpoint: %s', (title, reqData, resDa
     processedReqData = reqData(reqContext);
   } else processedReqData = reqData;
   return request
-    .put(hospitalUserEndpoint)
+    .put(`${hospitalUserEndpoint}/${testGlobals.hospitalUser.id}`)
     .send(processedReqData.body || {})
     .set(processedReqData.headers || {})
     .then((res) => {
