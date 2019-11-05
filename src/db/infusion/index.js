@@ -46,7 +46,7 @@ const updateInfusion = async (infusionMatch, update) => {
  */
 const getSingleInfusion = async (infusionMatch) => {
   const Model = infusionModel;
-  return Model.findOne(infusionMatch);
+  return Model.findOne(infusionMatch).populate('deviceId').populate('wardId').populate('nurseId');
 };
 
 /**
