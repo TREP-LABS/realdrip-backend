@@ -35,9 +35,7 @@ const testCases = [
           stopVolume: infusion.stopVolume,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
-          // Since the device is not valid null will be returned.
-          // Testing the deviceId then is invalid
-          // deviceId: infusion.deviceId,
+          deviceId: infusion.deviceId,
           wardId: expect.any(String),
           hospitalId: expect.any(String),
         }],
@@ -65,7 +63,9 @@ const testCases = [
           stopVolume: infusion.stopVolume,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
-          deviceId: expect.any(Object),
+          // Since the device is not valid null will be returned.
+          // Testing the deviceId then is invalid
+          // deviceId: infusion.deviceId,
           wardId: expect.any(Object),
           hospitalId: expect.any(Object),
         },
