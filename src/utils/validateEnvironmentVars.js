@@ -113,6 +113,7 @@ variableNames.forEach((name) => {
     case 2: {
       if (!process.env[name] && defaultValue) {
         console.warn(message || `Missing needed env var "${name}". Defaulting to a value of "${defaultValue}"`);
+        process.env[name] = defaultValue;
       } else if (!process.env[name]) console.warn(message || `Missing needed env var "${name}". Some features of the app might not work`);
       break;
     }
