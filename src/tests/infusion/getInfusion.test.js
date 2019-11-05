@@ -65,7 +65,6 @@ const testCases = [
           doctorsInstruction: infusion.doctorsInstruction,
           // Since the device is not valid null will be returned.
           // Testing the deviceId then is invalid
-          deviceId: expect(null),
           wardId: expect.any(Object),
           hospitalId: expect.any(String),
         },
