@@ -38,7 +38,7 @@ const updateAdminUser = async (req, res) => {
   const { log } = res.locals;
   log.debug('Executing the updateAdminUser controller');
   const { name, location } = req.body;
-  const { userId } = res.params;
+  const { userId } = req.params;
   try {
     const user = await hospitalUserService.updateAdminUser({ name, location, userId }, log);
     log.debug('UpdateAdminUser service executed without error, sending back a success response');

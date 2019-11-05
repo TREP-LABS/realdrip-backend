@@ -122,7 +122,7 @@ test.each(testTable)('Update Hospital User endpoint: %s', (title, reqData, resDa
   const hospitalUserEndpoint = `/api/hospital/${testGlobals.hospitalUser.id}`;
   // eslint-disable-next-line no-console
   console.log(hospitalUserEndpoint);
-  
+
   const reqContext = { testGlobals };
   let processedReqData;
   if (typeof reqData === 'function') {
