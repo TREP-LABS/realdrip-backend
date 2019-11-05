@@ -67,7 +67,7 @@ const testCases = [
           // Testing the deviceId then is invalid
           // deviceId: infusion.deviceId,
           wardId: expect.any(Object),
-          hospitalId: expect.any(Object),
+          hospitalId: expect.any(String),
         },
       },
     },
