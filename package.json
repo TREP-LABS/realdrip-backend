@@ -36,6 +36,7 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
+    "core-js": "^3.3.6",
     "coveralls": "^3.0.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
