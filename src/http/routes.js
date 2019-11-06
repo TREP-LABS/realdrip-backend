@@ -11,7 +11,14 @@ const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 router.get('/health', (req, res) => res.json({ status: 'I am alive' }));
 
 router.post('/hospital', controllers.hospitalUser.createAdminUser);
-router.put('/hospital/:userId', authMiddleware, controllers.hospitalUser.updateAdminUser);
+router.put(
+  '/hospital/:userId',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
+  hasConfirmedEmail,
+  hasVerifiedAccount,
+  controllers.hospitalUser.updateAdminUser,
+);
 router.get('/hospital/confirmEmail', controllers.hospitalUser.confirmUserAccount);
 
 router.post(
@@ -33,7 +40,7 @@ router.get(
 router.put(
   '/ward/:wardId',
   authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  hasUserPrivledge([WARD_USER.toLowerCase()]),
   hasConfirmedEmail,
   hasVerifiedAccount,
   controllers.wardUser.updateWardUser,
