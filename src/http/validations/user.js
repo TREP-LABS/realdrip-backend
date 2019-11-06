@@ -16,7 +16,6 @@ const createAdminUser = (req, res, next) => {
 
   const {
     name, email, password, confirmPassword,
-    location: { country, state, address },
   } = req.body;
 
   const fieldErrors = new FieldErrors();
@@ -39,10 +38,16 @@ const createAdminUser = (req, res, next) => {
     fieldErrors.addError('confirmPassword', 'Confirm password field must match the password field');
   }
 
-  // Validating location fields
-  if (!country || typeof (country) !== 'string') fieldErrors.addError('location.country', 'Country field is a required string');
-  if (!state || typeof (state) !== 'string') fieldErrors.addError('location.state', 'State field is a required string');
-  if (!address || typeof (address) !== 'string') fieldErrors.addError('location.address', 'Address field is a required string');
+  const { location } = req.body;
+  if (location && location.constructor.name === 'Object') {
+    const { country, state, address } = location;
+    // Validating location fields
+    if (!country || typeof (country) !== 'string') fieldErrors.addError('location.country', 'Country field is a required string');
+    if (!state || typeof (state) !== 'string') fieldErrors.addError('location.state', 'State field is a required string');
+    if (!address || typeof (address) !== 'string') fieldErrors.addError('location.address', 'Address field is a required string');
+  } else {
+    fieldErrors.addError('location', 'Location field is a required object');
+  }
 
   if (fieldErrors.count > 0) {
     log.debug('Create admin request data is invalid, sending back failure response');
