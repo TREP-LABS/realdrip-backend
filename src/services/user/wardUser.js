@@ -91,13 +91,7 @@ const updateWardUser = async (data, log) => {
   log.debug('Executing updateWardUser service');
   const { name, label, wardId } = data;
   const { WARD_USER } = db.users.userTypes;
-  const user = await db.users.getUser({ _id: wardId }, WARD_USER);
-  if (!user) {
-    log.debug('The ward user to update does not exist');
-    const error = new Error('User does not exist');
-    error.httpStatusCode = 404;
-    throw error;
-  }
+  log.debug('Attempting to update ward user details');
   const fieldsToUpdate = JSON.parse(JSON.stringify({ name, label }));
   const { _doc: updatedUser } = await db.users.updateUser(
     { _id: wardId }, fieldsToUpdate, WARD_USER,
