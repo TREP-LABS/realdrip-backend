@@ -126,6 +126,8 @@ const updateHospitalUser = (req, res, next) => {
 
   const fieldErrors = new FieldErrors();
 
+  const { userId } = req.params;
+  if (!db.validResourceId(userId)) fieldErrors.addError('userId', 'user id is not valid');
   const { name } = req.body;
   if (name && typeof (name) === 'string') {
     if (name.trim().length < 3) fieldErrors.addError('name', 'Medical center name must be at least 3 characters');
