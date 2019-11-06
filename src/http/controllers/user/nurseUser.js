@@ -7,7 +7,7 @@ import db from '../../../db';
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const createNurseUser = async (req, res) => {
+const createNurseUser = async (req, res, next) => {
   const { log, user: { _id: wardId, hospitalId } } = res.locals;
   log.debug('Executing the createNurseUser controller');
   const { name, email, phoneNo } = req.body;
@@ -22,8 +22,7 @@ const createNurseUser = async (req, res) => {
       log.debug('CreateNurseUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'CreateNurseUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error creating nurse user' });
+    return next(err);
   }
 };
 
@@ -32,7 +31,7 @@ const createNurseUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getSingleNurseUser = async (req, res) => {
+const getSingleNurseUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the getSingleNurseUser controller');
   const { nurseId } = req.params;
@@ -49,8 +48,7 @@ const getSingleNurseUser = async (req, res) => {
       log.debug('getSingleNurseUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getSingleNurseUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting nurse' });
+    return next(err);
   }
 };
 
@@ -59,7 +57,7 @@ const getSingleNurseUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getAllNurseUser = async (req, res) => {
+const getAllNurseUser = async (req, res, next) => {
   const { log, user, userType } = res.locals;
   const hospitalId = userType === db.users.userTypes.HOSPITAL_ADMIN_USER
     ? user._id : user.hospitalId;
@@ -75,8 +73,7 @@ const getAllNurseUser = async (req, res) => {
       log.debug('getAllNurseUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getAllNurseUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error fetching all nurses' });
+    return next(err);
   }
 };
 
@@ -85,7 +82,7 @@ const getAllNurseUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const updateNurseUser = async (req, res) => {
+const updateNurseUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the updateNurseUser controller');
   const { name, phoneNo } = req.body;
@@ -99,8 +96,7 @@ const updateNurseUser = async (req, res) => {
       log.debug('UpdateNurseUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'UpdateNurseUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error updating Nurse user' });
+    return next(err);
   }
 };
 export default {

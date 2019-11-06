@@ -45,7 +45,10 @@
     "supertest": "^4.0.2"
   },
   "nodemonConfig": {
-    "ignore": ["test/*", "docs/*"],
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
     "delay": "2500"
   }
 }

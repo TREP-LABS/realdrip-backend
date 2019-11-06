@@ -6,7 +6,7 @@ import deviceValidation from '../validations/device';
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getSingleDevice = async (req, res) => {
+const getSingleDevice = async (req, res, next) => {
   const { deviceId } = req.params;
   const { user, userType, log } = res.locals;
   log.debug('Executing the getSingleDevice controller');
@@ -22,8 +22,7 @@ const getSingleDevice = async (req, res) => {
       log.debug('getSingleDevie service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getSingleDevice service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting device' });
+    return next(err);
   }
 };
 
@@ -32,7 +31,7 @@ const getSingleDevice = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getAllDevice = async (req, res) => {
+const getAllDevice = async (req, res, next) => {
   const { user, userType, log } = res.locals;
   log.debug('Executing the getAllDevice controller');
   try {
@@ -44,8 +43,7 @@ const getAllDevice = async (req, res) => {
       log.debug('getAllDevice service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getAllDevice service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting device' });
+    return next(err);
   }
 };
 
@@ -54,7 +52,7 @@ const getAllDevice = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const updateDevice = async (req, res) => {
+const updateDevice = async (req, res, next) => {
   const { label } = req.body;
   const { deviceId } = req.params;
   const { user, userType, log } = res.locals;
@@ -73,8 +71,7 @@ const updateDevice = async (req, res) => {
       log.debug('updateDevice service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'updateDevice service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error updating device' });
+    return next(err);
   }
 };
 

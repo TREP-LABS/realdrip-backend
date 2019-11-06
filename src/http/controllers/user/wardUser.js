@@ -6,7 +6,7 @@ import userValidation from '../../validations/user';
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const createWardUser = async (req, res) => {
+const createWardUser = async (req, res, next) => {
   const { log, user: { _id: hospitalId } } = res.locals;
   log.debug('Executing the createWardUser controller');
   const { name, email, label } = req.body;
@@ -21,8 +21,7 @@ const createWardUser = async (req, res) => {
       log.debug('CreateWardUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'CreateWardUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error creating ward user' });
+    return next(err);
   }
 };
 
@@ -31,7 +30,7 @@ const createWardUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const updateWardUser = async (req, res) => {
+const updateWardUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the updateWardUser controller');
   const { name, label } = req.body;
@@ -45,8 +44,7 @@ const updateWardUser = async (req, res) => {
       log.debug('UpdateWardUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'UpdateWardUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error updating ward user' });
+    return next(err);
   }
 };
 
@@ -55,7 +53,7 @@ const updateWardUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getAllWardUser = async (req, res) => {
+const getAllWardUser = async (req, res, next) => {
   const { log, user: { _id: hospitalId } } = res.locals;
   log.debug('Executing the getAllWardUser controller');
   try {
@@ -67,8 +65,7 @@ const getAllWardUser = async (req, res) => {
       log.debug('GetAllWardUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'GetAllWardUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting all ward users' });
+    return next(err);
   }
 };
 
@@ -78,7 +75,7 @@ const getAllWardUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getSingleWardUser = async (req, res) => {
+const getSingleWardUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the getSingleWardUser controller');
   const { wardId } = req.params;
@@ -95,8 +92,7 @@ const getSingleWardUser = async (req, res) => {
       log.debug('GetSingleWardUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'GetSingleWardUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting a single ward user' });
+    return next(err);
   }
 };
 
