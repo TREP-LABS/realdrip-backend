@@ -1,7 +1,7 @@
-import supertest from 'supertest';
-import app from '../../http/app';
+import db from '../../db';
+import testRunner from '../utils/testRunner';
 
-const request = supertest(app);
+const { WARD_USER } = db.users.userTypes;
 
 const infusion = {
   startVolume: 700,
@@ -18,8 +18,10 @@ const testCases = [
     title: 'should create infusion successfully',
     request: context => ({
       body: infusion,
+      path: '/api/infusion',
+      method: 'post',
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
@@ -43,23 +45,4 @@ const testCases = [
   },
 ];
 
-const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
-
-const infusionEndpoint = '/api/infusion';
-
-test.each(testTable)('Create Infusion Endpoint: %s', (title, reqData, resData) => {
-  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
-  const reqContext = { testGlobals };
-  let processedReqData;
-  if (typeof reqData === 'function') {
-    processedReqData = reqData(reqContext);
-  } else processedReqData = reqData;
-  return request
-    .post(infusionEndpoint)
-    .send(processedReqData.body || {})
-    .set(processedReqData.headers || {})
-    .then((res) => {
-      expect(res.status).toBe(resData.status);
-      expect(res.body).toMatchObject(resData.body);
-    });
-});
+testRunner(testCases, 'Create infusion endpoint', {});

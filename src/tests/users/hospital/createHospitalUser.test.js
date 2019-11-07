@@ -1,7 +1,7 @@
-import supertest from 'supertest';
-import app from '../../../http/app';
+import db from '../../../db';
+import testRunner from '../../utils/testRunner';
 
-const request = supertest(app);
+const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
 
 const userDetails = {
   name: 'Test User',
@@ -15,11 +15,15 @@ const userDetails = {
   },
 };
 
+const createHospitalUserPath = '/api/hospital';
+
 const testCases = [
   {
     title: 'should create hospital user',
     request: {
       body: userDetails,
+      method: 'post',
+      path: createHospitalUserPath,
     },
     response: {
       status: 201,
@@ -40,9 +44,11 @@ const testCases = [
   {
     title: 'should fail if user with the same email already exist',
     request: context => ({
+      method: 'post',
+      path: createHospitalUserPath,
       body: {
         ...userDetails,
-        email: context.testGlobals.hospitalUser.email,
+        email: context.testGlobals[HOSPITAL_ADMIN_USER].email,
       },
     }),
     response: {
@@ -56,6 +62,8 @@ const testCases = [
   {
     title: 'should fail if user name is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, name: undefined },
     },
     response: {
@@ -72,6 +80,8 @@ const testCases = [
   {
     title: 'should fail if user name is less than 3 chars',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, name: 'me' },
     },
     response: {
@@ -88,6 +98,8 @@ const testCases = [
   {
     title: 'should fail if user email is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, email: undefined },
     },
     response: {
@@ -104,6 +116,8 @@ const testCases = [
   {
     title: 'should fail if user email is not a valid email address',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, email: 'testtt.com' },
     },
     response: {
@@ -120,6 +134,8 @@ const testCases = [
   {
     title: 'should fail if user password is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, password: undefined },
     },
     response: {
@@ -138,6 +154,8 @@ const testCases = [
     // and is not a mix of capital, small letters and numbers.
     title: 'should fail if password is weak',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, password: 'password' },
     },
     response: {
@@ -154,6 +172,8 @@ const testCases = [
   {
     title: 'should fail if confirmPassword value is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, confirmPassword: undefined },
     },
     response: {
@@ -170,6 +190,8 @@ const testCases = [
   {
     title: 'should fail if confirm password value does not match password value',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, confirmPassword: `${userDetails.password}ttt` },
     },
     response: {
@@ -186,6 +208,8 @@ const testCases = [
   {
     title: 'should fail if country value is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, location: { ...userDetails.location, country: undefined } },
     },
     response: {
@@ -202,6 +226,8 @@ const testCases = [
   {
     title: 'should fail if state value is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, location: { ...userDetails.location, state: undefined } },
     },
     response: {
@@ -218,6 +244,8 @@ const testCases = [
   {
     title: 'should fail if address value is not in request body',
     request: {
+      method: 'post',
+      path: createHospitalUserPath,
       body: { ...userDetails, location: { ...userDetails.location, address: undefined } },
     },
     response: {
@@ -233,23 +261,5 @@ const testCases = [
   },
 ];
 
-const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
 
-const hospitalUserEndpoint = '/api/hospital';
-
-test.each(testTable)('Create Hospital User endpoint: %s', (title, reqData, resData) => {
-  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
-  const reqContext = { testGlobals };
-  let processedReqData;
-  if (typeof reqData === 'function') {
-    processedReqData = reqData(reqContext);
-  } else processedReqData = reqData;
-  return request
-    .post(hospitalUserEndpoint)
-    .send(processedReqData.body || {})
-    .set(processedReqData.headers || {})
-    .then((res) => {
-      expect(res.status).toBe(resData.status);
-      expect(res.body).toMatchObject(resData.body);
-    });
-});
+testRunner(testCases, 'Create hospital user', {});
