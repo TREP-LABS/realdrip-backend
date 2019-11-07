@@ -14,14 +14,12 @@ const updateUserFields = {
   },
 };
 
-const path = '/api/hospital';
-
 const testCases = [
   {
     title: 'should update hospital user',
     request: context => ({
       method: 'put',
-      path,
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: updateUserFields,
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
@@ -47,7 +45,7 @@ const testCases = [
     title: 'should fail if user name is less than 3 chars',
     request: context => ({
       method: 'put',
-      path,
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, name: 'me' },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
@@ -68,7 +66,7 @@ const testCases = [
     title: 'should fail if new country value is not a string',
     request: context => ({
       method: 'put',
-      path,
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, country: 45 } },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
@@ -89,7 +87,7 @@ const testCases = [
     title: 'should fail if new state value is not a string',
     request: context => ({
       method: 'put',
-      path,
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, state: 45 } },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
@@ -110,7 +108,7 @@ const testCases = [
     title: 'should fail if new address value is not a string',
     request: context => ({
       method: 'put',
-      path,
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, address: 45 } },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
