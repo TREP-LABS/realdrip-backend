@@ -7,7 +7,7 @@ import config from '../../config';
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const createAdminUser = async (req, res) => {
+const createAdminUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the createAdminUser controller');
   const {
@@ -24,8 +24,7 @@ const createAdminUser = async (req, res) => {
       log.debug('CreateAdminUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'CreateAdminUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error creating admin user' });
+    return next(err);
   }
 };
 
@@ -34,7 +33,7 @@ const createAdminUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const updateAdminUser = async (req, res) => {
+const updateAdminUser = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing the updateAdminUser controller');
   const { name, location } = req.body;
@@ -48,8 +47,7 @@ const updateAdminUser = async (req, res) => {
       log.debug('UpdateAdminUser service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'UpdateAdminUser service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error updating user data' });
+    return next(err);
   }
 };
 
@@ -58,7 +56,7 @@ const updateAdminUser = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const confirmUserAccount = async (req, res) => {
+const confirmUserAccount = async (req, res, next) => {
   const { log } = res.locals;
   log.debug('Executing confirmUserAccount controller');
   const { regToken } = req.query;
@@ -71,8 +69,7 @@ const confirmUserAccount = async (req, res) => {
       log.debug('ConfirmUserAccount service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'ConfirmUserAccount service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error confirming user account' });
+    return next(err);
   }
 };
 

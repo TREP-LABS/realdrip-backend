@@ -6,7 +6,7 @@ import infusionValidation from '../validations/infusion';
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const createInfusion = async (req, res) => {
+const createInfusion = async (req, res, next) => {
   const {
     patientName, doctorsInstruction, startVolume, stopVolume, deviceId,
   } = req.body;
@@ -29,8 +29,7 @@ const createInfusion = async (req, res) => {
       log.debug('createInfusion service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'createInfusion service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error creating Infusion' });
+    return next(err);
   }
 };
 
@@ -39,7 +38,7 @@ const createInfusion = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getAllInfusion = async (req, res) => {
+const getAllInfusion = async (req, res, next) => {
   const { user, userType, log } = res.locals;
   log.debug('Executing the getAllInfusion controller');
   try {
@@ -51,8 +50,7 @@ const getAllInfusion = async (req, res) => {
       log.debug('getAllInfusion service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getAllInfusion service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting Infusions' });
+    return next(err);
   }
 };
 
@@ -61,7 +59,7 @@ const getAllInfusion = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const getSingleInfusion = async (req, res) => {
+const getSingleInfusion = async (req, res, next) => {
   const { infusionId } = req.params;
   const { user, userType, log } = res.locals;
   log.debug('Executing the getSingleInfusion controller');
@@ -77,8 +75,7 @@ const getSingleInfusion = async (req, res) => {
       log.debug('getSingleInfusion service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'getSingleInfusion service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error getting Infusion' });
+    return next(err);
   }
 };
 
@@ -87,7 +84,7 @@ const getSingleInfusion = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const updateInfusion = async (req, res) => {
+const updateInfusion = async (req, res, next) => {
   const {
     patientName, doctorsInstruction, startVolume, stopVolume,
   } = req.body;
@@ -108,8 +105,7 @@ const updateInfusion = async (req, res) => {
       log.debug('updateInfusion service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'updateInfusion service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error updating infusion' });
+    return next(err);
   }
 };
 
@@ -118,7 +114,7 @@ const updateInfusion = async (req, res) => {
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
-const deleteInfusion = async (req, res) => {
+const deleteInfusion = async (req, res, next) => {
   const { infusionId } = req.params;
   const { user, userType, log } = res.locals;
   log.debug('Executing the deleteInfusion controller');
@@ -131,8 +127,7 @@ const deleteInfusion = async (req, res) => {
       log.debug('deleteInfusion service failed with an http status code, sending back a failure response');
       return res.status(err.httpStatusCode).json({ success: false, message: err.message });
     }
-    log.error(err, 'deleteInfusion service failed without an http status code');
-    return res.status(500).json({ success: false, message: 'Error deleting Infusion' });
+    return next(err);
   }
 };
 

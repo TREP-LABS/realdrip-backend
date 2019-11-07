@@ -23,4 +23,11 @@ app.all('*', (req, res, next) => {
 
 app.use('/api', routes);
 
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  res.locals.log.error(`Error processing request for route: ${req.method} ${req.route.path}`);
+  res.locals.log.error(err);
+  return res.status(500).json({ success: false, message: 'Unable to complete operation' });
+});
+
 export default app;
