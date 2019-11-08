@@ -43,16 +43,16 @@ const testCases = [
       body: {
         success: true,
         message: 'Operation successful',
-        data: [
-          {
+        data: expect.arrayContaining([
+          expect.objectContaining({
             id: context.testGlobals[WARD_USER].id,
             name: context.testGlobals[WARD_USER].name,
             email: context.testGlobals[WARD_USER].email,
             label: context.testGlobals[WARD_USER].label,
             hospitalId: context.testGlobals[WARD_USER].hospitalId,
             defaultPass: context.testGlobals[WARD_USER].defaultPass,
-          },
-        ],
+          }),
+        ]),
       },
     }),
   },
