@@ -65,7 +65,6 @@ const testCases = [
         success: true,
         message: 'Infusion found',
         data: {
-          // @todo: Having _id instead of id here is a bug, it should be fixed
           _id: expect.any(String),
           startVolume: infusion.startVolume,
           stopVolume: infusion.stopVolume,
@@ -113,7 +112,6 @@ beforeAll(() => {
       if (!res.body || !res.body.success) {
         throw Error('Infusion creation failed, all other tests in this suite is also expected to fail');
       }
-      // @todo: Having _id instead of id here is a bug, it should be fixed
       context.infusionId = res.body.data._id;
     });
 });

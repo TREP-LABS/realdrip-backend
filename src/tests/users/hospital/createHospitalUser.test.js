@@ -31,7 +31,7 @@ const testCases = [
         success: true,
         message: 'Admin user created successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: userDetails.name,
           email: userDetails.email,
           location: userDetails.location,

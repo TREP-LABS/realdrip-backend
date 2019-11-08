@@ -30,7 +30,6 @@ const testCases = [
         success: true,
         message: 'Infusion created',
         data: {
-          // @todo: Having _id instead of id here is a bug, it should be fixed
           _id: expect.any(String),
           startVolume: infusion.startVolume,
           stopVolume: infusion.stopVolume,

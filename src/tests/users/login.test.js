@@ -27,7 +27,7 @@ const testCases = [
         message: 'Login successfully',
         data: {
           user: {
-            id: expect.any(String),
+            _id: expect.any(String),
             name: expect.any(String),
             email: expect.any(String),
             location: expect.any(Object),

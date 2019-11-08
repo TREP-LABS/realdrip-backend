@@ -48,7 +48,7 @@ const testCases = [
         success: true,
         message: 'User updated successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: updateUserFields.name,
           email: expect.any(String),
           location: updateUserFields.location,
