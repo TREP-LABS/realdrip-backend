@@ -1,9 +1,9 @@
 import db from '../../../db';
 import testRunner from '../../utils/testRunner';
+import confirmAccessLevelRestriction from '../../genericTestCases/confirmAccessLevelRestriction';
+import confirmAuthRestriction from '../../genericTestCases/confirmAuthRestriction';
 
-
-const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
-
+const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 
 const updateUserFields = {
   name: 'Updated Hospital User',
@@ -15,6 +15,23 @@ const updateUserFields = {
 };
 
 const testCases = [
+  confirmAuthRestriction({
+    title: 'should fail if user does not send a valid auth token',
+    path: '/api/hospital/5099803df3f4948bd2f98391',
+    method: 'put',
+  }),
+  confirmAccessLevelRestriction({
+    title: 'ward user should not be able to update a hospital account',
+    userType: WARD_USER,
+    path: '/api/hospital/5099803df3f4948bd2f98391',
+    method: 'put',
+  }),
+  confirmAccessLevelRestriction({
+    title: 'nurse user should not be able to update a hospital account',
+    userType: NURSE_USER,
+    path: '/api/hospital/5099803df3f4948bd2f98391',
+    method: 'put',
+  }),
   {
     title: 'should update hospital user',
     request: context => ({

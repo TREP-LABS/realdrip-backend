@@ -222,7 +222,7 @@ const updateWardUser = (req, res, next) => {
 
   if (name) {
     if (typeof (name) !== 'string') fieldErrors.addError('name', 'Ward name is a required string');
-    if (name.trim().length < 3) fieldErrors.addError('name', 'Ward name must be at least 3 characters');
+    else if (name.trim().length < 3) fieldErrors.addError('name', 'Ward name must be at least 3 characters');
   }
   if (label && typeof label !== 'string') {
     fieldErrors.addError('label', 'Ward label is a required string');
