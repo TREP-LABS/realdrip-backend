@@ -1,5 +1,9 @@
 import supertest from 'supertest';
 import app from '../../http/app';
+import db from '../../db';
+import testRunner from '../utils/testRunner';
+
+const { WARD_USER } = db.users.userTypes;
 
 const request = supertest(app);
 
@@ -18,9 +22,10 @@ const testCases = [
     title: 'should get all infusions',
     request: context => ({
       body: {},
-      endpoint: '/api/infusion',
+      path: '/api/infusion',
+      method: 'get',
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
@@ -46,9 +51,10 @@ const testCases = [
     title: 'should get a single infusion',
     request: context => ({
       body: {},
-      endpoint: `/api/infusion/${context.infusionId}`,
+      path: `/api/infusion/${context.infusionId}`,
+      method: 'get',
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
@@ -74,9 +80,10 @@ const testCases = [
     title: 'should fail to get single infusion if infusionId is not valid',
     request: context => ({
       body: {},
-      endpoint: '/api/infusion/555aa',
+      path: '/api/infusion/555aa',
+      method: 'get',
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
@@ -92,40 +99,21 @@ const testCases = [
   },
 ];
 
-const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
-
-const infusionEndpoint = '/api/infusion';
-let infusionId = null;
+const context = {};
 
 beforeAll(() => {
   const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
   return request
-    .post(infusionEndpoint)
+    .post('/api/infusion')
     .send(infusion)
-    .set('req-token', testGlobals.wardUser.authToken)
+    .set('req-token', testGlobals[WARD_USER].authToken)
     .then((res) => {
       if (!res.body || !res.body.success) {
         throw Error('Infusion creation failed, all other tests in this suite is also expected to fail');
       }
       // @todo: Having _id instead of id here is a bug, it should be fixed
-      infusionId = res.body.data._id;
+      context.infusionId = res.body.data._id;
     });
 });
 
-
-test.each(testTable)('Get Infusion Endpoint: %s', (title, reqData, resData) => {
-  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
-  const reqContext = { testGlobals, infusionId };
-  let processedReqData;
-  if (typeof reqData === 'function') {
-    processedReqData = reqData(reqContext);
-  } else processedReqData = reqData;
-  return request
-    .get(processedReqData.endpoint || infusion)
-    .send(processedReqData.body || {})
-    .set(processedReqData.headers || {})
-    .then((res) => {
-      expect(res.status).toBe(resData.status);
-      expect(res.body).toMatchObject(resData.body);
-    });
-});
+testRunner(testCases, 'Get infusion', context);

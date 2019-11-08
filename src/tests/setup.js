@@ -87,8 +87,8 @@ export default async () => {
   };
 
   process.env.TEST_GLOBALS = JSON.stringify({
-    hospitalUser,
-    wardUser,
-    nurseUser,
+    [HOSPITAL_ADMIN_USER]: hospitalUser,
+    [WARD_USER]: wardUser,
+    [NURSE_USER]: nurseUser,
   });
 };

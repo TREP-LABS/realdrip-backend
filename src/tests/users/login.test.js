@@ -1,7 +1,8 @@
-import supertest from 'supertest';
-import app from '../../http/app';
+import db from '../../db';
+import testRunner from '../utils/testRunner';
 
-const request = supertest(app);
+
+const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
 
 const loginDetails = hospitalUser => ({
   email: hospitalUser.email,
@@ -9,12 +10,15 @@ const loginDetails = hospitalUser => ({
   userType: 'hospital_admin',
 });
 
+const loginPath = '/api//users/login';
 
 const testCases = [
   {
     title: 'should log user in succcessfully',
     request: context => ({
-      body: loginDetails(context.testGlobals.hospitalUser),
+      method: 'post',
+      path: loginPath,
+      body: loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]),
     }),
     response: {
       status: 200,
@@ -38,7 +42,9 @@ const testCases = [
   {
     title: 'should fail if user email is not provided',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), email: undefined },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), email: undefined },
     }),
     response: {
       status: 400,
@@ -54,7 +60,9 @@ const testCases = [
   {
     title: 'should fail if user email is not a valid email address',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), email: 'testt.com' },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), email: 'testt.com' },
     }),
     response: {
       status: 400,
@@ -70,7 +78,9 @@ const testCases = [
   {
     title: 'should fail if user does not exist',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), email: 'randomerandomeuser@gmail.com' },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), email: 'randomerandomeuser@gmail.com' },
     }),
     response: {
       status: 400,
@@ -83,7 +93,9 @@ const testCases = [
   {
     title: 'should fail if user password is not provided',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), password: undefined },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), password: undefined },
     }),
     response: {
       status: 400,
@@ -99,7 +111,9 @@ const testCases = [
   {
     title: 'should fail if user password is not correct',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), password: `${context.testGlobals.hospitalUser.stringPass}--` },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), password: `${context.testGlobals[HOSPITAL_ADMIN_USER].stringPass}--` },
     }),
     response: {
       status: 400,
@@ -112,7 +126,9 @@ const testCases = [
   {
     title: 'should fail if user type is not valid',
     request: context => ({
-      body: { ...loginDetails(context.testGlobals.hospitalUser), userType: 'random_user_type' },
+      method: 'post',
+      path: loginPath,
+      body: { ...loginDetails(context.testGlobals[HOSPITAL_ADMIN_USER]), userType: 'random_user_type' },
     }),
     response: {
       status: 400,
@@ -127,23 +143,4 @@ const testCases = [
   },
 ];
 
-const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
-
-const hospitalUserEndpoint = '/api/users/login';
-
-test.each(testTable)('Log user in: %s', (title, reqData, resData) => {
-  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
-  const reqContext = { testGlobals };
-  let processedReqData;
-  if (typeof reqData === 'function') {
-    processedReqData = reqData(reqContext);
-  } else processedReqData = reqData;
-  return request
-    .post(hospitalUserEndpoint)
-    .send(processedReqData.body || {})
-    .set(processedReqData.headers || {})
-    .then((res) => {
-      expect(res.status).toBe(resData.status);
-      expect(res.body).toMatchObject(resData.body);
-    });
-});
+testRunner(testCases, 'User login', {});

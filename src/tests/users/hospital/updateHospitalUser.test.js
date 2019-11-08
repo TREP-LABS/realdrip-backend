@@ -1,7 +1,9 @@
-import supertest from 'supertest';
-import app from '../../../http/app';
+import db from '../../../db';
+import testRunner from '../../utils/testRunner';
 
-const request = supertest(app);
+
+const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+
 
 const updateUserFields = {
   name: 'Updated Hospital User',
@@ -16,9 +18,11 @@ const testCases = [
   {
     title: 'should update hospital user',
     request: context => ({
+      method: 'put',
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: updateUserFields,
       headers: {
-        'req-token': context.testGlobals.hospitalUser.authToken,
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
     }),
     response: {
@@ -40,9 +44,11 @@ const testCases = [
   {
     title: 'should fail if user name is less than 3 chars',
     request: context => ({
+      method: 'put',
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, name: 'me' },
       headers: {
-        'req-token': context.testGlobals.hospitalUser.authToken,
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
     }),
     response: {
@@ -59,9 +65,11 @@ const testCases = [
   {
     title: 'should fail if new country value is not a string',
     request: context => ({
+      method: 'put',
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, country: 45 } },
       headers: {
-        'req-token': context.testGlobals.hospitalUser.authToken,
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
     }),
     response: {
@@ -78,9 +86,11 @@ const testCases = [
   {
     title: 'should fail if new state value is not a string',
     request: context => ({
+      method: 'put',
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, state: 45 } },
       headers: {
-        'req-token': context.testGlobals.hospitalUser.authToken,
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
     }),
     response: {
@@ -97,9 +107,11 @@ const testCases = [
   {
     title: 'should fail if new address value is not a string',
     request: context => ({
+      method: 'put',
+      path: `/api/hospital/${context.testGlobals[HOSPITAL_ADMIN_USER].id}`,
       body: { ...updateUserFields, location: { ...updateUserFields, address: 45 } },
       headers: {
-        'req-token': context.testGlobals.hospitalUser.authToken,
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
     }),
     response: {
@@ -115,22 +127,4 @@ const testCases = [
   },
 ];
 
-const testTable = testCases.map(testCase => [testCase.title, testCase.request, testCase.response]);
-
-test.each(testTable)('Update Hospital User endpoint: %s', (title, reqData, resData) => {
-  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
-  const hospitalUserEndpoint = `/api/hospital/${testGlobals.hospitalUser.id}`;
-  const reqContext = { testGlobals };
-  let processedReqData;
-  if (typeof reqData === 'function') {
-    processedReqData = reqData(reqContext);
-  } else processedReqData = reqData;
-  return request
-    .put(hospitalUserEndpoint)
-    .send(processedReqData.body || {})
-    .set(processedReqData.headers || {})
-    .then((res) => {
-      expect(res.status).toBe(resData.status);
-      expect(res.body).toMatchObject(resData.body);
-    });
-});
+testRunner(testCases, 'Update hospital user', {});
