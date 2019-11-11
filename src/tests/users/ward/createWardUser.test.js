@@ -47,7 +47,7 @@ const testCases = [
         success: true,
         message: 'Ward user created successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: wardUserDetails.name,
           email: wardUserDetails.email,
           label: wardUserDetails.label,

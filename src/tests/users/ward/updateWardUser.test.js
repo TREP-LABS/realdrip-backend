@@ -54,7 +54,7 @@ const testCases = [
         success: true,
         message: 'Ward user updated successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: updateUserFields.name,
           email: expect.any(String),
           label: updateUserFields.label,
@@ -159,7 +159,7 @@ beforeAll(() => {
       if (!res.body || !res.body.success) {
         throw Error('Ward user creation failed, all other tests in this suite is also expected to fail');
       }
-      context.wardId = res.body.data.id;
+      context.wardId = res.body.data._id;
     });
 });
 
