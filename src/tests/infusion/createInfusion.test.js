@@ -46,6 +46,8 @@ const testCases = [
   {
     title: 'creation of infusion should fail for a nurse user',
     request: context => ({
+      path: '/api/infusion',
+      method: 'post',
       body: infusion,
       headers: {
         'req-token': context.testGlobals[NURSE_USER].authToken,
@@ -62,6 +64,8 @@ const testCases = [
   {
     title: 'creation of infusion should fail if some of the required data such as patientName is missing',
     request: context => ({
+      path: '/api/infusion',
+      method: 'post',
       body: {
         startVolume: 700,
         stopVolume: 50,
@@ -78,7 +82,7 @@ const testCases = [
         success: false,
         message: 'Invalid request',
         errors: {
-          infusionId: ['patientName is a required string'],
+          patientName: ['patientName is a required string'],
         },
       },
     },

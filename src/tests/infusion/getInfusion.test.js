@@ -65,7 +65,6 @@ const testCases = [
         success: true,
         message: 'Infusion found',
         data: {
-          // @todo: Having _id instead of id here is a bug, it should be fixed
           _id: expect.any(String),
           startVolume: infusion.startVolume,
           stopVolume: infusion.stopVolume,
@@ -104,7 +103,8 @@ const testCases = [
     title: 'should fail to get single infusion if infusion is not in the database',
     request: context => ({
       body: {},
-      endpoint: '/api/infusion/5db84960166c41363822ca25',
+      path: '/api/infusion/5db84960166c41363822ca25',
+      method: 'get',
       headers: {
         'req-token': context.testGlobals[WARD_USER].authToken,
       },
@@ -113,9 +113,7 @@ const testCases = [
       status: 404,
       body: {
         success: false,
-        errors: {
-          infusionId: ['Infusion not found'],
-        },
+        message: 'Infusion not found',
       },
     },
   },
@@ -123,7 +121,8 @@ const testCases = [
     title: 'should fail to get infusion if the req-token is not part of the header',
     request: context => ({
       body: {},
-      endpoint: '/api/infusion/555aa',
+      path: '/api/infusion/555aa',
+      method: 'get',
       headers: {
         Auth: context.testGlobals[WARD_USER].authToken,
       },
@@ -132,10 +131,7 @@ const testCases = [
       status: 401,
       body: {
         success: false,
-        message: 'Invalid request',
-        errors: {
-          infusionId: ['req-token not found in request header'],
-        },
+        message: 'Unable to authenticate token',
       },
     },
   },
@@ -153,7 +149,6 @@ beforeAll(() => {
       if (!res.body || !res.body.success) {
         throw Error('Infusion creation failed, all other tests in this suite is also expected to fail');
       }
-      // @todo: Having _id instead of id here is a bug, it should be fixed
       context.infusionId = res.body.data._id;
     });
 });

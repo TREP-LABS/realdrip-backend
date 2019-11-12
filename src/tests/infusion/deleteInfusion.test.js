@@ -28,6 +28,7 @@ const testCases = [
     }),
     response: {
       status: 204,
+      body: {},
     },
   },
 ];
