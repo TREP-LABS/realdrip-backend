@@ -53,7 +53,7 @@ beforeAll(() => request
     context.infusionId = res.body.data._id;
   }));
 
-test('Updating of infusion should succeed if the infusion details is valid', (done) => {
+test('Updating of infusion should succeed', (done) => {
   request
     .put(`/api/infusion/${context.infusionId}`)
     .set('req-token', testGlobals[WARD_USER].authToken)
