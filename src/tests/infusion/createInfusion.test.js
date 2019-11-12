@@ -1,7 +1,7 @@
 import db from '../../db';
 import testRunner from '../utils/testRunner';
 
-const { WARD_USER } = db.users.userTypes;
+const { WARD_USER, NURSE_USER } = db.users.userTypes;
 
 const infusion = {
   startVolume: 700,
@@ -48,7 +48,7 @@ const testCases = [
     request: context => ({
       body: infusion,
       headers: {
-        'req-token': context.testGlobals.nurseUser.authToken,
+        'req-token': context.testGlobals[NURSE_USER].authToken,
       },
     }),
     response: {
@@ -69,7 +69,7 @@ const testCases = [
         deviceId: '5db95971c9da2412401b1804',
       },
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {

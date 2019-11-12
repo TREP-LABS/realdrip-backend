@@ -106,7 +106,7 @@ const testCases = [
       body: {},
       endpoint: '/api/infusion/5db84960166c41363822ca25',
       headers: {
-        'req-token': context.testGlobals.wardUser.authToken,
+        'req-token': context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
@@ -125,7 +125,7 @@ const testCases = [
       body: {},
       endpoint: '/api/infusion/555aa',
       headers: {
-        Auth: context.testGlobals.wardUser.authToken,
+        Auth: context.testGlobals[WARD_USER].authToken,
       },
     }),
     response: {
