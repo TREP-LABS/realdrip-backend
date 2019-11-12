@@ -96,7 +96,7 @@ const getAllNurseUser = async (data, log) => {
   const userMatch = JSON.parse(JSON.stringify({ hospitalId, wardId }));
   const { NURSE_USER } = db.users.userTypes;
   const userFields = [
-    '_id', 'name', 'phoneNo', 'email', 'hospitalId', 'wardId',
+    '_id', 'name', 'phoneNo', 'email', 'hospitalId', 'wardId', 'defaultPass',
   ];
   log.debug('Querying db for all nurses that matches the given hospitalId and wardId');
   let nurses = await db.users.getAllUsers(userMatch, NURSE_USER, userFields);
