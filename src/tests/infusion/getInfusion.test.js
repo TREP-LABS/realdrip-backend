@@ -100,6 +100,45 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'should fail to get single infusion if infusion is not in the database',
+    request: context => ({
+      body: {},
+      endpoint: '/api/infusion/5db84960166c41363822ca25',
+      headers: {
+        'req-token': context.testGlobals.wardUser.authToken,
+      },
+    }),
+    response: {
+      status: 404,
+      body: {
+        success: false,
+        errors: {
+          infusionId: ['Infusion not found'],
+        },
+      },
+    },
+  },
+  {
+    title: 'should fail to get infusion if the req-token is not part of the header',
+    request: context => ({
+      body: {},
+      endpoint: '/api/infusion/555aa',
+      headers: {
+        Auth: context.testGlobals.wardUser.authToken,
+      },
+    }),
+    response: {
+      status: 401,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          infusionId: ['req-token not found in request header'],
+        },
+      },
+    },
+  },
 ];
 
 const context = {};

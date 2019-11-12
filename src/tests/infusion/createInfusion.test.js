@@ -43,6 +43,46 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'creation of infusion should fail for a nurse user',
+    request: context => ({
+      body: infusion,
+      headers: {
+        'req-token': context.testGlobals.nurseUser.authToken,
+      },
+    }),
+    response: {
+      status: 403,
+      body: {
+        success: false,
+        message: 'You do not have access to this endpoint',
+      },
+    },
+  },
+  {
+    title: 'creation of infusion should fail if some of the required data such as patientName is missing',
+    request: context => ({
+      body: {
+        startVolume: 700,
+        stopVolume: 50,
+        doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
+        deviceId: '5db95971c9da2412401b1804',
+      },
+      headers: {
+        'req-token': context.testGlobals.wardUser.authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          infusionId: ['patientName is a required string'],
+        },
+      },
+    },
+  },
 ];
 
 testRunner(testCases, 'Create infusion endpoint', {});
