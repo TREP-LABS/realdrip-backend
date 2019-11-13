@@ -15,10 +15,36 @@ const infusion = {
   deviceId: '5db23403347ab06cc7bfd8a2',
 };
 
-// @todo: Additional test cases are to be added to test
-// for other scenarios this endpoint is to handle
 const testCases = [
 
+  {
+    title: 'should update infusion',
+    request: context => ({
+      method: 'put',
+      path: `/api/infusion/${context.infusionId}`,
+      body: { patientName: 'JP Saxe' },
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Infusion updated',
+        data: {
+          _id: expect.any(String),
+          startVolume: infusion.startVolume,
+          stopVolume: infusion.stopVolume,
+          patientName: 'JP Saxe',
+          doctorsInstruction: infusion.doctorsInstruction,
+          deviceId: infusion.deviceId,
+          wardId: expect.any(String),
+          hospitalId: expect.any(String),
+        },
+      },
+    },
+  },
   {
     title: 'should fail to update infusion if the infusion is not found',
     request: context => ({
@@ -53,14 +79,4 @@ beforeAll(() => request
     context.infusionId = res.body.data._id;
   }));
 
-test('Updating of infusion should succeed', (done) => {
-  request
-    .put(`/api/infusion/${context.infusionId}`)
-    .set('req-token', testGlobals[WARD_USER].authToken)
-    .send({ patientName: 'Abeeb' })
-    .end((err, res) => {
-      expect(res.status).toBe(200);
-      done();
-    });
-});
-testRunner(testCases, 'Update infusion endpoint', {});
+testRunner(testCases, 'Update infusion endpoint', context);
