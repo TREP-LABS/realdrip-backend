@@ -9,7 +9,7 @@ jobs:
   - name: Unit Tests
     stage: Testing/Static Analysis
     script: 
-      - npm run test -- --forceExit --silent --testTimeout=7000 --maxWorkers=4
+      - npm run test -- --forceExit --silent --testTimeout=10000 --maxWorkers=4
       - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage # reporting coverage
   - name: Linting
     stage: Testing/Static Analysis
