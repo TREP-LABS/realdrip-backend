@@ -84,7 +84,53 @@ const testCases = [
       },
     },
   },
-
+  {
+    title: 'should fail to update if an empty request body is provided',
+    request: context => ({
+      path: `/api/infusion/${context.infusionId}`,
+      method: 'put',
+      body: {},
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request: All fields can\'t be empty',
+      },
+    },
+  },
+  {
+    title: 'should fail to update infusion if the dataTypes sent are different from expected',
+    request: context => ({
+      path: `/api/infusion/${context.infusionId}`,
+      method: 'put',
+      body: {
+        startVolume: '700ml',
+        stopVolume: '50ml',
+        patientName: 25,
+        doctorsInstruction: 989,
+      },
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          patientName: ['patientName is a required string'],
+          startVolume: ['startVolume is a required number'],
+          stopVolume: ['stopVolume is a required number'],
+          doctorsInstruction: ['doctorsInstruction is a required string'],
+        },
+      },
+    },
+  },
 ];
 
 const context = {};
