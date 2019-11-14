@@ -251,10 +251,10 @@ const createNurseUser = (req, res, next) => {
   const fieldErrors = new FieldErrors();
 
   if (!name || typeof (name) !== 'string') fieldErrors.addError('name', 'Nurse name is a required string');
-  if (name.trim().length < 3) fieldErrors.addError('name', 'Nurse name must be at least 3 characters');
+  else if (name.trim().length < 3) fieldErrors.addError('name', 'Nurse name must be at least 3 characters');
 
   if (!email || typeof (email) !== 'string') fieldErrors.addError('email', 'Nurse email is a required string');
-  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Nurse email format is a not valid');
+  else if (!validator.isEmail(email)) fieldErrors.addError('email', 'Nurse email format is not valid');
 
   if (!phoneNo || typeof (phoneNo) !== 'string') fieldErrors.addError('phoneNo', 'phoneNo is a required string');
 
@@ -300,7 +300,7 @@ const updateNurseUser = (req, res, next) => {
 
   if (name) {
     if (typeof (name) !== 'string') fieldErrors.addError('name', 'Nurse name is a required string');
-    if (name.trim().length < 3) fieldErrors.addError('name', 'Nurse name must be at least 3 characters');
+    else if (name.trim().length < 3) fieldErrors.addError('name', 'Nurse name must be at least 3 characters');
   }
   if (phoneNo && typeof phoneNo !== 'string') {
     fieldErrors.addError('phoneNo', 'Nurse phone number is a required string');
