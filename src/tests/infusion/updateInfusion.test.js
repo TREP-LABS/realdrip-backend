@@ -63,6 +63,28 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'should fail to update infusion if the infusionId is invalid',
+    request: context => ({
+      method: 'put',
+      path: '/api/infusion/5bbad66',
+      body: { patientName: 'JP Saxe' },
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          infusionId: ['infusionId is not valid'],
+        },
+      },
+    },
+  },
+
 ];
 
 const context = {};

@@ -1,5 +1,7 @@
 import db from '../../db';
 import testRunner from '../utils/testRunner';
+import confirmAccessLevelRestriction from '../genericTestCases/confirmAccessLevelRestriction';
+import confirmAuthRestriction from '../genericTestCases/confirmAuthRestriction';
 
 const { WARD_USER, NURSE_USER } = db.users.userTypes;
 
@@ -11,9 +13,18 @@ const infusion = {
   deviceId: '5db95971c9da2412401b1804',
 };
 
-// @todo: Additional test cases are to be added to test
-// for other scenarios this endpoint is to handle
 const testCases = [
+  confirmAuthRestriction({
+    title: 'should fail if user does not send a valid auth token',
+    path: '/api/ward',
+    method: 'post',
+  }),
+  confirmAccessLevelRestriction({
+    title: 'Nurse user should not be able to create infusion',
+    userType: NURSE_USER,
+    path: '/api/infusion',
+    method: 'post',
+  }),
   {
     title: 'should create infusion successfully',
     request: context => ({
@@ -43,34 +54,11 @@ const testCases = [
     },
   },
   {
-    title: 'creation of infusion should fail for a nurse user',
+    title: 'creation of infusion should fail if some of the required credentials is not provided',
     request: context => ({
       path: '/api/infusion',
       method: 'post',
-      body: infusion,
-      headers: {
-        'req-token': context.testGlobals[NURSE_USER].authToken,
-      },
-    }),
-    response: {
-      status: 403,
-      body: {
-        success: false,
-        message: 'You do not have access to this endpoint',
-      },
-    },
-  },
-  {
-    title: 'creation of infusion should fail if some of the required data such as patientName is missing',
-    request: context => ({
-      path: '/api/infusion',
-      method: 'post',
-      body: {
-        startVolume: 700,
-        stopVolume: 50,
-        doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
-        deviceId: '5db95971c9da2412401b1804',
-      },
+      body: {},
       headers: {
         'req-token': context.testGlobals[WARD_USER].authToken,
       },
@@ -82,6 +70,53 @@ const testCases = [
         message: 'Invalid request',
         errors: {
           patientName: ['patientName is a required string'],
+          startVolume: ['startVolume is a required number'],
+          stopVolume: ['stopVolume is a required number'],
+          doctorsInstruction: ['doctorsInstruction is a required string'],
+          deviceId: ['deviceId is required'],
+        },
+      },
+    },
+  },
+  {
+    title: 'creation of infusion should fail if the deviceId is not valid',
+    request: context => ({
+      path: '/api/infusion',
+      method: 'post',
+      body: { ...infusion, deviceId: 'sddfadf5' },
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          deviceId: ['Invalid deviceId'],
+        },
+      },
+    },
+  },
+  {
+    title: 'creation of infusion should fail if the start and stop volumes are not numbers',
+    request: context => ({
+      path: '/api/infusion',
+      method: 'post',
+      body: { ...infusion, startVolume: '700ml', stopVolume: '100ml' },
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          startVolume: ['startVolume is a required number'],
+          stopVolume: ['stopVolume is a required number'],
         },
       },
     },

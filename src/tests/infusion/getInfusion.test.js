@@ -94,7 +94,7 @@ const testCases = [
         success: false,
         message: 'Invalid request',
         errors: {
-          infusionId: ['infusionId is not valid.'],
+          infusionId: ['infusionId is not valid'],
         },
       },
     },

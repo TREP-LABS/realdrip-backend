@@ -2,8 +2,10 @@ import supertest from 'supertest';
 import app from '../../http/app';
 import db from '../../db';
 import testRunner from '../utils/testRunner';
+import confirmAccessLevelRestriction from '../genericTestCases/confirmAccessLevelRestriction';
+import confirmAuthRestriction from '../genericTestCases/confirmAuthRestriction';
 
-const { WARD_USER } = db.users.userTypes;
+const { WARD_USER, NURSE_USER } = db.users.userTypes;
 
 const request = supertest(app);
 
@@ -16,6 +18,17 @@ const infusion = {
 };
 
 const testCases = [
+  confirmAuthRestriction({
+    title: 'should fail if user does not send a valid auth token',
+    path: '/api/ward',
+    method: 'post',
+  }),
+  confirmAccessLevelRestriction({
+    title: 'Nurse user should not be able to delete infusion',
+    userType: NURSE_USER,
+    path: '/api/infusion',
+    method: 'post',
+  }),
   {
     title: 'should delete infusion',
     request: context => ({
@@ -29,6 +42,27 @@ const testCases = [
     response: {
       status: 204,
       body: {},
+    },
+  },
+  {
+    title: 'should fail to delete infusion if the infusionId is invalid',
+    request: context => ({
+      body: {},
+      path: '/api/infusion/2ad3flk',
+      method: 'delete',
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Invalid request',
+        errors: {
+          infusionId: ['infusionId is not valid'],
+        },
+      },
     },
   },
 ];
