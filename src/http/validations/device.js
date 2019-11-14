@@ -34,4 +34,20 @@ const updateDevice = (req, res, next) => {
   return next();
 };
 
-export default { getSingleDevice, updateDevice };
+const verifyDeviceLabel = async (req, res, next) => {
+  const { label } = req.body;
+  const { user, userType } = res.locals;
+  const deviceMatch = {
+    label,
+    hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
+    wardId: userType === 'ward_user' ? user._id : user.wardId,
+  };
+  const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
+  const device = await db.device.getSingleDevice(purifyDeviceMatch);
+  if (device) {
+    return res.status(400).json({ success: false, message: 'Label already in use. try a different one' });
+  }
+  return next();
+};
+
+export default { getSingleDevice, updateDevice, verifyDeviceLabel };

@@ -50,7 +50,7 @@ const updateDevice = catchControllerError('UpdateDevice', async (req, res) => {
 });
 
 export default {
-  updateDevice: [deviceValidation.updateDevice, updateDevice],
+  updateDevice: [deviceValidation.updateDevice, deviceValidation.verifyDeviceLabel, updateDevice],
   getSingleDevice: [deviceValidation.getSingleDevice, getSingleDevice],
   getAllDevice,
 };
