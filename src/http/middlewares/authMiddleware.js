@@ -15,6 +15,9 @@ const auth = async (req, res, next) => {
     res.locals.user = user;
     res.locals.userType = type;
   } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ success: false, message: 'Token expired' });
+    }
     return res.status(401).json({ success: false, message: 'Unable to authenticate token' });
   }
   return next();
