@@ -6,7 +6,7 @@ const getSingleDevice = (req, res, next) => {
 
   const fieldErrors = new FieldErrors();
 
-  if (!deviceId || typeof (deviceId) !== 'string') fieldErrors.addError('deviceId', 'deviceId is a required string');
+  if (!db.validResourceId(deviceId)) fieldErrors.addError('deviceId', 'deviceId is not valid');
 
   if (fieldErrors.count > 0) {
     return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });

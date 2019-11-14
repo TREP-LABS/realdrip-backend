@@ -10,7 +10,7 @@ import deviceModel from './model';
  */
 const getSingleDevice = async (deviceMatch) => {
   const Model = deviceModel;
-  return Model.findOne(deviceMatch);
+  return Model.findOne(deviceMatch).select('-__v');
 };
 
 /**
@@ -22,7 +22,7 @@ const getSingleDevice = async (deviceMatch) => {
  */
 const getAllDevice = async (deviceMatch) => {
   const Model = deviceModel;
-  return Model.find(deviceMatch);
+  return Model.find(deviceMatch).select('-__v');
 };
 
 /**
