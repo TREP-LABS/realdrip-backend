@@ -333,7 +333,7 @@ const udpateUserPassword = (req, res, next) => {
   if (!db.validResourceId(userId)) fieldErrors.addError('userId', 'userId is not valid');
 
   if (!formerPassword || typeof formerPassword !== 'string') fieldErrors.addError('formerPassword', 'Former password is a required string');
-  if (!newPassword || typeof newPassword !== 'string') fieldErrors.addError('newPassword', 'New password is a requried string');
+  if (!newPassword || typeof newPassword !== 'string') fieldErrors.addError('newPassword', 'New password is a required string');
   else if (!(/\d/.test(newPassword) && /[A-Z]/.test(newPassword) && /[a-z]/.test(newPassword) && newPassword.length > 7)) {
     fieldErrors.addError('newPassword', 'New password must be at least 7 character mix of capital, small letters with numbers');
   }
