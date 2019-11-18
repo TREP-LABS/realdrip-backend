@@ -1,8 +1,23 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import db from '../../db';
 import testRunner from '../utils/testRunner';
 import confirmAuthRestriction from '../genericTestCases/confirmAuthRestriction';
 
-const { WARD_USER, NURSE_USER } = db.users.userTypes;
+const { WARD_USER, HOSPITAL_ADMIN_USER } = db.users.userTypes;
+
+const jwtSecrete = process.env.JWT_SECRETE;
+
+const createToken = ({ type, id }) => jwt.sign({ type, id }, jwtSecrete, { expiresIn: '3d' });
+const wardUser = {
+  id: '',
+  name: 'Test Ward User',
+  email: 'anotherWarduser@test.com',
+  password: '',
+  label: 'Another Test Ward Label',
+  defaultPass: true,
+  hospitalId: '',
+};
 
 const testCases = [
   confirmAuthRestriction({
@@ -14,10 +29,10 @@ const testCases = [
     title: 'should update user password',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
-      body: { formerPassword: 'Password123', newPassword: 'Password1234' },
+      path: `/api/users/${context.ward._id}/password`,
+      body: { formerPassword: context.ward.stringPass, newPassword: 'Password1234' },
       headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -29,10 +44,10 @@ const testCases = [
     title: 'should fail if new password does not contain an uppercase letter',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
+      path: `/api/users/${context.ward._id}/password`,
       body: { formerPassword: 'Password123', newPassword: 'password1234' },
       headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -50,10 +65,10 @@ const testCases = [
     title: 'should fail if new password does not contain a number',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
+      path: `/api/users/${context.ward._id}/password`,
       body: { formerPassword: 'Password123', newPassword: 'passworD' },
       headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -71,10 +86,10 @@ const testCases = [
     title: 'should fail if Former password is incorrect',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
+      path: `/api/users/${context.ward._id}/password`,
       body: { formerPassword: 'Passwor3', newPassword: 'passworD223' },
       headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -89,10 +104,10 @@ const testCases = [
     title: 'should fail if the user is not found',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
-      body: { formerPassword: 'Passwor3', newPassword: 'passworD223' },
+      path: '/api/users/5db95971c9da2412401b1804/password',
+      body: { formerPassword: context.ward.stringPass, newPassword: 'passworD223' },
       headers: {
-        'req-token': context.testGlobals[NURSE_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -107,10 +122,10 @@ const testCases = [
     title: 'should fail if former password or new password is not a string',
     request: context => ({
       method: 'put',
-      path: `/api/users/${context.testGlobals[WARD_USER].id}/password`,
+      path: `/api/users/${context.ward._id}/password`,
       body: { formerPassword: 55289099, newPassword: 55555582 },
       headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
+        'req-token': context.ward.authToken,
       },
     }),
     response: {
@@ -125,6 +140,44 @@ const testCases = [
       },
     },
   },
+  {
+    title: 'should fail if req-token is not in the header',
+    request: context => ({
+      method: 'put',
+      path: `/api/users/${context.ward._id}/password`,
+      body: { formerPassword: context.ward.stringPass, newPassword: 'passworD223' },
+      headers: {
+        Auth: context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
+      },
+    }),
+    response: {
+      status: 401,
+      body: {
+        success: false,
+        message: 'Unable to authenticate token',
+      },
+    },
+  },
 ];
 
-testRunner(testCases, 'Update user password', {});
+const context = {};
+
+beforeAll(async () => {
+  const testGlobals = JSON.parse(process.env.TEST_GLOBALS);
+  const stringPass = 'Password123';
+  const hashedpass = await bcrypt.hash(
+    stringPass, Number.parseInt(process.env.BCRYPT_HASH_SALT_ROUNDS, 10),
+  );
+  const ward = await db.users.createUser(
+    {
+      ...wardUser,
+      hospitalId: testGlobals[HOSPITAL_ADMIN_USER].id,
+      password: hashedpass,
+    }, WARD_USER,
+  );
+  context.ward = {
+    ...ward, _id: ward._id, stringPass, authToken: createToken({ type: WARD_USER, id: ward._id }),
+  };
+});
+
+testRunner(testCases, 'Update user password', context);
