@@ -1,7 +1,10 @@
+import jwt from 'jsonwebtoken';
+import db from '../../../db';
 import testRunner from '../../utils/testRunner';
 
-// This valid registeration token was manually generated
-const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJ1c2VyVHlwZSI6Imhvc3BpdGFsX2FkbWluIiwiaWF0IjoxNTcwMTgyNjk4fQ.Df7sc7J_1vJozqO5UEFU6O_P6BdJ1xzhv-NbuoP-pWk';
+const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+const jwtSecrete = process.env.JWT_SECRETE;
+const validToken = jwt.sign({ email: 'hospitaluser@test.com', userType: HOSPITAL_ADMIN_USER }, jwtSecrete);
 
 const testCases = [
   {
