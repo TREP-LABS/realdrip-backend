@@ -65,7 +65,6 @@ const testCases = [
         success: true,
         message: 'Infusion found',
         data: {
-          // @todo: Having _id instead of id here is a bug, it should be fixed
           _id: expect.any(String),
           startVolume: infusion.startVolume,
           stopVolume: infusion.stopVolume,
@@ -95,8 +94,44 @@ const testCases = [
         success: false,
         message: 'Invalid request',
         errors: {
-          infusionId: ['infusionId is not valid.'],
+          infusionId: ['infusionId is not valid'],
         },
+      },
+    },
+  },
+  {
+    title: 'should fail to get single infusion if infusion is not in the database',
+    request: context => ({
+      body: {},
+      path: '/api/infusion/5db84960166c41363822ca25',
+      method: 'get',
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 404,
+      body: {
+        success: false,
+        message: 'Infusion not found',
+      },
+    },
+  },
+  {
+    title: 'should fail to get infusion if the req-token is not part of the header',
+    request: context => ({
+      body: {},
+      path: '/api/infusion/555aa',
+      method: 'get',
+      headers: {
+        Auth: context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 401,
+      body: {
+        success: false,
+        message: 'Unable to authenticate token',
       },
     },
   },
@@ -114,7 +149,6 @@ beforeAll(() => {
       if (!res.body || !res.body.success) {
         throw Error('Infusion creation failed, all other tests in this suite is also expected to fail');
       }
-      // @todo: Having _id instead of id here is a bug, it should be fixed
       context.infusionId = res.body.data._id;
     });
 });

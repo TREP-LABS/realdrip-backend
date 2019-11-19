@@ -99,7 +99,7 @@ const updateInfusion = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Infusion not found' });
     }
     log.debug('updateInfusion service executed without error, sending back a success response.');
-    return res.status(200).json({ success: true, message: 'Device updated', data: infusion });
+    return res.status(200).json({ success: true, message: 'Infusion updated', data: infusion });
   } catch (err) {
     if (err.httpStatusCode) {
       log.debug('updateInfusion service failed with an http status code, sending back a failure response');

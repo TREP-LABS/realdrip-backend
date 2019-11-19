@@ -12,7 +12,7 @@ const createInfusion = (req, res, next) => {
   if (!startVolume || typeof (startVolume) !== 'number') fieldErrors.addError('startVolume', 'startVolume is a required number');
   if (!stopVolume || typeof (stopVolume) !== 'number') fieldErrors.addError('stopVolume', 'stopVolume is a required number');
   if (!deviceId || typeof (deviceId) !== 'string') fieldErrors.addError('deviceId', 'deviceId is required');
-  if (!db.validResourceId(deviceId)) fieldErrors.addError('deviceId', 'Invalid deviceId.');
+  else if (!db.validResourceId(deviceId)) fieldErrors.addError('deviceId', 'Invalid deviceId');
   if (fieldErrors.count > 0) {
     return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
   }
@@ -24,7 +24,7 @@ const validateInfusionId = (req, res, next) => {
 
   const fieldErrors = new FieldErrors();
 
-  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'infusionId is not valid.');
+  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'infusionId is not valid');
 
   if (fieldErrors.count > 0) {
     return res.status(400).json({ success: false, message: 'Invalid request', errors: fieldErrors.errors });
@@ -39,7 +39,7 @@ const updateInfusion = (req, res, next) => {
   } = req.body;
   const fieldErrors = new FieldErrors();
 
-  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'Infusion id is invalid.');
+  if (!db.validResourceId(infusionId)) fieldErrors.addError('infusionId', 'infusionId is not valid');
 
   if (patientName) {
     if (typeof (patientName) !== 'string') fieldErrors.addError('patientName', 'patientName is a required string');
