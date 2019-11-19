@@ -16,7 +16,7 @@ const infusion = {
 const testCases = [
   confirmAuthRestriction({
     title: 'should fail if user does not send a valid auth token',
-    path: '/api/ward',
+    path: '/api/infusion',
     method: 'post',
   }),
   confirmAccessLevelRestriction({
