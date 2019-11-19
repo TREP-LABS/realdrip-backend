@@ -46,7 +46,8 @@ const updateInfusion = async (infusionMatch, update) => {
  */
 const getSingleInfusion = async (infusionMatch) => {
   const Model = infusionModel;
-  return Model.findOne(infusionMatch).populate('deviceId').populate('wardId').populate('nurseId');
+  return Model.findOne(infusionMatch).select('-__v').populate('deviceId').populate('wardId')
+    .populate('nurseId');
 };
 
 /**
@@ -59,7 +60,7 @@ const getSingleInfusion = async (infusionMatch) => {
  */
 const getAllInfusion = async (infusionMatch) => {
   const Model = infusionModel;
-  return Model.find(infusionMatch);
+  return Model.find(infusionMatch).select('-__v');
 };
 
 /**
