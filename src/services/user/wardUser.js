@@ -10,7 +10,7 @@ import emailService from '../email';
  * @returns {object} The formatted user data
  */
 const formatUserData = user => ({
-  id: user._id,
+  _id: user._id,
   name: user.name,
   email: user.email,
   label: user.label,
