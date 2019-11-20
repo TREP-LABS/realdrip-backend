@@ -18,6 +18,12 @@ const testCases = [
     path: '/api/ward',
     method: 'get',
   }),
+  confirmAccessLevelRestriction({
+    title: 'Nurse user should not be able to get a single ward',
+    userType: NURSE_USER,
+    path: '/api/ward/5099803df3f4948bd2f98391', // The ID here does not have to be correct
+    method: 'get',
+  }),
   confirmAuthRestriction({
     title: 'getting all ward users should fail if user does not send a valid auth token',
     path: '/api/ward',

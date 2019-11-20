@@ -47,7 +47,7 @@ const testCases = [
         success: true,
         message: 'Nurse user created successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: nurseUserDetails.name,
           email: nurseUserDetails.email,
           phoneNo: nurseUserDetails.phoneNo,

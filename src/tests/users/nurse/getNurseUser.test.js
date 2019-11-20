@@ -39,7 +39,7 @@ const testCases = [
         message: 'Nurse users fetched successfully',
         data: expect.arrayContaining([
           expect.objectContaining({
-            id: context.testGlobals[NURSE_USER].id,
+            _id: context.testGlobals[NURSE_USER].id,
             name: context.testGlobals[NURSE_USER].name,
             email: context.testGlobals[NURSE_USER].email,
             phoneNo: context.testGlobals[NURSE_USER].phoneNo,
@@ -67,7 +67,7 @@ const testCases = [
         success: true,
         message: 'Operation successful',
         data: {
-          id: context.testGlobals[NURSE_USER].id,
+          _id: context.testGlobals[NURSE_USER].id,
           name: context.testGlobals[NURSE_USER].name,
           email: context.testGlobals[NURSE_USER].email,
           phoneNo: context.testGlobals[NURSE_USER].phoneNo,

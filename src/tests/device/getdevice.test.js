@@ -1,9 +1,16 @@
 import db from '../../db';
 import testRunner from '../utils/testRunner';
+import confirmAccessLevelRestriction from '../genericTestCases/confirmAccessLevelRestriction';
 
-const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+const { HOSPITAL_ADMIN_USER, NURSE_USER } = db.users.userTypes;
 
 const testCases = [
+  confirmAccessLevelRestriction({
+    title: 'nurse user should not be able to get all devices',
+    userType: NURSE_USER,
+    path: '/api/devices',
+    method: 'get',
+  }),
   {
     title: 'should get all devices',
     request: context => ({
