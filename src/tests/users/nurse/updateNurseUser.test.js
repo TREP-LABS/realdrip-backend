@@ -54,7 +54,7 @@ const testCases = [
         success: true,
         message: 'Nurse user updated successfully',
         data: {
-          id: expect.any(String),
+          _id: expect.any(String),
           name: updateUserFields.name,
           email: expect.any(String),
           phoneNo: updateUserFields.phoneNo,
@@ -160,7 +160,7 @@ beforeAll(() => {
       if (!res.body || !res.body.success) {
         throw Error('Nurse user creation failed, all other tests in this suite is also expected to fail');
       }
-      context.nurseId = res.body.data.id;
+      context.nurseId = res.body.data._id;
     });
 });
 
