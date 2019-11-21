@@ -97,22 +97,3 @@ testRunner(testCases, 'User login', {});
 
 ## TestGlobals
 Some data are needed across multiple tests at runtime, they are computed just before the tests start running as part of the test setup(`src/tests/setup.js`). We pass this data down to the other tests via the `TEST_GLOBALS` environment variables. If you are using the testRunner, the testGlobals object is available in the context object of every test case, if you are not using the testRunner, you can alwyas get the testGlobals object by parsing the JSON serialzied `process.env.TEST_GLOBALS` at test runtime.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
