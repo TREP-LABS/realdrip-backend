@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../../db';
 import config from '../config';
+import ServiceError from '../serviceError';
 
 /**
  * @description Format the user data to be returned to the client
@@ -37,9 +38,7 @@ const login = async (data, log) => {
   const user = await db.users.getUser({ email: email.toLowerCase() }, userType);
   if (!user || !bcrypt.compareSync(password, user.password)) {
     log.debug('The given email or password is not correct, throwing error');
-    const error = new Error('Email or password incorrect');
-    error.httpStatusCode = 400;
-    throw error;
+    throw new ServiceError('Email or password incorrect', 400);
   }
   const userId = user._id;
   log.debug('Create an auth token for this user');
@@ -65,15 +64,11 @@ const updatePassword = async (data, log) => {
   const user = await db.users.getUser({ _id: userId }, userType);
   if (!user) {
     log.debug('The user to update does not exist');
-    const error = new Error('User does not exist');
-    error.httpStatusCode = 404;
-    throw error;
+    throw new ServiceError('User does not exist', 404);
   }
   if (!bcrypt.compareSync(formerPassword, user.password)) {
     log.debug('The formerPassword is not correct, throwing error');
-    const error = new Error('Former password is not correct');
-    error.httpStatusCode = 400;
-    throw error;
+    throw new ServiceError('Former password is not correct', 400);
   }
   log.debug('Hashing new user password');
   const newHashedPassword = await bcrypt.hash(newPassword, 10);
