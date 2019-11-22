@@ -40,7 +40,6 @@ const verifyDeviceLabel = async (req, res, next) => {
   const deviceMatch = {
     label,
     hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-    wardId: userType === 'ward_user' ? user._id : user.wardId,
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
   const device = await db.device.getSingleDevice(purifyDeviceMatch);
