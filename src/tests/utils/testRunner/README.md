@@ -1,6 +1,6 @@
  
 # TestRunner
-The testRunner is an abstraction over the way we write our automated integration tests. Most of the integration tests we write for the different API endpoints follows the same structure of simulating an Http request to the app and asserting the response body. Consequently, we created this testRunner utility that takes care of the details on sending request and asserting a response, all you need to do to test an endpoint is to compose test cases. 
+The testRunner is an abstraction over the way we write automated integration tests. Most of the integration tests we write for the different API endpoints follows the same structure of simulating an Http request to the app and asserting the response body. Consequently, we created this testRunner utility that takes care of the details on sending request and asserting a response, all you need to do to test an endpoint is to compose test cases. 
 
 The `testRunner` method accepts 3 arguments, `testRunner(a, b, c)`:
 - a: The testCases array, this is an array of one or more test case for the testRunner to run.
