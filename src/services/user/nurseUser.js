@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import config from '../config';
 import db from '../../db';
 import emailService from '../email';
+import ServiceError from '../serviceError';
 
 /**
  * @description Format the user data to be returned to the client
@@ -40,9 +41,7 @@ const createNurseUser = async (data, log) => {
   );
   if (alreadyExistingUser) {
     log.debug('Nurse user with the given email already exist, throwing error');
-    const error = new Error('Nurse user with this email already exist');
-    error.httpStatusCode = 409;
-    throw error;
+    throw new ServiceError('Nurse user with this email already exist', 409);
   }
   log.debug('Creating a default password for this user');
   const defaultPassword = passwordGenerator.generate({ length: 10, numbers: true });

@@ -86,7 +86,7 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Email or password incorrect',
+        message: 'Incorrect email or password',
       },
     },
   },
@@ -119,7 +119,7 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Email or password incorrect',
+        message: 'Incorrect email or password',
       },
     },
   },

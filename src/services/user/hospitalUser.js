@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import db from '../../db';
 import emailService from '../email';
 import config from '../config';
+import ServiceError from '../serviceError';
 
 /**
  * @description Format the user data to be returned to the client
@@ -38,9 +39,7 @@ const createAdminUser = async (data, log) => {
   );
   if (alreadyExistingUser) {
     log.debug('User with the given email already exist, throwing error');
-    const error = new Error('User with this email already exist');
-    error.httpStatusCode = 409;
-    throw error;
+    throw new ServiceError('User with this email already exist', 409);
   }
   log.debug('Hashing user password');
   const hashedPassword = await bcrypt.hash(password, config.bcryptHashSaltRounds);
@@ -99,9 +98,7 @@ const confirmUserAccount = async (regToken, log) => {
     return db.users.updateUser({ email }, { confirmedEmail: true }, userType);
   } catch (err) {
     log.debug('Unable to verify the registeration token, throwing error');
-    const error = new Error('Registeration token not valid');
-    error.httpStatusCode = 400;
-    throw error;
+    throw new ServiceError('Registeration token not valid', 400);
   }
 };
 
