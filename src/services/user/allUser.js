@@ -38,7 +38,7 @@ const login = async (data, log) => {
   const user = await db.users.getUser({ email: email.toLowerCase() }, userType);
   if (!user || !bcrypt.compareSync(password, user.password)) {
     log.debug('The given email or password is not correct, throwing error');
-    throw new ServiceError('Incorrect Email or passwrod', 400);
+    throw new ServiceError('Incorrect email or password', 400);
   }
   const userId = user._id;
   log.debug('Create an auth token for this user');
