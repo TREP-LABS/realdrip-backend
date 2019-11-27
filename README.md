@@ -18,7 +18,7 @@ The instructions below would get the project up and running on your local machin
 ### Installation
 - Clone the repository `git clone https://github.com/TREP-LABS/realdrip-backend.git`
 - Change into the directory of the project
-- Use `npm install` to install all the dependency packages
+- run `npm install` on your preferred console to install all the dependency packages
 - Create a `.env` file in the root folder of the project to provide all the needed environment variables as specified in `.env.example`
 - Use `npm run dev` to start the application in dev mode
 
