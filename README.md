@@ -20,7 +20,7 @@ The instructions below would get the project up and running on your local machin
 - Change into the directory of the project
 - run `npm install` on your preferred console to install all the dependency packages
 - Create a `.env` file in the root folder of the project to provide all the needed environment variables as specified in `.env.example`
-- Use `npm run dev` to start the application in dev mode
+- run `npm run dev` to start the application in dev mode
 
 ## Continuous Integration(CI)
 We try our best to continuously integrate our changes as soon as they are created i.e we don't do long live feature branches. All pull requests are raised directly unto the shared main branch (master). You can read more about continuous integrations [here](https://en.wikipedia.org/wiki/Continuous_integration). We use [TravisCI](https://travis-ci.org/) a third-party platform to effectively manage our continuous integration. Travis helps us run automated builds for every commit introduced into the codebase. At any point in time, if Travis reports a failing build, fixing such a build should be the priority of the team. For CI, Travis builds includes linting the codebase to ensure it adheres to the standard of the team and running automated tests to ensure nothing is breaking.
