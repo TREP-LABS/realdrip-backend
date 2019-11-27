@@ -8,7 +8,7 @@ This is the backend API of the RealDrip platform.
 The API is well documented using the OpenAPI Spec(Swagger) [here](https://app.swaggerhub.com/apis/Treplabs/Realdrip_Platform/1.0#/).
 
 ## Getting Started
-The instructions below would get you a copy of the project up and running on your local machine
+The instructions below would get the project up and running on your local machine
 
 ### Prerequisite
 - Git
