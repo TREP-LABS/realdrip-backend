@@ -19,6 +19,23 @@ const formatUserData = user => ({
   verifiedPurchase: user.verifiedPurchase,
 });
 
+const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
+
+/**
+ * @description The service function that sends email-address valdiation mail to users
+ * @param {object} data The request data
+ * @param {function} log Logger utility for logging messages
+ */
+const sendEmailValidationMail = (data, log) => {
+  const { name, email } = data;
+  log.debug('Creating a registeration token');
+  const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
+  const confirmationUrl = `${config.serverAppUrl}/api/hospital/confirmEmail?regToken=${regToken}`;
+  log.debug('Sending email address validation mail to user');
+  emailService.sendEmailAddresValidation({ name, email }, confirmationUrl)
+    .catch(err => log.error(err, `Error sending email to  ${email}`));
+};
+
 /**
  * @description The service function that creates an hospital user
  * @param {object} data The hospital user data
@@ -32,7 +49,6 @@ const createAdminUser = async (data, log) => {
     name, email, location, password,
   } = data;
   const lowerCaseEmail = email.toLowerCase();
-  const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
   log.debug('Checking if a user with the given email already exist');
   const alreadyExistingUser = await db.users.getUser(
     { email: lowerCaseEmail }, HOSPITAL_ADMIN_USER,
@@ -52,14 +68,7 @@ const createAdminUser = async (data, log) => {
     confirmedEmail: false,
     verifiedPurchase: false,
   }, HOSPITAL_ADMIN_USER);
-  log.debug('Create a registeration token');
-  const regToken = jwt.sign({ email, userType: HOSPITAL_ADMIN_USER }, config.jwtSecrete);
-  const confirmationUrl = `${config.serverAppUrl}/api/hospital/confirmEmail?regToken=${regToken}`;
-  // NOTE: The actions below is asynchronous, however, I don't need to wait for it to complete
-  // before sending response to the user.
-  log.debug('Sending email address validation mail notification');
-  emailService.sendEmailAddresValidation({ name, email }, confirmationUrl)
-    .catch(err => log.error(err, `Error sending email to  ${email}`));
+  sendEmailValidationMail({ name, email }, log);
   return formatUserData(adminUser);
 };
 
@@ -73,7 +82,6 @@ const createAdminUser = async (data, log) => {
 const updateAdminUser = async (data, log) => {
   log.debug('Executing updateAdminUser service');
   const { name, location, userId } = data;
-  const { HOSPITAL_ADMIN_USER } = db.users.userTypes;
   const fieldsToUpdate = JSON.parse(JSON.stringify({ name, location }));
   const { _doc: updatedUser } = await db.users.updateUser(
     { _id: userId }, fieldsToUpdate, HOSPITAL_ADMIN_USER,
@@ -106,4 +114,5 @@ export default {
   createAdminUser,
   updateAdminUser,
   confirmUserAccount,
+  sendEmailValidationMail,
 };
