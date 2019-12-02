@@ -30,7 +30,6 @@ const createInfusion = catchControllerError('CreateInfusion', async (req, res) =
     deviceId,
     user,
     userType,
-    populateFields: getPopulateFields(req.query.populate),
   }, log);
   log.debug('createInfusion service executed without error, sending back a success response');
   return res.status(201).json({ success: true, message: 'Infusion created', data: infusion });
@@ -87,7 +86,6 @@ const updateInfusion = catchControllerError('UpdateInfusion', async (req, res) =
     doctorsInstruction,
     startVolume,
     stopVolume,
-    populateFields: getPopulateFields(req.query.populate),
   }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });

@@ -77,7 +77,7 @@ beforeAll(() => {
     .set('req-token', testGlobals[WARD_USER].authToken)
     .then((res) => {
       if (!res.body || !res.body.success) {
-        throw Error('Deleting infusion failed, all other tests in this suite is also expected to fail');
+        throw Error('Creating infusion failed, all other tests in this suite is also expected to fail');
       }
       context.infusionId = res.body.data._id;
     });

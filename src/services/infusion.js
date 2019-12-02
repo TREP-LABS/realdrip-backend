@@ -10,7 +10,6 @@ const createInfusion = async (data, log) => {
     deviceId,
     user,
     userType,
-    populateFields = [],
   } = data;
   log.debug('Gathering data for creating Infusion');
   const infusionDetails = {
@@ -25,9 +24,7 @@ const createInfusion = async (data, log) => {
   };
   const purifyInfusionDetails = JSON.parse(JSON.stringify(infusionDetails));
   log.debug('creating infusion');
-  const infusion = await db.utils.populate(
-    db.infusion.createInfusion(purifyInfusionDetails), populateFields,
-  );
+  const infusion = db.infusion.createInfusion(purifyInfusionDetails);
   log.debug('Returning created infusion to user');
   return infusion;
 };
@@ -103,7 +100,6 @@ const getSingleInfusion = async (data, log) => {
 const updateInfusion = async (data, log) => {
   const {
     infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
-    populateFields = [],
   } = data;
   const infusionMatch = {
     _id: infusionId,
@@ -116,10 +112,7 @@ const updateInfusion = async (data, log) => {
     patientName, doctorsInstruction, startVolume, stopVolume,
   }));
   log.debug('Updating infusion details');
-  const infusion = await db.utils.populate(
-    db.infusion.updateInfusion(purifyInfusionMatch, update),
-    populateFields,
-  );
+  const infusion = await db.infusion.updateInfusion(purifyInfusionMatch, update);
   log.debug('Sending updated infusion to the user');
   return infusion;
 };
