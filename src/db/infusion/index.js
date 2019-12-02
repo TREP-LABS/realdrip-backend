@@ -13,7 +13,7 @@ import infusionModel from './model';
  * @param {string} data.nurseId Infusion nurse id
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const createInfusion = async (data) => {
+const createInfusion = (data) => {
   const Model = infusionModel;
   return new Model(data).save();
 };
@@ -29,7 +29,7 @@ const createInfusion = async (data) => {
  * @param {object} update The data to patch with the existing infusion data
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const updateInfusion = async (infusionMatch, update) => {
+const updateInfusion = (infusionMatch, update) => {
   const Model = infusionModel;
   return Model.findOneAndUpdate(infusionMatch, update, { new: true });
 };
@@ -44,10 +44,9 @@ const updateInfusion = async (infusionMatch, update) => {
  * @param {string} infusionMatch.nurseId the nurse id
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getSingleInfusion = async (infusionMatch) => {
+const getSingleInfusion = (infusionMatch) => {
   const Model = infusionModel;
-  return Model.findOne(infusionMatch).select('-__v').populate('deviceId').populate('wardId')
-    .populate('nurseId');
+  return Model.findOne(infusionMatch).select('-__v');
 };
 
 /**
@@ -58,7 +57,7 @@ const getSingleInfusion = async (infusionMatch) => {
  * @param {string} infusionMatch.nurseId The nurse id
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getAllInfusion = async (infusionMatch) => {
+const getAllInfusion = (infusionMatch) => {
   const Model = infusionModel;
   return Model.find(infusionMatch).select('-__v');
 };
@@ -73,7 +72,7 @@ const getAllInfusion = async (infusionMatch) => {
  * @param {string} infusionMatch.nurseId the nurse id
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const deleteInfusion = async (infusionMatch) => {
+const deleteInfusion = (infusionMatch) => {
   const Model = infusionModel;
   return Model.deleteOne(infusionMatch);
 };
