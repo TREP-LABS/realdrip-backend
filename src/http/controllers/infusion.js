@@ -79,13 +79,7 @@ const updateInfusion = catchControllerError('UpdateInfusion', async (req, res) =
   const { infusionId } = req.params;
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.updateInfusion({
-    infusionId,
-    user,
-    userType,
-    patientName,
-    doctorsInstruction,
-    startVolume,
-    stopVolume,
+    infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
   }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });

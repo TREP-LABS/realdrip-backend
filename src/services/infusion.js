@@ -24,7 +24,7 @@ const createInfusion = async (data, log) => {
   };
   const purifyInfusionDetails = JSON.parse(JSON.stringify(infusionDetails));
   log.debug('creating infusion');
-  const infusion = db.infusion.createInfusion(purifyInfusionDetails);
+  const infusion = await db.infusion.createInfusion(purifyInfusionDetails);
   log.debug('Returning created infusion to user');
   return infusion;
 };
@@ -112,7 +112,9 @@ const updateInfusion = async (data, log) => {
     patientName, doctorsInstruction, startVolume, stopVolume,
   }));
   log.debug('Updating infusion details');
-  const infusion = await db.infusion.updateInfusion(purifyInfusionMatch, update);
+  const infusion = await db.infusion.updateInfusion(
+    purifyInfusionMatch, update,
+  );
   log.debug('Sending updated infusion to the user');
   return infusion;
 };
