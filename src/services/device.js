@@ -36,7 +36,9 @@ const getSingleDevice = async (data, log) => {
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getAllDevice = async (data, log) => {
-  const { user, userType } = data;
+  const {
+    user, userType, limit, cursor,
+  } = data;
   log.debug('Gathering user details');
   const deviceMatch = {
     hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
@@ -44,7 +46,7 @@ const getAllDevice = async (data, log) => {
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
   log.debug('Getting devices from the database using user details');
-  const device = await db.device.getAllDevice(purifyDeviceMatch);
+  const device = await db.device.getAllDevice({ purifyDeviceMatch, limit, cursor });
   log.debug('Sending devices to the user');
   return device;
 };

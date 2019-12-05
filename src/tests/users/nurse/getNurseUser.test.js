@@ -37,17 +37,19 @@ const testCases = [
       body: {
         success: true,
         message: 'Nurse users fetched successfully',
-        data: expect.arrayContaining([
-          expect.objectContaining({
-            _id: context.testGlobals[NURSE_USER].id,
-            name: context.testGlobals[NURSE_USER].name,
-            email: context.testGlobals[NURSE_USER].email,
-            phoneNo: context.testGlobals[NURSE_USER].phoneNo,
-            wardId: context.testGlobals[NURSE_USER].wardId,
-            hospitalId: context.testGlobals[NURSE_USER].hospitalId,
-            defaultPass: context.testGlobals[NURSE_USER].defaultPass,
-          }),
-        ]),
+        data: expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              _id: context.testGlobals[NURSE_USER].id,
+              name: context.testGlobals[NURSE_USER].name,
+              email: context.testGlobals[NURSE_USER].email,
+              phoneNo: context.testGlobals[NURSE_USER].phoneNo,
+              wardId: context.testGlobals[NURSE_USER].wardId,
+              hospitalId: context.testGlobals[NURSE_USER].hospitalId,
+              defaultPass: context.testGlobals[NURSE_USER].defaultPass,
+            }),
+          ]),
+        }),
       },
     }),
   },

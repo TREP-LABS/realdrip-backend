@@ -42,8 +42,11 @@ const createInfusion = catchControllerError('CreateInfusion', async (req, res) =
  */
 const getAllInfusion = catchControllerError('GetAllInfusion', async (req, res) => {
   const { user, userType, log } = res.locals;
+  const { cursor, limit } = req.query;
   const infusions = await infusionService.getAllInfusion(
-    { user, userType, populateFields: getPopulateFields(req.query.populate) }, log,
+    {
+      user, userType, populateFields: getPopulateFields(req.query.populate), limit, cursor,
+    }, log,
   );
   log.debug('getAllInfusion service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Infusions found', data: infusions });

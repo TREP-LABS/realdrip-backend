@@ -39,7 +39,9 @@ const createInfusion = async (data, log) => {
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getAllInfusion = async (data, log) => {
-  const { user, userType, populateFields = [] } = data;
+  const {
+    user, userType, populateFields = [], limit, cursor,
+  } = data;
   log.debug('Gathering user details');
   const infusionMatch = {
     hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
@@ -49,7 +51,9 @@ const getAllInfusion = async (data, log) => {
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   log.debug('Getting infusions from the database using user details');
   const infusions = await db.utils.populate(
-    db.infusion.getAllInfusion(purifyInfusionMatch), populateFields,
+    db.infusion.getAllInfusion(
+      { infusionMatch: purifyInfusionMatch, limit, cursor }
+    ), populateFields,
   );
   log.debug('Sending infusions to the user');
   return infusions;

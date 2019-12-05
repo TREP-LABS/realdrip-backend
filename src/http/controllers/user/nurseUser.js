@@ -42,11 +42,14 @@ const getSingleNurseUser = catchControllerError('GetSingleNurseUser', async (req
  */
 const getAllNurseUser = catchControllerError('GetAllNurseUser', async (req, res) => {
   const { log, user, userType } = res.locals;
+  const { limit, cursor } = req.query;
   const hospitalId = userType === db.users.userTypes.HOSPITAL_ADMIN_USER
     ? user._id : user.hospitalId;
   const wardId = userType === db.users.userTypes.WARD_USER ? user._id : user.wardId;
 
-  const nurses = await nurseUserService.getAllNurseUser({ hospitalId, wardId }, log);
+  const nurses = await nurseUserService.getAllNurseUser({
+    hospitalId, wardId, limit, cursor,
+  }, log);
   log.debug('getAllNurseUser service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Nurse users fetched successfully', data: nurses });
 });

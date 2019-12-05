@@ -91,16 +91,21 @@ const getSingleNurseUser = async (data, log) => {
  */
 const getAllNurseUser = async (data, log) => {
   log.debug('Executing getAllNurseUser service');
-  const { hospitalId, wardId } = data;
+  const {
+    hospitalId, wardId, limit, cursor,
+  } = data;
   const userMatch = JSON.parse(JSON.stringify({ hospitalId, wardId }));
   const { NURSE_USER } = db.users.userTypes;
   const userFields = [
     '_id', 'name', 'phoneNo', 'email', 'hospitalId', 'wardId', 'defaultPass',
   ];
   log.debug('Querying db for all nurses that matches the given hospitalId and wardId');
-  let nurses = await db.users.getAllUsers(userMatch, NURSE_USER, userFields);
-  nurses = nurses.map(user => formatUserData(user));
-  return nurses;
+  const allNurses = await db.users.getAllUsers(userMatch, NURSE_USER, userFields, limit, cursor);
+  const nurses = allNurses.items.map(user => formatUserData(user));
+  return {
+    items: nurses,
+    pagination: allNurses.pagination,
+  };
 };
 
 /**
