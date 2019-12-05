@@ -35,10 +35,12 @@ const updateDevice = (req, res, next) => {
 };
 
 const verifyDeviceLabel = async (req, res, next) => {
-  const { label } = req.body;
+  let { label } = req.body;
   const { user, userType } = res.locals;
+  // eslint-disable-next-line no-const-assign
+  label = label.toLowerCase();
   const deviceMatch = {
-    label: label.toLowercase(),
+    label,
     hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
