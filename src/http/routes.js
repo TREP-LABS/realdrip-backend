@@ -22,6 +22,13 @@ router.put(
 router.get('/hospital/confirmEmail', controllers.hospitalUser.confirmUserAccount);
 
 router.post(
+  '/hospital/sendEmailValidationMail',
+  authMiddleware,
+  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
+  controllers.hospitalUser.sendEmailValidationMail,
+);
+
+router.post(
   '/ward',
   authMiddleware,
   hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),

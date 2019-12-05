@@ -47,8 +47,21 @@ const confirmUserAccount = catchControllerError('ConfirmUserAccount', async (req
   return res.status(302).redirect(`${config.clientAppUrl}/login`);
 });
 
+/**
+ * @description Controller for sendEmailValidationMail mail API operation
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ */
+const sendEmailValidationMail = catchControllerError('sendEmailValidationMail', async (req, res) => {
+  const { log, user: { name, email } } = res.locals;
+  await hospitalUserService.sendEmailValidationMail({ name, email }, log);
+  log.debug('sendEmailValidationMail service executed without error, sending back a success response');
+  return res.status(200).json({ success: true, message: 'Email address validation mail sent' });
+});
+
 export default {
   createAdminUser: [userValidation.createAdminUser, createAdminUser],
   confirmUserAccount: [userValidation.validateRegToken, confirmUserAccount],
   updateAdminUser: [userValidation.updateHospitalUser, updateAdminUser],
+  sendEmailValidationMail,
 };
