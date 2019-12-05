@@ -66,7 +66,7 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Label already in use. try a different one',
+        message: 'Label already in use. Try a different one',
       },
     },
   },
