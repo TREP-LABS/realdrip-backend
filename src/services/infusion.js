@@ -3,8 +3,7 @@ import db from '../db';
 const createInfusion = async (data, log) => {
   log.debug('Executing createInfusion service');
   const {
-    startVolume,
-    stopVolume,
+    volumeToDispense,
     patientName,
     doctorsInstruction,
     deviceId,
@@ -13,8 +12,7 @@ const createInfusion = async (data, log) => {
   } = data;
   log.debug('Gathering data for creating Infusion');
   const infusionDetails = {
-    startVolume,
-    stopVolume,
+    volumeToDispense,
     patientName,
     doctorsInstruction,
     deviceId,
@@ -99,7 +97,7 @@ const getSingleInfusion = async (data, log) => {
  */
 const updateInfusion = async (data, log) => {
   const {
-    infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
+    infusionId, user, userType, patientName, doctorsInstruction, volumeToDispense,
   } = data;
   const infusionMatch = {
     _id: infusionId,
@@ -109,7 +107,7 @@ const updateInfusion = async (data, log) => {
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   const update = JSON.parse(JSON.stringify({
-    patientName, doctorsInstruction, startVolume, stopVolume,
+    patientName, doctorsInstruction, volumeToDispense,
   }));
   log.debug('Updating infusion details');
   const infusion = await db.infusion.updateInfusion(

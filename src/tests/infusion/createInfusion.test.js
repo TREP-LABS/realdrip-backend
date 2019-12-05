@@ -6,8 +6,7 @@ import confirmAuthRestriction from '../genericTestCases/confirmAuthRestriction';
 const { WARD_USER, NURSE_USER } = db.users.userTypes;
 
 const infusion = {
-  startVolume: 700,
-  stopVolume: 50,
+  volumeToDispense: 700,
   patientName: 'Tumtum',
   doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
   deviceId: '5db95971c9da2412401b1804',
@@ -42,8 +41,7 @@ const testCases = [
         message: 'Infusion created',
         data: {
           _id: expect.any(String),
-          startVolume: infusion.startVolume,
-          stopVolume: infusion.stopVolume,
+          volumeToDispense: infusion.volumeToDispense,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
           deviceId: infusion.deviceId,
@@ -70,8 +68,7 @@ const testCases = [
         message: 'Invalid request',
         errors: {
           patientName: ['patientName is a required string'],
-          startVolume: ['startVolume is a required number'],
-          stopVolume: ['stopVolume is a required number'],
+          volumeToDispense: ['volumeToDispense is a required number'],
           doctorsInstruction: ['doctorsInstruction is a required string'],
           deviceId: ['deviceId is required'],
         },
@@ -100,11 +97,11 @@ const testCases = [
     },
   },
   {
-    title: 'creation of infusion should fail if the start and stop volumes are not numbers',
+    title: 'creation of infusion should fail if the volumeToDispense is not a numbers',
     request: context => ({
       path: '/api/infusion',
       method: 'post',
-      body: { ...infusion, startVolume: '700ml', stopVolume: '100ml' },
+      body: { ...infusion, volumeToDispense: '100ml' },
       headers: {
         'req-token': context.testGlobals[WARD_USER].authToken,
       },
@@ -115,8 +112,7 @@ const testCases = [
         success: false,
         message: 'Invalid request',
         errors: {
-          startVolume: ['startVolume is a required number'],
-          stopVolume: ['stopVolume is a required number'],
+          volumeToDispense: ['volumeToDispense is a required number'],
         },
       },
     },

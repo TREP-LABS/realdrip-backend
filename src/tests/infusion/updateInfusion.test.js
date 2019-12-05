@@ -8,8 +8,7 @@ const { WARD_USER } = db.users.userTypes;
 const request = supertest(app);
 
 const infusion = {
-  startVolume: 700,
-  stopVolume: 50,
+  volumeToDispense: 700,
   patientName: 'Tumtum',
   doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
   deviceId: '5db23403347ab06cc7bfd8a2',
@@ -34,8 +33,7 @@ const testCases = [
         message: 'Infusion updated',
         data: {
           _id: expect.any(String),
-          startVolume: infusion.startVolume,
-          stopVolume: infusion.stopVolume,
+          volumeToDispense: infusion.volumeToDispense,
           patientName: 'JP Saxe',
           doctorsInstruction: infusion.doctorsInstruction,
           deviceId: infusion.deviceId,
@@ -108,8 +106,7 @@ const testCases = [
       path: `/api/infusion/${context.infusionId}`,
       method: 'put',
       body: {
-        startVolume: '700ml',
-        stopVolume: '50ml',
+        volumeToDispense: '700ml',
         patientName: 25,
         doctorsInstruction: 989,
       },
@@ -124,8 +121,7 @@ const testCases = [
         message: 'Invalid request',
         errors: {
           patientName: ['patientName is a required string'],
-          startVolume: ['startVolume is a required number'],
-          stopVolume: ['stopVolume is a required number'],
+          volumeToDispense: ['volumeToDispense is a required number'],
           doctorsInstruction: ['doctorsInstruction is a required string'],
         },
       },
