@@ -3,6 +3,16 @@ import infusionValidation from '../validations/infusion';
 import catchControllerError from './catchControllerError';
 
 /**
+ * @description Get the list of fields to be populated by refrence
+ * @param {String} populateQueryParams The value of "populate" query parameters
+ * @returns {Array} A list of fields to be populated
+ */
+const getPopulateFields = (populateQueryParams) => {
+  if (typeof populateQueryParams !== 'string') return [];
+  return populateQueryParams.split(',');
+};
+
+/**
  * @description Controller to create infusion
  * @param {object} req Express request object
  * @param {object} res Express response object
@@ -32,7 +42,9 @@ const createInfusion = catchControllerError('CreateInfusion', async (req, res) =
  */
 const getAllInfusion = catchControllerError('GetAllInfusion', async (req, res) => {
   const { user, userType, log } = res.locals;
-  const infusions = await infusionService.getAllInfusion({ user, userType }, log);
+  const infusions = await infusionService.getAllInfusion(
+    { user, userType, populateFields: getPopulateFields(req.query.populate) }, log,
+  );
   log.debug('getAllInfusion service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Infusions found', data: infusions });
 });
@@ -45,7 +57,9 @@ const getAllInfusion = catchControllerError('GetAllInfusion', async (req, res) =
 const getSingleInfusion = catchControllerError('GetSingleInfusion', async (req, res) => {
   const { infusionId } = req.params;
   const { user, userType, log } = res.locals;
-  const infusion = await infusionService.getSingleInfusion({ infusionId, user, userType }, log);
+  const infusion = await infusionService.getSingleInfusion({
+    infusionId, user, userType, populateFields: getPopulateFields(req.query.populate),
+  }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });
   }

@@ -15,8 +15,6 @@ const infusion = {
   deviceId: '5db95971c9da2412401b1804',
 };
 
-// @todo: Additional test cases are to be added to test
-// for other scenarios this endpoint is to handle
 const testCases = [
   {
     title: 'should get all infusions',
@@ -35,7 +33,6 @@ const testCases = [
         message: 'Infusions found',
         data: expect.arrayContaining([
           expect.objectContaining({
-            // @todo: Having _id instead of id here is a bug, it should be fixed
             _id: expect.any(String),
             startVolume: infusion.startVolume,
             stopVolume: infusion.stopVolume,
@@ -44,6 +41,36 @@ const testCases = [
             deviceId: infusion.deviceId,
             wardId: expect.any(String),
             hospitalId: expect.any(String),
+          }),
+        ]),
+      },
+    },
+  },
+  {
+    title: 'should get all infusions with populated refrence fields',
+    request: context => ({
+      body: {},
+      path: '/api/infusion?populate=wardId,hospitalId',
+      method: 'get',
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Infusions found',
+        data: expect.arrayContaining([
+          expect.objectContaining({
+            _id: expect.any(String),
+            startVolume: infusion.startVolume,
+            stopVolume: infusion.stopVolume,
+            patientName: infusion.patientName,
+            doctorsInstruction: infusion.doctorsInstruction,
+            deviceId: infusion.deviceId,
+            wardId: expect.any(Object),
+            hospitalId: expect.any(Object),
           }),
         ]),
       },
@@ -70,10 +97,37 @@ const testCases = [
           stopVolume: infusion.stopVolume,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
-          // Since the device is not valid null will be returned.
-          // Testing the deviceId then is invalid
-          wardId: expect.any(Object),
+          deviceId: expect.any(String),
+          wardId: expect.any(String),
           hospitalId: expect.any(String),
+        },
+      },
+    },
+  },
+  {
+    title: 'should get a single infusion with populated refrence fields',
+    request: context => ({
+      body: {},
+      path: `/api/infusion/${context.infusionId}?populate=wardId,hospitalId`,
+      method: 'get',
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Infusion found',
+        data: {
+          _id: expect.any(String),
+          startVolume: infusion.startVolume,
+          stopVolume: infusion.stopVolume,
+          patientName: infusion.patientName,
+          doctorsInstruction: infusion.doctorsInstruction,
+          deviceId: expect.any(String),
+          wardId: expect.any(Object),
+          hospitalId: expect.any(Object),
         },
       },
     },

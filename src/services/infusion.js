@@ -39,7 +39,7 @@ const createInfusion = async (data, log) => {
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getAllInfusion = async (data, log) => {
-  const { user, userType } = data;
+  const { user, userType, populateFields = [] } = data;
   log.debug('Gathering user details');
   const infusionMatch = {
     hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
@@ -48,7 +48,9 @@ const getAllInfusion = async (data, log) => {
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   log.debug('Getting infusions from the database using user details');
-  const infusions = await db.infusion.getAllInfusion(purifyInfusionMatch);
+  const infusions = await db.utils.populate(
+    db.infusion.getAllInfusion(purifyInfusionMatch), populateFields,
+  );
   log.debug('Sending infusions to the user');
   return infusions;
 };
@@ -65,7 +67,9 @@ const getAllInfusion = async (data, log) => {
  */
 const getSingleInfusion = async (data, log) => {
   log.debug('Executing getSingleInfusion service');
-  const { infusionId, user, userType } = data;
+  const {
+    infusionId, user, userType, populateFields = [],
+  } = data;
   log.debug('Gathering filter parameters for getting Infusion');
   const infusionMatch = {
     _id: infusionId,
@@ -75,7 +79,9 @@ const getSingleInfusion = async (data, log) => {
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   log.debug('Fetching infusion from database using filter parameters');
-  const infusion = await db.infusion.getSingleInfusion(purifyInfusionMatch);
+  const infusion = await db.utils.populate(
+    db.infusion.getSingleInfusion(purifyInfusionMatch), populateFields,
+  );
   log.debug('Returning infusion to user');
   return infusion;
 };
