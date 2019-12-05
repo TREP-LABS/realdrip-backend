@@ -38,7 +38,7 @@ const verifyDeviceLabel = async (req, res, next) => {
   const { label } = req.body;
   const { user, userType } = res.locals;
   const deviceMatch = {
-    label,
+    label: label.toLowercase(),
     hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));

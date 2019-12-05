@@ -73,7 +73,7 @@ const updateDevice = async (data, log) => {
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
   log.debug('Updating device info');
   const device = await db.device.updateDevice(
-    purifyDeviceMatch, { label },
+    purifyDeviceMatch, { label: label.toLowerCase() },
   );
   log.debug('Sending updated device to the user');
   return device;
