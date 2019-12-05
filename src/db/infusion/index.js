@@ -1,4 +1,5 @@
 import infusionModel from './model';
+import paginate from '../common/paginate';
 
 /**
  * @description Creates an infusion in the database
@@ -57,9 +58,18 @@ const getSingleInfusion = (infusionMatch) => {
  * @param {string} infusionMatch.nurseId The nurse id
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getAllInfusion = (infusionMatch) => {
+const getAllInfusion = (data) => {
   const Model = infusionModel;
-  return Model.find(infusionMatch).select('-__v');
+  const { infusionMatch, cursor } = data;
+  let { limit } = data;
+  const fallbackLimit = 15;
+  limit = !limit ? fallbackLimit : limit;
+  return paginate.cursorPagination(Model, {
+    infusionMatch,
+    select: '-__v',
+    limit,
+    cursor,
+  });
 };
 
 /**

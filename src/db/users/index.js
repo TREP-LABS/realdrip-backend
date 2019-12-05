@@ -1,5 +1,6 @@
 import userModels from './models';
 import * as userTypes from './userTypes';
+import paginate from '../common/paginate';
 
 const createUser = async (userData, userType) => {
   const Model = userModels[userType];
@@ -28,10 +29,17 @@ const getUser = async (userMatch, userType) => {
  * @param {array} userFields The properties to return for each user
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getAllUsers = async (userMatch, userType, userFields) => {
+const getAllUsers = async (userMatch, userType, userFields, lim, cursor) => {
   const Model = userModels[userType];
   const projection = userFields ? userFields.join(' ') : null;
-  return Model.find(userMatch, projection);
+  const fallbackLimit = 15;
+  const limit = !lim ? fallbackLimit : lim;
+  return paginate.cursorPagination(Model, {
+    userMatch,
+    select: projection,
+    limit,
+    cursor,
+  });
 };
 
 /**

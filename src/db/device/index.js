@@ -1,4 +1,5 @@
 import deviceModel from './model';
+import paginate from '../common/paginate';
 
 /**
  * @description Gets a single device from the database
@@ -20,9 +21,18 @@ const getSingleDevice = async (deviceMatch) => {
  * @param {string} deviceMatch.wardId The ward id associated with the device
  * @returns {Promise} A promise that resolves or reject to the result of the database operation
  */
-const getAllDevice = async (deviceMatch) => {
+const getAllDevice = async (data) => {
   const Model = deviceModel;
-  return Model.find(deviceMatch).select('-__v');
+  const { deviceMatch, cursor } = data;
+  let { limit } = data;
+  const fallbackLimit = 15;
+  limit = !limit ? fallbackLimit : limit;
+  return paginate.cursorPagination(Model, {
+    deviceMatch,
+    select: '-__v',
+    limit,
+    cursor,
+  });
 };
 
 /**

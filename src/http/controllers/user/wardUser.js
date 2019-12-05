@@ -38,8 +38,8 @@ const updateWardUser = catchControllerError('UpdateWardUser', async (req, res) =
  */
 const getAllWardUser = catchControllerError('GetAllWardUser', async (req, res) => {
   const { log, user: { _id: hospitalId } } = res.locals;
-
-  const wardUsers = await wardUserService.getAllWardUser({ hospitalId }, log);
+  const { limit, cursor } = req.query;
+  const wardUsers = await wardUserService.getAllWardUser({ hospitalId, limit, cursor }, log);
   log.debug('GetAllWardUser service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Operation successful', data: wardUsers });
 });

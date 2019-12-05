@@ -26,13 +26,15 @@ const testCases = [
       body: {
         success: true,
         message: 'Devices found',
-        data: expect.arrayContaining([
-          expect.objectContaining({
-            _id: expect.any(String),
-            label: expect.any(String),
-            hospitalId: expect.any(String),
-          }),
-        ]),
+        data: expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              _id: expect.any(String),
+              label: expect.any(String),
+              hospitalId: expect.any(String),
+            }),
+          ]),
+        }),
       },
     },
   },

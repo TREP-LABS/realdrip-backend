@@ -107,15 +107,18 @@ const updateWardUser = async (data, log) => {
  */
 const getAllWardUser = async (data, log) => {
   log.debug('Executing getAllWardUser service');
-  const { hospitalId } = data;
+  const { hospitalId, limit, cursor } = data;
   const { WARD_USER } = db.users.userTypes;
   const userFields = [
     '_id', 'name', 'email', 'label', 'defaultPass', 'hospitalId',
   ];
   log.debug('Querying db for all ward users that matches the given hospitalId');
-  let users = await db.users.getAllUsers({ hospitalId }, WARD_USER, userFields);
-  users = users.map(user => formatUserData(user));
-  return users;
+  const users = await db.users.getAllUsers({ hospitalId, limit, cursor }, WARD_USER, userFields);
+  const wards = users.items.map(user => formatUserData(user));
+  return {
+    items: wards,
+    pagination: users.pagination,
+  };
 };
 
 export default {

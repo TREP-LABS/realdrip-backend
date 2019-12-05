@@ -31,18 +31,20 @@ const testCases = [
       body: {
         success: true,
         message: 'Infusions found',
-        data: expect.arrayContaining([
-          expect.objectContaining({
-            _id: expect.any(String),
-            startVolume: infusion.startVolume,
-            stopVolume: infusion.stopVolume,
-            patientName: infusion.patientName,
-            doctorsInstruction: infusion.doctorsInstruction,
-            deviceId: infusion.deviceId,
-            wardId: expect.any(String),
-            hospitalId: expect.any(String),
-          }),
-        ]),
+        data: expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              _id: expect.any(String),
+              startVolume: infusion.startVolume,
+              stopVolume: infusion.stopVolume,
+              patientName: infusion.patientName,
+              doctorsInstruction: infusion.doctorsInstruction,
+              deviceId: infusion.deviceId,
+              wardId: expect.any(String),
+              hospitalId: expect.any(String),
+            }),
+          ]),
+        }),
       },
     },
   },

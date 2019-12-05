@@ -25,7 +25,10 @@ const getSingleDevice = catchControllerError('GetSingleDevice', async (req, res)
  */
 const getAllDevice = catchControllerError('GetAllDevice', async (req, res) => {
   const { user, userType, log } = res.locals;
-  const devices = await deviceService.getAllDevice({ user, userType }, log);
+  const { cursor, limit } = req.query;
+  const devices = await deviceService.getAllDevice({
+    user, userType, limit, cursor,
+  }, log);
   log.debug('getAllDevice service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Devices found', data: devices });
 });
