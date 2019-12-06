@@ -97,7 +97,7 @@ const testCases = [
     },
   },
   {
-    title: 'creation of infusion should fail if the volumeToDispense is not a numbers',
+    title: 'creation of infusion should fail if the volumeToDispense is not a number',
     request: context => ({
       path: '/api/infusion',
       method: 'post',
