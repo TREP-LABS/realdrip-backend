@@ -28,24 +28,30 @@ const createInfusion = async (data, log) => {
 };
 
 /**
- * @description The service function that gets all infusions
+ * @description The service function that gets all infusions using user details and query filters
  * @param {Object} data The data required
  * @param {Object} data.user The user making the request
  * @param {String} data.userType The type of user making the request
+ * @param {String} data.status used as a querying filter
+ * @param {String} data.deviceId Used as a querying filter
  * @param {function} log Logger utility for logging messages
  * @returns {Object} The infusions
  * @throws {Error} Any error that prevents the service from executing successfully
  */
 const getAllInfusion = async (data, log) => {
-  const { user, userType, populateFields = [] } = data;
+  const {
+    user, userType, status, deviceId, populateFields = [],
+  } = data;
   log.debug('Gathering user details');
   const infusionMatch = {
     hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
     wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
     nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    status,
+    deviceId,
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
-  log.debug('Getting infusions from the database using user details');
+  log.debug('Getting infusions from the database using user details and filters');
   const infusions = await db.utils.populate(
     db.infusion.getAllInfusion(purifyInfusionMatch), populateFields,
   );
