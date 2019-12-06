@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../../db';
 import config from '../config';
-import ServiceError from '../serviceError';
+import ServiceError from '../common/serviceError';
 
 /**
  * @description Format the user data to be returned to the client

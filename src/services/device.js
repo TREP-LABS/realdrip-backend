@@ -1,4 +1,6 @@
 import db from '../db';
+import userMatch from './common/userMatch';
+
 
 /**
  * @description The service function that gets a single device
@@ -16,8 +18,7 @@ const getSingleDevice = async (data, log) => {
   log.debug('Gathering filter parameters for getting device');
   const deviceMatch = {
     _id: deviceId,
-    hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-    wardId: userType === 'ward_user' ? user._id : user.wardId,
+    ...userMatch({ userType, user }),
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
   log.debug('Fetching device from database using filter parameters');
@@ -38,13 +39,9 @@ const getSingleDevice = async (data, log) => {
 const getAllDevice = async (data, log) => {
   const { user, userType } = data;
   log.debug('Gathering user details');
-  const deviceMatch = {
-    hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
-    wardId: userType === 'ward_user' ? user._id : user.wardId,
-  };
-  const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
+  const deviceMatch = { ...userMatch({ userType, user }) };
   log.debug('Getting devices from the database using user details');
-  const device = await db.device.getAllDevice(purifyDeviceMatch);
+  const device = await db.device.getAllDevice(deviceMatch);
   log.debug('Sending devices to the user');
   return device;
 };
@@ -70,8 +67,7 @@ const updateDevice = async (data, log) => {
   log.debug('Gathering filter to match device');
   const deviceMatch = {
     _id: deviceId,
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
+    ...userMatch({ userType, user }),
   };
   const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
   log.debug('Updating device info');

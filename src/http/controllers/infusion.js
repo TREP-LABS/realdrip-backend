@@ -41,11 +41,13 @@ const createInfusion = catchControllerError('CreateInfusion', async (req, res) =
  */
 const getAllInfusion = catchControllerError('GetAllInfusion', async (req, res) => {
   const { user, userType, log } = res.locals;
-  const { status, deviceId } = req.query;
+  const {
+    status, deviceId, wardId, nurseId,
+  } = req.query;
   const infusions = await infusionService.getAllInfusion(
     {
       // eslint-disable-next-line max-len
-      status, deviceId, user, userType, populateFields: getPopulateFields(req.query.populate),
+      status, deviceId, wardId, nurseId, user, userType, populateFields: getPopulateFields(req.query.populate),
     }, log,
   );
   log.debug('getAllInfusion service executed without error, sending back a success response');
