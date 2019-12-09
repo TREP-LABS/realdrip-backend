@@ -3,8 +3,7 @@ import infusionModel from './model';
 /**
  * @description Creates an infusion in the database
  * @param {object} data  The infusion details
- * @param {number} data.startVolume The start volume
- * @param {number} data.stopVolume The stop volume
+ * @param {number} data.volumeToDispense The volume to be administered
  * @param {string} data.patientName The patient's name
  * @param {string} data.doctorsInstruction Doctors Instruction
  * @param {string} data.status Infusion status

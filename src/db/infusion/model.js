@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const infusionSchema = new Schema({
-  startVolume: { type: Number, required: true },
-  stopVolume: { type: Number, required: true },
+  volumeToDispense: { type: Number, required: true },
   patientName: { type: String, required: true },
   doctorsInstruction: { type: String, required: true },
   status: { type: String, enum: ['active', 'ended'] },

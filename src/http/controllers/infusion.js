@@ -19,12 +19,11 @@ const getPopulateFields = (populateQueryParams) => {
  */
 const createInfusion = catchControllerError('CreateInfusion', async (req, res) => {
   const {
-    patientName, doctorsInstruction, startVolume, stopVolume, deviceId,
+    patientName, doctorsInstruction, volumeToDispense, deviceId,
   } = req.body;
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.createInfusion({
-    startVolume,
-    stopVolume,
+    volumeToDispense,
     patientName,
     doctorsInstruction,
     deviceId,
@@ -74,12 +73,12 @@ const getSingleInfusion = catchControllerError('GetSingleInfusion', async (req, 
  */
 const updateInfusion = catchControllerError('UpdateInfusion', async (req, res) => {
   const {
-    patientName, doctorsInstruction, startVolume, stopVolume,
+    patientName, doctorsInstruction, volumeToDispense,
   } = req.body;
   const { infusionId } = req.params;
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.updateInfusion({
-    infusionId, user, userType, patientName, doctorsInstruction, startVolume, stopVolume,
+    infusionId, user, userType, patientName, doctorsInstruction, volumeToDispense,
   }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });

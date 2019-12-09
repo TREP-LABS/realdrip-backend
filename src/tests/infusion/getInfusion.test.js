@@ -8,8 +8,7 @@ const { WARD_USER } = db.users.userTypes;
 const request = supertest(app);
 
 const infusion = {
-  startVolume: 700,
-  stopVolume: 50,
+  volumeToDispense: 700,
   patientName: 'Tumtum',
   doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
   deviceId: '5db95971c9da2412401b1804',
@@ -34,8 +33,7 @@ const testCases = [
         data: expect.arrayContaining([
           expect.objectContaining({
             _id: expect.any(String),
-            startVolume: infusion.startVolume,
-            stopVolume: infusion.stopVolume,
+            volumeToDispense: infusion.volumeToDispense,
             patientName: infusion.patientName,
             doctorsInstruction: infusion.doctorsInstruction,
             deviceId: infusion.deviceId,
@@ -64,8 +62,7 @@ const testCases = [
         data: expect.arrayContaining([
           expect.objectContaining({
             _id: expect.any(String),
-            startVolume: infusion.startVolume,
-            stopVolume: infusion.stopVolume,
+            volumeToDispense: infusion.volumeToDispense,
             patientName: infusion.patientName,
             doctorsInstruction: infusion.doctorsInstruction,
             deviceId: infusion.deviceId,
@@ -93,8 +90,7 @@ const testCases = [
         message: 'Infusion found',
         data: {
           _id: expect.any(String),
-          startVolume: infusion.startVolume,
-          stopVolume: infusion.stopVolume,
+          volumeToDispense: infusion.volumeToDispense,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
           deviceId: expect.any(String),
@@ -121,8 +117,7 @@ const testCases = [
         message: 'Infusion found',
         data: {
           _id: expect.any(String),
-          startVolume: infusion.startVolume,
-          stopVolume: infusion.stopVolume,
+          volumeToDispense: infusion.volumeToDispense,
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
           deviceId: expect.any(String),

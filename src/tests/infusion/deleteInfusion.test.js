@@ -10,8 +10,7 @@ const { WARD_USER, NURSE_USER } = db.users.userTypes;
 const request = supertest(app);
 
 const infusion = {
-  startVolume: 700,
-  stopVolume: 50,
+  volumeToDispense: 700,
   patientName: 'Tumtum',
   doctorsInstruction: 'This is the doctor\'s instructions and it\'s a string',
   deviceId: '5db95971c9da2412401b1804',
