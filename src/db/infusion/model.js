@@ -6,7 +6,7 @@ const infusionSchema = new Schema({
   volumeToDispense: { type: Number, required: true },
   patientName: { type: String, required: true },
   doctorsInstruction: { type: String, required: true },
-  status: { type: String, enum: ['active', 'ended'] },
+  status: { type: String, enum: ['active', 'terminated', 'ended'], default: 'active' },
   deviceId: { type: Schema.Types.ObjectId, required: true, ref: 'devices' },
   hospitalId: { type: Schema.Types.ObjectId, required: true, ref: 'user.hospitaladmin' },
   wardId: { type: Schema.Types.ObjectId, ref: 'user.ward' },

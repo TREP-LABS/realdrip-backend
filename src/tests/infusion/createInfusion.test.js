@@ -42,6 +42,7 @@ const testCases = [
         data: {
           _id: expect.any(String),
           volumeToDispense: infusion.volumeToDispense,
+          status: 'active',
           patientName: infusion.patientName,
           doctorsInstruction: infusion.doctorsInstruction,
           deviceId: infusion.deviceId,

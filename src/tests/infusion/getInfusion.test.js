@@ -45,6 +45,36 @@ const testCases = [
     },
   },
   {
+    title: 'should get all active infusions using url query',
+    request: context => ({
+      body: {},
+      path: '/api/infusion?status=active',
+      method: 'get',
+      headers: {
+        'req-token': context.testGlobals[WARD_USER].authToken,
+      },
+    }),
+    response: {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Infusions found',
+        data: expect.arrayContaining([
+          expect.objectContaining({
+            _id: expect.any(String),
+            status: 'active',
+            volumeToDispense: infusion.volumeToDispense,
+            patientName: infusion.patientName,
+            doctorsInstruction: infusion.doctorsInstruction,
+            deviceId: infusion.deviceId,
+            wardId: expect.any(String),
+            hospitalId: expect.any(String),
+          }),
+        ]),
+      },
+    },
+  },
+  {
     title: 'should get all infusions with populated refrence fields',
     request: context => ({
       body: {},
@@ -62,6 +92,7 @@ const testCases = [
         data: expect.arrayContaining([
           expect.objectContaining({
             _id: expect.any(String),
+            status: 'active',
             volumeToDispense: infusion.volumeToDispense,
             patientName: infusion.patientName,
             doctorsInstruction: infusion.doctorsInstruction,
