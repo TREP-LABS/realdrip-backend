@@ -62,8 +62,11 @@ const getAllDevice = async (data, log) => {
  */
 const updateDevice = async (data, log) => {
   const {
-    deviceId, user, userType, label,
+    deviceId, user, userType,
   } = data;
+  let { label } = data;
+  // eslint-disable-next-line no-const-assign
+  label = label.toLowerCase();
   log.debug('Gathering filter to match device');
   const deviceMatch = {
     _id: deviceId,

@@ -4,11 +4,12 @@ import db from '../db';
 import authMiddleware from './middlewares/authMiddleware';
 import userStatus from './middlewares/userStatus';
 
+
 const router = express.Router();
 const { hasConfirmedEmail, hasVerifiedAccount, hasUserPrivledge } = userStatus;
 const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 
-router.get('/health', (req, res) => res.json({ status: 'I am alive' }));
+router.get('/health', async (req, res) => res.json({ status: 'I am alive' }));
 
 router.post('/hospital', controllers.hospitalUser.createAdminUser);
 router.put(

@@ -38,8 +38,8 @@ const testCases = [
     title: 'should fail if device is not found in the db',
     request: context => ({
       method: 'put',
-      path: '/api/devices/5bbad66374df3900221a55f0',
-      body: { label: 'red label' },
+      path: '/api/devices/5bbad66374df3900221a53f0',
+      body: { label: 'red rabel' },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
@@ -49,6 +49,24 @@ const testCases = [
       body: {
         success: false,
         message: 'Unable to update device',
+      },
+    },
+  },
+  {
+    title: 'should fail if device label is already in use',
+    request: context => ({
+      method: 'put',
+      path: '/api/devices/5bbad66374df3900221a53f0',
+      body: { label: 'red label' },
+      headers: {
+        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
+      },
+    }),
+    response: {
+      status: 400,
+      body: {
+        success: false,
+        message: 'Label already in use. Try a different one',
       },
     },
   },

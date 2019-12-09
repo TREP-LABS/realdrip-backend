@@ -34,4 +34,21 @@ const updateDevice = (req, res, next) => {
   return next();
 };
 
-export default { getSingleDevice, updateDevice };
+const verifyDeviceLabel = async (req, res, next) => {
+  let { label } = req.body;
+  const { user, userType } = res.locals;
+  // eslint-disable-next-line no-const-assign
+  label = label ? label.toLowerCase() : null;
+  const deviceMatch = {
+    label,
+    hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
+  };
+  const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
+  const device = await db.device.getSingleDevice(purifyDeviceMatch);
+  if (device) {
+    return res.status(400).json({ success: false, message: 'Label already in use. Try a different one' });
+  }
+  return next();
+};
+
+export default { getSingleDevice, updateDevice, verifyDeviceLabel };
