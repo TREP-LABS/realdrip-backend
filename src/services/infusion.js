@@ -1,5 +1,18 @@
 import db from '../db';
 
+/**
+ * @description The service function that creates an infusion
+ * @param {Object} data The data required
+ * @param {Object} data.user The user making the request
+ * @param {String} data.userType The type of user making the request
+ * @param {Number} data.volumeToDispense The volume to be administered
+ * @param {String} data.patientName The name of the patient
+ * @param {String} data.doctorsInstruction The doctors instruction
+ * @param {String} data.deviceId The device id
+ * @param {function} log Logger utility for logging messages
+ * @returns {Object} The infusions
+ * @throws {Error} Any error that prevents the service from executing successfully
+ */
 const createInfusion = async (data, log) => {
   log.debug('Executing createInfusion service');
   const {
@@ -90,7 +103,10 @@ const getSingleInfusion = async (data, log) => {
  * @param {Object} data.user The user data
  * @param {String} data.infusionId the id of the infusion to be updated
  * @param {String} data.userType The type of user making the request
- * @param {String} data.label the new label of the device
+ * @param {Number} data.volumeToDispense The volume to be administered
+ * @param {String} data.patientName The name of the patient
+ * @param {String} data.doctorsInstruction The doctors instruction
+ * @param {String} data.deviceId The device id
  * @param {function} log Logger utility for logging messages
  * @returns {object} The updated device data
  * @throws {error} Any error that prevents the service from executing successfully
