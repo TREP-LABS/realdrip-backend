@@ -49,8 +49,16 @@ const updateDevice = catchControllerError('UpdateDevice', async (req, res) => {
   return res.status(200).json({ success: true, message: 'Device updated', data: device });
 });
 
+const syncDeviceWithFirebase = catchControllerError('GetDevicesFromFirebase', async (req, res) => {
+  const { log } = res.locals;
+  const devices = await deviceService.syncDeviceWithFirebase();
+  log.debug('Synced successfully. return success message to user');
+  return res.status(200).json({ success: true, message: 'Synced successfully', data: devices });
+});
+
 export default {
   updateDevice: [deviceValidation.updateDevice, deviceValidation.verifyDeviceLabel, updateDevice],
   getSingleDevice: [deviceValidation.getSingleDevice, getSingleDevice],
   getAllDevice,
+  syncDeviceWithFirebase,
 };

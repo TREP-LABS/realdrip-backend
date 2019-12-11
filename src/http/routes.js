@@ -11,6 +11,8 @@ const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 
 router.get('/health', async (req, res) => res.json({ status: 'I am alive' }));
 
+router.get('/deviceSync', controllers.device.syncDeviceWithFirebase);
+
 router.post('/hospital', controllers.hospitalUser.createAdminUser);
 router.put(
   '/hospital/:userId',

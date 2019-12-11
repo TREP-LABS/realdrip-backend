@@ -3,10 +3,14 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const deviceSchema = new Schema({
-  hospitalId: { type: Schema.Types.ObjectId, required: true },
+  /* ************** DEV COMMENT *****************
+  Removed required from hospitalId and wardId
+  because during sync the devices are unassigned.
+  ********************************************* */
+  hospitalId: { type: Schema.Types.ObjectId },
   wardId: { type: Schema.Types.ObjectId },
-  label: { type: String },
-  fbDeviceId: { type: String },
+  label: { type: String, default: 'Default label' },
+  fbDeviceId: { type: String, required: true },
 });
 
 export default mongoose.model('devices', deviceSchema);

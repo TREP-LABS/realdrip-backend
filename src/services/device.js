@@ -82,4 +82,27 @@ const updateDevice = async (data, log) => {
   return device;
 };
 
-export default { getSingleDevice, getAllDevice, updateDevice };
+/* ************** DEV COMMENT *****************
+  TODO: helper function to identify new and
+  exising devices to help prevent multiple
+  insertion of same device
+********************************************* */
+const syncDeviceWithFirebase = async (log) => {
+  const devices = [];
+  log.debug('Retrieving devices from firebase');
+  const devicesFromFirebase = await db.fireDrip.getDevicesFromFirebase();
+  log.debug('Adding device key to an array');
+  devicesFromFirebase.forEach((device) => {
+    devices.push({
+      fbDeviceId: device.key,
+    });
+  });
+  log.debug('Inserting devices into device schema');
+  const insertedDevices = db.device.insertManyDevice(devices);
+  log.debug('returning newly synced devices');
+  return insertedDevices;
+};
+
+export default {
+  getSingleDevice, getAllDevice, updateDevice, syncDeviceWithFirebase,
+};

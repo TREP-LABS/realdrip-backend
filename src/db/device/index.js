@@ -38,6 +38,12 @@ const createDevice = async (data) => {
   return new Model(data).save();
 };
 
+const insertManyDevice = async (data) => {
+  const Model = deviceModel;
+  return Model.insertMany(data);
+
+}
+
 /**
  * @description Updates device data in the database
  * @param {object} deviceMatch An object describing how to select the device to be udpated
@@ -53,6 +59,7 @@ const updateDevice = async (deviceMatch, update) => {
 };
 
 export default {
+  insertManyDevice,
   getSingleDevice,
   getAllDevice,
   createDevice,
