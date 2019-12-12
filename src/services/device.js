@@ -87,6 +87,18 @@ const updateDevice = async (data, log) => {
   exising devices to help prevent multiple
   insertion of same device
 ********************************************* */
+const verifyDevicesBeforeSyncing = async (fbDevices) => {
+  const localDevices = await db.device.getAllDevice({});
+  const foreignDevices = fbDevices;
+  for (let i = 0; i < fbDevices.length; i += 1) {
+    for (let j = 0; j < localDevices.length; j += 1) {
+      if (fbDevices[i].fbDeviceId === localDevices[j].fbDeviceId) {
+        foreignDevices.splice(i, 1);
+      }
+    }
+  }
+  return foreignDevices;
+};
 const syncDeviceWithFirebase = async (log) => {
   const devices = [];
   log.debug('Retrieving devices from firebase');
@@ -98,7 +110,10 @@ const syncDeviceWithFirebase = async (log) => {
     });
   });
   log.debug('Inserting devices into device schema');
-  const insertedDevices = db.device.insertManyDevice(devices);
+  const xxx = await verifyDevicesBeforeSyncing(devices);
+  // eslint-disable-next-line no-console
+  console.log(xxx);
+  const insertedDevices = db.device.insertManyDevice(xxx);
   log.debug('returning newly synced devices');
   return insertedDevices;
 };
