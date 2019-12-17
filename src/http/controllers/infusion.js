@@ -1,6 +1,8 @@
 import infusionService from '../../services/infusion';
-import infusionValidation from '../validations/infusion';
-import catchControllerError from './catchControllerError';
+import catchControllerError from './helpers/catchControllerError';
+import invalidReqeust from './helpers/invalidRequest';
+import validate from '../validations/validate';
+import * as schemas from '../validations/schemas/infusion';
 
 /**
  * @description Get the list of fields to be populated by refrence
@@ -18,17 +20,12 @@ const getPopulateFields = (populateQueryParams) => {
  * @param {object} res Express response object
  */
 const createInfusion = catchControllerError('CreateInfusion', async (req, res) => {
-  const {
-    patientName, doctorsInstruction, volumeToDispense, deviceId,
-  } = req.body;
+  const requestData = validate(schemas.createInfusion, req.body);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.createInfusion({
-    volumeToDispense,
-    patientName,
-    doctorsInstruction,
-    deviceId,
-    user,
-    userType,
+    ...requestData, user, userType,
   }, log);
   log.debug('createInfusion service executed without error, sending back a success response');
   return res.status(201).json({ success: true, message: 'Infusion created', data: infusion });
@@ -60,10 +57,12 @@ const getAllInfusion = catchControllerError('GetAllInfusion', async (req, res) =
  * @param {object} res Express response object
  */
 const getSingleInfusion = catchControllerError('GetSingleInfusion', async (req, res) => {
-  const { infusionId } = req.params;
+  const requestData = validate(schemas.getSingleInfusion, req.params);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.getSingleInfusion({
-    infusionId, user, userType, populateFields: getPopulateFields(req.query.populate),
+    ...requestData, user, userType, populateFields: getPopulateFields(req.query.populate),
   }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });
@@ -78,13 +77,12 @@ const getSingleInfusion = catchControllerError('GetSingleInfusion', async (req, 
  * @param {object} res Express response object
  */
 const updateInfusion = catchControllerError('UpdateInfusion', async (req, res) => {
-  const {
-    patientName, doctorsInstruction, volumeToDispense,
-  } = req.body;
-  const { infusionId } = req.params;
+  const requestData = validate(schemas.updateInfusion, { ...req.body, ...req.params });
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { user, userType, log } = res.locals;
   const infusion = await infusionService.updateInfusion({
-    infusionId, user, userType, patientName, doctorsInstruction, volumeToDispense,
+    user, userType, ...requestData,
   }, log);
   if (!infusion) {
     return res.status(404).json({ success: false, message: 'Infusion not found' });
@@ -99,17 +97,19 @@ const updateInfusion = catchControllerError('UpdateInfusion', async (req, res) =
  * @param {object} res Express response object
  */
 const deleteInfusion = catchControllerError('DeleteInfusion', async (req, res) => {
-  const { infusionId } = req.params;
+  const requestData = validate(schemas.deleteInfusion, req.params);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { user, userType, log } = res.locals;
-  await infusionService.deleteInfusion({ infusionId, user, userType }, log);
+  await infusionService.deleteInfusion({ ...requestData, user, userType }, log);
   log.debug('deleteInfusion service executed without error, sending back a success response');
   return res.status(204).json({});
 });
 
 export default {
-  createInfusion: [infusionValidation.createInfusion, createInfusion],
-  getSingleInfusion: [infusionValidation.validateInfusionId, getSingleInfusion],
+  createInfusion,
+  getSingleInfusion,
   getAllInfusion,
-  updateInfusion: [infusionValidation.updateInfusion, updateInfusion],
-  deleteInfusion: [infusionValidation.validateInfusionId, deleteInfusion],
+  updateInfusion,
+  deleteInfusion,
 };

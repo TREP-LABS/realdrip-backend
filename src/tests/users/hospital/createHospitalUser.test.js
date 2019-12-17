@@ -70,9 +70,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Medical center name is a required string'],
+          name: ['"name" is required'],
         },
       },
     },
@@ -88,9 +88,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Medical center name must be at least 3 characters'],
+          name: ['"name" length must be at least 3 characters long'],
         },
       },
     },
@@ -106,9 +106,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Medical center email is a required string'],
+          email: ['"email" is required'],
         },
       },
     },
@@ -124,9 +124,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Medical center email format is a not valid'],
+          email: ['"email" must be a valid email'],
         },
       },
     },
@@ -142,9 +142,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          password: ['Password field is a required string'],
+          password: ['"password" is required'],
         },
       },
     },
@@ -158,16 +158,16 @@ const testCases = [
       path: createHospitalUserPath,
       body: { ...userDetails, password: 'password' },
     },
-    response: {
+    response: () => ({
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          password: ['Password must be at least 7 character mix of capital, small letters with numbers'],
+          password: ['"password" must be at least 7 character mix of capital, small letters with numbers'],
         },
       },
-    },
+    }),
   },
   {
     title: 'should fail if confirmPassword value is not in request body',
@@ -180,9 +180,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          confirmPassword: ['Confirm password field is a required string'],
+          confirmPassword: ['"confirmPassword" is required'],
         },
       },
     },
@@ -198,9 +198,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          confirmPassword: ['Confirm password field must match the password field'],
+          confirmPassword: ['"confirmPassword" must match the password value'],
         },
       },
     },
@@ -216,9 +216,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.country': ['Country field is a required string'],
+          'location.country': ['"location.country" is required'],
         },
       },
     },
@@ -234,9 +234,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.state': ['State field is a required string'],
+          'location.state': ['"location.state" is required'],
         },
       },
     },
@@ -252,9 +252,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.address': ['Address field is a required string'],
+          'location.address': ['"location.address" is required'],
         },
       },
     },

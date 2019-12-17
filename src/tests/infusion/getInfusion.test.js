@@ -172,9 +172,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          infusionId: ['infusionId is not valid'],
+          infusionId: ['"infusionId" in query params is not valid'],
         },
       },
     },

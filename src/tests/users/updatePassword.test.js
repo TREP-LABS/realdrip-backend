@@ -54,9 +54,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          newPassword: ['New password must be at least 7 character mix of capital, small letters with numbers'],
+          newPassword: ['"newPassword" must be at least 7 character mix of capital, small letters with numbers'],
         },
       },
     },
@@ -75,9 +75,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          newPassword: ['New password must be at least 7 character mix of capital, small letters with numbers'],
+          newPassword: ['"newPassword" must be at least 7 character mix of capital, small letters with numbers'],
         },
       },
     },
@@ -132,10 +132,10 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          formerPassword: ['Former password is a required string'],
-          newPassword: ['New password is a required string'],
+          formerPassword: ['"formerPassword" must be a string'],
+          newPassword: ['"newPassword" must be a string'],
         },
       },
     },

@@ -92,9 +92,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Ward name is a required string'],
+          name: ['"name" is required'],
         },
       },
     },
@@ -113,9 +113,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Ward name must be at least 3 characters'],
+          name: ['"name" length must be at least 3 characters long'],
         },
       },
     },
@@ -134,9 +134,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Ward email is a required string'],
+          email: ['"email" is required'],
         },
       },
     },
@@ -155,9 +155,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Ward email format is not valid'],
+          email: ['"email" must be a valid email'],
         },
       },
     },
@@ -176,9 +176,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          label: ['Ward label is a required string'],
+          label: ['"label" must be a string'],
         },
       },
     },

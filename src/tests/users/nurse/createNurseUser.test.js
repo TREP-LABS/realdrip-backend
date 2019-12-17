@@ -93,9 +93,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Nurse name is a required string'],
+          name: ['"name" is required'],
         },
       },
     },
@@ -114,9 +114,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Nurse name must be at least 3 characters'],
+          name: ['"name" length must be at least 3 characters long'],
         },
       },
     },
@@ -135,9 +135,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Nurse email is a required string'],
+          email: ['"email" is required'],
         },
       },
     },
@@ -156,9 +156,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['Nurse email format is not valid'],
+          email: ['"email" must be a valid email'],
         },
       },
     },
@@ -177,9 +177,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          phoneNo: ['phoneNo is a required string'],
+          phoneNo: ['"phoneNo" must be a string'],
         },
       },
     },

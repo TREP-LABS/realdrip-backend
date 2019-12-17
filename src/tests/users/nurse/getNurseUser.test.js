@@ -92,7 +92,10 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'nurse id is not valid',
+        message: 'Invalid request data',
+        errors: {
+          nurseId: ['"nurseId" in query params is not valid'],
+        },
       },
     },
   },
