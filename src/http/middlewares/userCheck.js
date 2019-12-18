@@ -11,7 +11,7 @@ const hasUserPrivledge = previledges => (req, res, next) => {
   if (
     !userType
     || typeof userType !== 'string'
-    || !previledges.includes(userType.toLowerCase())
+    || !previledges.includes(userType)
   ) {
     return res.status(403).json({ success: false, message: 'You do not have access to this endpoint' });
   }
@@ -42,8 +42,28 @@ verifying user accounts so this middleware is left empty for now.
 */
 const hasVerifiedAccount = (req, res, next) => next();
 
-export default {
-  hasConfirmedEmail,
-  hasVerifiedAccount,
-  hasUserPrivledge,
+/**
+ * @description Chain a number of middlewares to perform specific checks
+ * on the user accessing a route.
+ * @param {Object} check The properties of the user to check.
+ * @param {Boolean} check.confirmedEmail If true, this function would add middleware to check
+ * if the user has confirmed his/her email.
+ * @param {Boolean} check.verifiedAccount If true, this function would add middleware to check
+ * if the user has verified his/her account.
+ * @param {Array|undefined} check.type An array of allowed user types. If provided, this function
+ * would add a middleware to check that the user one of those user types.
+ */
+const userCheck = (check = {
+  confirmedEmail: false,
+  verifiedAccount: false,
+  type: [],
+}) => {
+  const { confirmedEmail, verifiedAccount, type } = check;
+  const middlewares = [];
+  if (confirmedEmail) middlewares.push(hasConfirmedEmail);
+  if (verifiedAccount) middlewares.push(hasVerifiedAccount);
+  if (type) middlewares.push(hasUserPrivledge(type));
+  return middlewares;
 };
+
+export default userCheck;

@@ -2,136 +2,152 @@ import express from 'express';
 import controllers from './controllers';
 import db from '../db';
 import authMiddleware from './middlewares/authMiddleware';
-import userStatus from './middlewares/userStatus';
-
+import userCheck from './middlewares/userCheck';
 
 const router = express.Router();
-const { hasConfirmedEmail, hasVerifiedAccount, hasUserPrivledge } = userStatus;
+
 const { HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER } = db.users.userTypes;
 
 router.get('/health', async (req, res) => res.json({ status: 'I am alive' }));
 
 router.post('/hospital', controllers.hospitalUser.createAdminUser);
-router.put(
-  '/hospital/:userId',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
-  controllers.hospitalUser.updateAdminUser,
-);
+
 router.get('/hospital/confirmEmail', controllers.hospitalUser.confirmUserAccount);
 
-router.post(
+router.post('/users/login', controllers.allUser.login);
+
+const authRouter = express.Router();
+authRouter.use(authMiddleware);
+
+authRouter.put('/users/:userId/password', controllers.allUser.updatePassword);
+
+authRouter.put(
+  '/hospital/:userId',
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER],
+  }),
+  controllers.hospitalUser.updateAdminUser,
+);
+
+authRouter.post(
   '/hospital/sendEmailValidationMail',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
+  userCheck({ type: [HOSPITAL_ADMIN_USER] }),
   controllers.hospitalUser.sendEmailValidationMail,
 );
 
-router.post(
+authRouter.post(
   '/ward',
   authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({ confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER] }),
   controllers.wardUser.createWardUser,
 );
-router.get(
+
+authRouter.get(
   '/ward/:wardId',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
+  }),
   controllers.wardUser.getSingleWardUser,
 );
-router.put(
+
+authRouter.put(
   '/ward/:wardId',
-  authMiddleware,
-  hasUserPrivledge([WARD_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({ type: [WARD_USER] }),
   controllers.wardUser.updateWardUser,
 );
-router.get(
+
+authRouter.get(
   '/ward',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({ confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER] }),
   controllers.wardUser.getAllWardUser,
 );
 
-router.post(
+authRouter.post(
   '/nurse',
-  authMiddleware,
-  hasUserPrivledge([WARD_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({ type: [WARD_USER] }),
   controllers.nurseUser.createNurseUser,
 );
-router.get(
+
+authRouter.get(
   '/nurse/:nurseId',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
+  }),
   controllers.nurseUser.getSingleNurseUser,
 );
-router.put(
+
+authRouter.put(
   '/nurse/:nurseId',
-  authMiddleware,
-  hasUserPrivledge([NURSE_USER.toLowerCase()]),
+  userCheck({ type: [NURSE_USER] }),
   controllers.nurseUser.updateNurseUser,
 );
-router.get(
+
+authRouter.get(
   '/nurse',
-  authMiddleware,
-  hasConfirmedEmail,
-  hasVerifiedAccount,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
+  }),
   controllers.nurseUser.getAllNurseUser,
 );
 
-router.post('/users/login', controllers.allUser.login);
-router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);
-
-router.get(
+authRouter.get(
   '/devices',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
+  }),
   controllers.device.getAllDevice,
 );
-router.get('/devices/:deviceId', authMiddleware, controllers.device.getSingleDevice);
-router.put('/devices/:deviceId',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
-  controllers.device.updateDevice);
 
-router.post(
+authRouter.get(
+  '/devices/:deviceId',
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
+  }),
+  controllers.device.getSingleDevice,
+);
+
+authRouter.put(
+  '/devices/:deviceId',
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
+  }),
+  controllers.device.updateDevice,
+);
+
+authRouter.post(
   '/infusion',
-  authMiddleware,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  userCheck({ type: [NURSE_USER, WARD_USER] }),
   controllers.infusion.createInfusion,
 );
-router.get('/infusion', authMiddleware, controllers.infusion.getAllInfusion);
-router.get('/infusion/:infusionId',
-  authMiddleware,
-  controllers.infusion.getSingleInfusion);
-router.put(
+
+authRouter.get(
+  '/infusion',
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
+  }),
+  controllers.infusion.getAllInfusion,
+);
+
+authRouter.get(
   '/infusion/:infusionId',
-  authMiddleware,
-  hasConfirmedEmail,
-  hasVerifiedAccount,
+  userCheck({
+    confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
+  }),
+  controllers.infusion.getSingleInfusion,
+);
+
+authRouter.put(
+  '/infusion/:infusionId',
+  userCheck({ type: [WARD_USER, NURSE_USER] }),
   controllers.infusion.updateInfusion,
 );
-router.delete(
+
+authRouter.delete(
   '/infusion/:infusionId',
-  authMiddleware,
-  hasConfirmedEmail,
-  hasVerifiedAccount,
-  hasUserPrivledge([HOSPITAL_ADMIN_USER.toLowerCase(), WARD_USER.toLowerCase()]),
+  userCheck({ type: [WARD_USER] }),
   controllers.infusion.deleteInfusion,
 );
+
+router.use(authRouter);
 
 export default router;
