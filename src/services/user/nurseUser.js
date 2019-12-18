@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import config from '../config';
 import db from '../../db';
 import emailService from '../email';
-import ServiceError from '../serviceError';
+import ServiceError from '../common/serviceError';
 
 /**
  * @description Format the user data to be returned to the client

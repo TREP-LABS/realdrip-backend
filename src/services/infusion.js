@@ -1,4 +1,5 @@
 import db from '../db';
+import userMatch from './common/userMatch';
 
 /**
  * @description The service function that creates an infusion
@@ -29,9 +30,7 @@ const createInfusion = async (data, log) => {
     patientName,
     doctorsInstruction,
     deviceId,
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
-    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    ...userMatch({ userType, user }),
   };
   const purifyInfusionDetails = JSON.parse(JSON.stringify(infusionDetails));
   log.debug('creating infusion');
@@ -41,24 +40,45 @@ const createInfusion = async (data, log) => {
 };
 
 /**
- * @description The service function that gets all infusions
+ * @description The service function that gets all infusions using user details and query filters
  * @param {Object} data The data required
  * @param {Object} data.user The user making the request
  * @param {String} data.userType The type of user making the request
+ * @param {String} data.status used as a querying filter
+ * @param {String} data.deviceId Used as a querying filter
  * @param {function} log Logger utility for logging messages
  * @returns {Object} The infusions
  * @throws {Error} Any error that prevents the service from executing successfully
  */
+
+const userFilters = (data) => {
+  const {
+    userType, user, wardId, nurseId,
+  } = data;
+  const defaultUserMatch = { ...userMatch({ userType, user }) };
+  if (!defaultUserMatch.wardId && wardId) {
+    defaultUserMatch.wardId = wardId;
+  }
+  if (!defaultUserMatch.nurseId && nurseId) {
+    defaultUserMatch.nurseId = nurseId;
+  }
+  return defaultUserMatch;
+};
+
 const getAllInfusion = async (data, log) => {
-  const { user, userType, populateFields = [] } = data;
+  const {
+    userType, user, status, deviceId, wardId, nurseId, populateFields = [],
+  } = data;
   log.debug('Gathering user details');
   const infusionMatch = {
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
-    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    ...userFilters({
+      userType, user, wardId, nurseId,
+    }),
+    status,
+    deviceId,
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
-  log.debug('Getting infusions from the database using user details');
+  log.debug('Getting infusions from the database using user details and filters');
   const infusions = await db.utils.populate(
     db.infusion.getAllInfusion(purifyInfusionMatch), populateFields,
   );
@@ -84,9 +104,7 @@ const getSingleInfusion = async (data, log) => {
   log.debug('Gathering filter parameters for getting Infusion');
   const infusionMatch = {
     _id: infusionId,
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
-    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    ...userMatch({ userType, user }),
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   log.debug('Fetching infusion from database using filter parameters');
@@ -117,9 +135,7 @@ const updateInfusion = async (data, log) => {
   } = data;
   const infusionMatch = {
     _id: infusionId,
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
-    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    ...userMatch({ userType, user }),
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   const update = JSON.parse(JSON.stringify({
@@ -150,9 +166,7 @@ const deleteInfusion = async (data, log) => {
   log.debug('Gathering filter parameters for deleting Infusion');
   const infusionMatch = {
     _id: infusionId,
-    hospitalId: userType === db.users.userTypes.HOSPITAL_ADMIN_USER ? user._id : user.hospitalId,
-    wardId: userType === db.users.userTypes.WARD_USER ? user._id : user.wardId,
-    nurseId: userType === db.users.userTypes.NURSE_USER ? user._id : user.nurseId,
+    ...userMatch({ userType, user }),
   };
   const purifyInfusionMatch = JSON.parse(JSON.stringify(infusionMatch));
   log.debug('Deleting infusion from database using filter parameters');
