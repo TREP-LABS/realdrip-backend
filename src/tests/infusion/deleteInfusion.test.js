@@ -20,13 +20,13 @@ const testCases = [
   confirmAuthRestriction({
     title: 'should fail if user does not send a valid auth token',
     path: '/api/infusion',
-    method: 'post',
+    method: 'delete',
   }),
   confirmAccessLevelRestriction({
     title: 'Nurse user should not be able to delete infusion',
     userType: NURSE_USER,
-    path: '/api/infusion',
-    method: 'post',
+    path: '/api/infusion/5db95971c9da241240randome',
+    method: 'delete',
   }),
   {
     title: 'should delete infusion',

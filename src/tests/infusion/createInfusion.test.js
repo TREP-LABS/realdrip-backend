@@ -1,9 +1,8 @@
 import db from '../../db';
 import testRunner from '../utils/testRunner';
-import confirmAccessLevelRestriction from '../genericTestCases/confirmAccessLevelRestriction';
 import confirmAuthRestriction from '../genericTestCases/confirmAuthRestriction';
 
-const { WARD_USER, NURSE_USER } = db.users.userTypes;
+const { WARD_USER } = db.users.userTypes;
 
 const infusion = {
   volumeToDispense: 700,
@@ -15,12 +14,6 @@ const infusion = {
 const testCases = [
   confirmAuthRestriction({
     title: 'should fail if user does not send a valid auth token',
-    path: '/api/infusion',
-    method: 'post',
-  }),
-  confirmAccessLevelRestriction({
-    title: 'Nurse user should not be able to create infusion',
-    userType: NURSE_USER,
     path: '/api/infusion',
     method: 'post',
   }),
