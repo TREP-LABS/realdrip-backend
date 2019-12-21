@@ -16,138 +16,150 @@ router.get('/hospital/confirmEmail', controllers.hospitalUser.confirmUserAccount
 
 router.post('/users/login', controllers.allUser.login);
 
-const authRouter = express.Router();
-authRouter.use(authMiddleware);
+router.put('/users/:userId/password', authMiddleware, controllers.allUser.updatePassword);
 
-authRouter.put('/users/:userId/password', controllers.allUser.updatePassword);
-
-authRouter.put(
+router.put(
   '/hospital/:userId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER],
   }),
   controllers.hospitalUser.updateAdminUser,
 );
 
-authRouter.post(
+router.post(
   '/hospital/sendEmailValidationMail',
+  authMiddleware,
   userCheck({ type: [HOSPITAL_ADMIN_USER] }),
   controllers.hospitalUser.sendEmailValidationMail,
 );
 
-authRouter.post(
+router.post(
   '/ward',
   authMiddleware,
   userCheck({ confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER] }),
   controllers.wardUser.createWardUser,
 );
 
-authRouter.get(
+router.get(
   '/ward/:wardId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
   }),
   controllers.wardUser.getSingleWardUser,
 );
 
-authRouter.put(
+router.put(
   '/ward/:wardId',
+  authMiddleware,
   userCheck({ type: [WARD_USER] }),
   controllers.wardUser.updateWardUser,
 );
 
-authRouter.get(
+router.get(
   '/ward',
+  authMiddleware,
   userCheck({ confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER] }),
   controllers.wardUser.getAllWardUser,
 );
 
-authRouter.post(
+router.post(
   '/nurse',
+  authMiddleware,
   userCheck({ type: [WARD_USER] }),
   controllers.nurseUser.createNurseUser,
 );
 
-authRouter.get(
+router.get(
   '/nurse/:nurseId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
   }),
   controllers.nurseUser.getSingleNurseUser,
 );
 
-authRouter.put(
+router.put(
   '/nurse/:nurseId',
+  authMiddleware,
   userCheck({ type: [NURSE_USER] }),
   controllers.nurseUser.updateNurseUser,
 );
 
-authRouter.get(
+router.get(
   '/nurse',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
   }),
   controllers.nurseUser.getAllNurseUser,
 );
 
-authRouter.get(
+router.get(
   '/devices',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
   }),
   controllers.device.getAllDevice,
 );
 
-authRouter.get(
+router.get(
   '/devices/:deviceId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
   }),
   controllers.device.getSingleDevice,
 );
 
-authRouter.put(
+router.put(
   '/devices/:deviceId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER],
   }),
   controllers.device.updateDevice,
 );
 
-authRouter.post(
+router.post(
   '/infusion',
+  authMiddleware,
   userCheck({ type: [NURSE_USER, WARD_USER] }),
   controllers.infusion.createInfusion,
 );
 
-authRouter.get(
+router.get(
   '/infusion',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
   }),
   controllers.infusion.getAllInfusion,
 );
 
-authRouter.get(
+router.get(
   '/infusion/:infusionId',
+  authMiddleware,
   userCheck({
     confirmedEmail: true, verifiedAccount: true, type: [HOSPITAL_ADMIN_USER, WARD_USER, NURSE_USER],
   }),
   controllers.infusion.getSingleInfusion,
 );
 
-authRouter.put(
+router.put(
   '/infusion/:infusionId',
+  authMiddleware,
   userCheck({ type: [WARD_USER, NURSE_USER] }),
   controllers.infusion.updateInfusion,
 );
 
-authRouter.delete(
+router.delete(
   '/infusion/:infusionId',
+  authMiddleware,
   userCheck({ type: [WARD_USER] }),
   controllers.infusion.deleteInfusion,
 );
-
-router.use(authRouter);
 
 export default router;
