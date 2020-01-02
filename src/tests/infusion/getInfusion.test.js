@@ -45,10 +45,10 @@ const testCases = [
     },
   },
   {
-    title: 'should get all active infusions using url query',
+    title: 'should get all active and ended infusions using url query params',
     request: context => ({
       body: {},
-      path: '/api/infusion?status=active',
+      path: '/api/infusion?status=active&status=ended',
       method: 'get',
       headers: {
         'req-token': context.testGlobals[WARD_USER].authToken,
