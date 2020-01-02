@@ -25,15 +25,15 @@ const testCases = [
     title: 'should fail if a reg token is not provided in query params',
     request: {
       method: 'get',
-      path: '/api/hospital/confirmEmail?regToken=',
+      path: '/api/hospital/confirmEmail?',
     },
     response: {
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          regToken: ['regToken is a required query parameter'],
+          regToken: ['"regToken" is a required query parameter'],
         },
       },
     },

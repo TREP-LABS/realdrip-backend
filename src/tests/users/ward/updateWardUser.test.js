@@ -78,9 +78,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Ward name is a required string'],
+          name: ['"name" must be a string'],
         },
       },
     },
@@ -99,9 +99,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Ward name must be at least 3 characters'],
+          name: ['"name" length must be at least 3 characters long'],
         },
       },
     },
@@ -120,9 +120,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          label: ['Ward label is a required string'],
+          label: ['"label" must be a string'],
         },
       },
     },
@@ -141,7 +141,10 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Ward id is not valid',
+        message: 'Invalid request data',
+        errors: {
+          wardId: ['"wardId" in query params is not valid'],
+        },
       },
     },
   },

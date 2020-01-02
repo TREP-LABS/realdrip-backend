@@ -50,9 +50,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['User email is a required string'],
+          email: ['"email" is required'],
         },
       },
     },
@@ -68,9 +68,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          email: ['User email format is a not valid'],
+          email: ['"email" must be a valid email'],
         },
       },
     },
@@ -101,9 +101,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          password: ['Password field is a required string'],
+          password: ['"password" is required'],
         },
       },
     },
@@ -134,9 +134,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          userType: ['userType field must be one of the following: hospital_admin, ward_user, nurse_user'],
+          userType: ['"userType" must be one of [hospital_admin, ward_user, nurse_user]'],
         },
       },
     },

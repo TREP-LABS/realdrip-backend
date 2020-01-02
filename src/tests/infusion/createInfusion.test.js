@@ -59,12 +59,12 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          patientName: ['patientName is a required string'],
-          volumeToDispense: ['volumeToDispense is a required number'],
-          doctorsInstruction: ['doctorsInstruction is a required string'],
-          deviceId: ['deviceId is required'],
+          patientName: ['"patientName" is required'],
+          volumeToDispense: ['"volumeToDispense" is required'],
+          doctorsInstruction: ['"doctorsInstruction" is required'],
+          deviceId: ['"deviceId" is required'],
         },
       },
     },
@@ -83,9 +83,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          deviceId: ['Invalid deviceId'],
+          deviceId: ['"deviceId" contains an invalid value'],
         },
       },
     },
@@ -104,9 +104,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          volumeToDispense: ['volumeToDispense is a required number'],
+          volumeToDispense: ['"volumeToDispense" must be a number'],
         },
       },
     },

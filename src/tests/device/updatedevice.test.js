@@ -39,7 +39,7 @@ const testCases = [
     request: context => ({
       method: 'put',
       path: '/api/devices/5bbad66374df3900221a53f0',
-      body: { label: 'red rabel' },
+      body: { label: 'random' },
       headers: {
         'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
       },
@@ -84,9 +84,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          deviceId: ['deviceId is not valid'],
+          deviceId: ['"deviceId" in query params is not valid'],
         },
       },
     },
@@ -105,28 +105,10 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          label: ['label is a required string'],
+          label: ['"label" must be a string'],
         },
-      },
-    },
-  },
-  {
-    title: 'should fail if an empty body was sent',
-    request: context => ({
-      method: 'put',
-      path: '/api/devices/221a55f0',
-      body: {},
-      headers: {
-        'req-token': context.testGlobals[HOSPITAL_ADMIN_USER].authToken,
-      },
-    }),
-    response: {
-      status: 400,
-      body: {
-        success: false,
-        message: 'Invalid request: All fields can\'t be empty',
       },
     },
   },

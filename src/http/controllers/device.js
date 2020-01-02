@@ -1,6 +1,9 @@
 import deviceService from '../../services/device';
-import deviceValidation from '../validations/device';
-import catchControllerError from './catchControllerError';
+import catchControllerError from './helpers/catchControllerError';
+import invalidReqeust from './helpers/invalidRequest';
+import validate from '../validations/validate';
+import * as schemas from '../validations/schemas/device';
+import db from '../../db';
 
 /**
  * @description Controller to get single device
@@ -8,9 +11,12 @@ import catchControllerError from './catchControllerError';
  * @param {object} res Express response object
  */
 const getSingleDevice = catchControllerError('GetSingleDevice', async (req, res) => {
-  const { deviceId } = req.params;
+  const requestData = validate(schemas.getSingleDevice, req.params);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { user, userType, log } = res.locals;
-  const device = await deviceService.getSingleDevice({ deviceId, user, userType }, log);
+  const device = await deviceService.getSingleDevice({ ...requestData, user, userType }, log);
+
   if (!device) {
     return res.status(404).json({ success: false, message: 'Device not found' });
   }
@@ -31,16 +37,41 @@ const getAllDevice = catchControllerError('GetAllDevice', async (req, res) => {
 });
 
 /**
+ * @description An helper function to help check if a device label is already in use
+ * @param {object} req Express request object
+ * @param {object} res Express response object
+ * @returns {Boolean} A truthy value representing if the label is already in use or not.
+ */
+const labelAlreadyExist = async (req, res) => {
+  let { label } = req.body;
+  const { user, userType } = res.locals;
+  label = label.toLowerCase();
+  const deviceMatch = {
+    label,
+    hospitalId: userType === 'hospital_admin' ? user._id : user.hospitalId,
+  };
+  const purifyDeviceMatch = JSON.parse(JSON.stringify(deviceMatch));
+  const device = await db.device.getSingleDevice(purifyDeviceMatch);
+  if (device) return true;
+  return false;
+};
+
+/**
  * @description Controller for Update device API operation
  * @param {object} req Express request object
  * @param {object} res Express response object
  */
 const updateDevice = catchControllerError('UpdateDevice', async (req, res) => {
-  const { label } = req.body;
-  const { deviceId } = req.params;
+  const requestData = validate(schemas.updateDevice, { ...req.body, ...req.params });
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
+  if (requestData.label && await labelAlreadyExist(req, res)) {
+    return res.status(400).json({ success: false, message: 'Label already in use. Try a different one' });
+  }
+
   const { user, userType, log } = res.locals;
   const device = await deviceService.updateDevice({
-    deviceId, user, userType, label,
+    user, userType, ...requestData,
   }, log);
   if (!device) {
     return res.status(404).json({ success: false, message: 'Unable to update device' });
@@ -50,7 +81,7 @@ const updateDevice = catchControllerError('UpdateDevice', async (req, res) => {
 });
 
 export default {
-  updateDevice: [deviceValidation.updateDevice, deviceValidation.verifyDeviceLabel, updateDevice],
-  getSingleDevice: [deviceValidation.getSingleDevice, getSingleDevice],
+  updateDevice,
+  getSingleDevice,
   getAllDevice,
 };

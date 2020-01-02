@@ -83,9 +83,9 @@ const testCases = [
     response: {
       status: 400,
       body: {
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          deviceId: ['deviceId is not valid'],
+          deviceId: ['"deviceId" in query params is not valid'],
         },
       },
     },

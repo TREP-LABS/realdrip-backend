@@ -75,28 +75,10 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          infusionId: ['infusionId is not valid'],
+          infusionId: ['"infusionId" in query params is not valid'],
         },
-      },
-    },
-  },
-  {
-    title: 'should fail to update if an empty request body is provided',
-    request: context => ({
-      path: `/api/infusion/${context.infusionId}`,
-      method: 'put',
-      body: {},
-      headers: {
-        'req-token': context.testGlobals[WARD_USER].authToken,
-      },
-    }),
-    response: {
-      status: 400,
-      body: {
-        success: false,
-        message: 'Invalid request: All fields can\'t be empty',
       },
     },
   },
@@ -118,11 +100,11 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request',
+        message: 'Invalid request data',
         errors: {
-          patientName: ['patientName is a required string'],
-          volumeToDispense: ['volumeToDispense is a required number'],
-          doctorsInstruction: ['doctorsInstruction is a required string'],
+          patientName: ['"patientName" must be a string'],
+          volumeToDispense: ['"volumeToDispense" must be a number'],
+          doctorsInstruction: ['"doctorsInstruction" must be a string'],
         },
       },
     },

@@ -1,6 +1,8 @@
 import userService from '../../../services/user/allUser';
-import userValidation from '../../validations/user';
-import catchControllerError from '../catchControllerError';
+import catchControllerError from '../helpers/catchControllerError';
+import invalidReqeust from '../helpers/invalidRequest';
+import validate from '../../validations/validate';
+import * as schemas from '../../validations/schemas/user';
 
 /**
  * @description User login controller
@@ -9,8 +11,10 @@ import catchControllerError from '../catchControllerError';
  */
 const login = catchControllerError('Login', async (req, res) => {
   const { log } = res.locals;
-  const { email, password, userType } = req.body;
-  const { token, user } = await userService.login({ email, password, userType }, log);
+  const requestData = validate(schemas.login, req.body);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
+  const { token, user } = await userService.login(requestData, log);
   log.debug('Login service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Login successfully', data: { token, user } });
 });
@@ -23,17 +27,16 @@ const login = catchControllerError('Login', async (req, res) => {
  */
 const updatePassword = catchControllerError('UpdatePassword', async (req, res) => {
   const { log } = res.locals;
-  const { formerPassword, newPassword } = req.body;
+  const requestData = validate(schemas.updatePassword, { ...req.body, ...req.params }, res);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { userType } = res.locals;
-  const { userId } = req.params;
-  await userService.updatePassword({
-    formerPassword, newPassword, userId, userType,
-  }, log);
+  await userService.updatePassword({ ...requestData, userType }, log);
   log.debug('UpdatePassword service executed without error, sending back a success response');
   return res.status(204).json({});
 });
 
 export default {
-  login: [userValidation.login, login],
-  updatePassword: [userValidation.udpateUserPassword, updatePassword],
+  login,
+  updatePassword,
 };

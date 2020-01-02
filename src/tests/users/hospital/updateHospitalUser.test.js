@@ -72,9 +72,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          name: ['Medical center name must be at least 3 characters'],
+          name: ['"name" length must be at least 3 characters long'],
         },
       },
     },
@@ -93,9 +93,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.country': ['Country field is a required string'],
+          'location.country': ['"location.country" must be a string'],
         },
       },
     },
@@ -114,9 +114,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.state': ['State field is a required string'],
+          'location.state': ['"location.state" must be a string'],
         },
       },
     },
@@ -135,9 +135,9 @@ const testCases = [
       status: 400,
       body: {
         success: false,
-        message: 'Invalid request body',
+        message: 'Invalid request data',
         errors: {
-          'location.address': ['Address field is a required string'],
+          'location.address': ['"location.address" must be a string'],
         },
       },
     },

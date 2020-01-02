@@ -1,7 +1,9 @@
 import hospitalUserService from '../../../services/user/hospitalUser';
-import userValidation from '../../validations/user';
 import config from '../../config';
-import catchControllerError from '../catchControllerError';
+import catchControllerError from '../helpers/catchControllerError';
+import invalidReqeust from '../helpers/invalidRequest';
+import validate from '../../validations/validate';
+import * as schemas from '../../validations/schemas/user';
 
 /**
  * @description Controller for create admin user API operation
@@ -9,13 +11,11 @@ import catchControllerError from '../catchControllerError';
  * @param {object} res Express response object
  */
 const createAdminUser = catchControllerError('CreateHospitalUser', async (req, res) => {
+  const requestData = validate(schemas.createHospitalUser, req.body);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { log } = res.locals;
-  const {
-    name, email, password, location,
-  } = req.body;
-  const user = await hospitalUserService.createAdminUser({
-    name, email, password, location,
-  }, log);
+  const user = await hospitalUserService.createAdminUser(requestData, log);
   log.debug('CreateAdminUser service executed without error, sending back a success response');
   return res.status(201).json({ success: true, message: 'Admin user created successfully', data: user });
 });
@@ -26,10 +26,11 @@ const createAdminUser = catchControllerError('CreateHospitalUser', async (req, r
  * @param {object} res Express response object
  */
 const updateAdminUser = catchControllerError('UpdateHospitalUser', async (req, res) => {
+  const requestData = validate(schemas.updateHospitalUser, { ...req.body, ...req.params });
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { log } = res.locals;
-  const { name, location } = req.body;
-  const { userId } = req.params;
-  const user = await hospitalUserService.updateAdminUser({ name, location, userId }, log);
+  const user = await hospitalUserService.updateAdminUser(requestData, log);
   log.debug('UpdateAdminUser service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'User updated successfully', data: user });
 });
@@ -40,9 +41,11 @@ const updateAdminUser = catchControllerError('UpdateHospitalUser', async (req, r
  * @param {object} res Express response object
  */
 const confirmUserAccount = catchControllerError('ConfirmUserAccount', async (req, res) => {
+  const requestData = validate(schemas.regToken, req.query.regToken);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { log } = res.locals;
-  const { regToken } = req.query;
-  await hospitalUserService.confirmUserAccount(regToken, log);
+  await hospitalUserService.confirmUserAccount(requestData, log);
   log.debug('ConfirmUserAccount service executed without error, sending back a success response');
   return res.status(302).redirect(`${config.clientAppUrl}/login`);
 });
@@ -60,8 +63,8 @@ const sendEmailValidationMail = catchControllerError('sendEmailValidationMail', 
 });
 
 export default {
-  createAdminUser: [userValidation.createAdminUser, createAdminUser],
-  confirmUserAccount: [userValidation.validateRegToken, confirmUserAccount],
-  updateAdminUser: [userValidation.updateHospitalUser, updateAdminUser],
+  createAdminUser,
+  confirmUserAccount,
+  updateAdminUser,
   sendEmailValidationMail,
 };

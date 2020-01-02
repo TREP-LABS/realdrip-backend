@@ -1,6 +1,8 @@
 import wardUserService from '../../../services/user/wardUser';
-import userValidation from '../../validations/user';
-import catchControllerError from '../catchControllerError';
+import catchControllerError from '../helpers/catchControllerError';
+import validate from '../../validations/validate';
+import * as schemas from '../../validations/schemas/user';
+import invalidReqeust from '../helpers/invalidRequest';
 
 /**
  * @description Controller for "create ward user" API operation
@@ -9,10 +11,10 @@ import catchControllerError from '../catchControllerError';
  */
 const createWardUser = catchControllerError('CreateWardUser', async (req, res) => {
   const { log, user: { _id: hospitalId } } = res.locals;
-  const { name, email, label } = req.body;
-  const user = await wardUserService.createWardUser({
-    name, email, label, hospitalId,
-  }, log);
+  const requestData = validate(schemas.createWardUser, req.body, res);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
+  const user = await wardUserService.createWardUser({ ...requestData, hospitalId }, log);
   log.debug('CreateWardUser service executed without error, sending back a success response');
   return res.status(201).json({ success: true, message: 'Ward user created successfully', data: user });
 });
@@ -23,10 +25,11 @@ const createWardUser = catchControllerError('CreateWardUser', async (req, res) =
  * @param {object} res Express response object
  */
 const updateWardUser = catchControllerError('UpdateWardUser', async (req, res) => {
+  const requestData = validate(schemas.updateWardUser, { ...req.body, ...req.params });
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { log } = res.locals;
-  const { name, label } = req.body;
-  const { wardId } = req.params;
-  const user = await wardUserService.updateWardUser({ name, label, wardId }, log);
+  const user = await wardUserService.updateWardUser(requestData, log);
   log.debug('UpdateWardUser service executed without error, sending back a success response');
   return res.status(200).json({ success: true, message: 'Ward user updated successfully', data: user });
 });
@@ -51,9 +54,11 @@ const getAllWardUser = catchControllerError('GetAllWardUser', async (req, res) =
  * @param {object} res Express response object
  */
 const getSingleWardUser = catchControllerError('GetSingleWardUser', async (req, res) => {
+  const requestData = validate(schemas.getSingleWardUser, req.params);
+  if (requestData.error) return invalidReqeust(res, { errors: requestData.error });
+
   const { log } = res.locals;
-  const { wardId } = req.params;
-  const wardUser = await wardUserService.getSingleWardUser({ wardId }, log);
+  const wardUser = await wardUserService.getSingleWardUser(requestData, log);
   if (!wardUser) {
     log.debug('GetSingleWardUser service did not return a user, sending back a 404 response');
     return res.status(404).json({ success: true, message: 'Ward user not found' });
@@ -64,8 +69,8 @@ const getSingleWardUser = catchControllerError('GetSingleWardUser', async (req, 
 
 
 export default {
-  createWardUser: [userValidation.createWardUser, createWardUser],
-  getSingleWardUser: [userValidation.validateWardId, getSingleWardUser],
-  updateWardUser: [userValidation.validateWardId, userValidation.updateWardUser, updateWardUser],
+  createWardUser,
+  getSingleWardUser,
+  updateWardUser,
   getAllWardUser,
 };
