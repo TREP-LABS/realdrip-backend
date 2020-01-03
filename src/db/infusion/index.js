@@ -58,6 +58,13 @@ const getSingleInfusion = (infusionMatch) => {
  */
 const getAllInfusion = (infusionMatch) => {
   const Model = infusionModel;
+  const { status } = infusionMatch;
+  if (Array.isArray(status)) {
+    return Model.find({
+      ...infusionMatch,
+      $or: status.map(sta => ({ status: sta })),
+    });
+  }
   return Model.find(infusionMatch).select('-__v');
 };
 

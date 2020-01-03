@@ -36,3 +36,14 @@ export const getSingleInfusion = Joi.object({
 export const deleteInfusion = Joi.object({
   infusionId: getSingleInfusion.extract('infusionId'),
 });
+
+const infusionStatus = Joi.string().prefs({ convert: true }).lowercase().valid('active', 'ended', 'terminated');
+
+export const getAllInfusion = Joi.object({
+  query: {
+    status: [infusionStatus, Joi.array().items(infusionStatus)],
+    deviceId: common.validResourceId,
+    wardId: common.validResourceId,
+    nurseId: common.validResourceId,
+  },
+});
