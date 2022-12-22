@@ -28,7 +28,7 @@
     "express-requests-logger": "^2.0.5",
     "forever": "^1.0.0",
     "generate-password": "^1.4.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.5",
     "nodemailer": "^6.3.0",
     "nodemailer-mailgun-transport": "^1.4.0",
