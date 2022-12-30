@@ -25,7 +25,7 @@
     "bunyan": "^1.8.12",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
-    "express-requests-logger": "^2.0.5",
+    "express-requests-logger": "^3.0.4",
     "forever": "^1.0.0",
     "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
